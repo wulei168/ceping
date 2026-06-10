@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>青春期痤疮自测表 | 安心滋养·饮食干预计划</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #fef7ef;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            color: #3b2a24;
+            padding: 1.5rem;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 36px;
+            box-shadow: 0 20px 35px rgba(0,0,0,0.05);
+            overflow: hidden;
+            padding: 2rem 2rem 3rem;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #f5e2d4;
+            padding-bottom: 1.5rem;
+        }
+        .main-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #cb7b5c;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            font-size: 0.95rem;
+            color: #9d6b55;
+            background: #fff4ec;
+            display: inline-block;
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            margin-top: 0.5rem;
+        }
+        .disclaimer {
+            background: #fff4e6;
+            border-left: 5px solid #e6b8a2;
+            padding: 0.8rem 1.2rem;
+            margin: 1.2rem 0 0.5rem;
+            font-size: 0.85rem;
+            color: #a46956;
+            border-radius: 16px;
+            text-align: left;
+        }
+        .progress-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1.8rem;
+        }
+        .badge {
+            background: #efddd2;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #7a4e3c;
+        }
+        .q-counter {
+            font-size: 0.9rem;
+            color: #b07c64;
+        }
+        .question-card {
+            background: #fefaf7;
+            border-radius: 28px;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1.2rem;
+            border: 1px solid #f1e2d6;
+        }
+        .question-text {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            color: #4b322a;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            align-items: center;
+        }
+        .opt-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            border: 1px solid #e7d4c8;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .opt-item.selected {
+            background: #f0d9ce;
+            border-color: #cb7b5c;
+        }
+        .opt-item input {
+            margin: 0;
+            accent-color: #cb7b5c;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .opt-item label {
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: #553c34;
+        }
+        @media (max-width: 600px) {
+            .options { gap: 0.5rem; }
+            .opt-item { padding: 0.2rem 0.8rem; }
+            .container { padding: 1rem; }
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin: 2rem 0 1.5rem;
+        }
+        button {
+            background: #eedbcb;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #5f3f32;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button.primary {
+            background: #cb7b5c;
+            color: white;
+            box-shadow: 0 4px 8px rgba(203,123,92,0.2);
+        }
+        button.primary:hover {
+            background: #b66343;
+            transform: translateY(-2px);
+        }
+        button:hover {
+            background: #e0cbbc;
+        }
+        .result-box {
+            margin-top: 2rem;
+            background: #fef3ec;
+            border-radius: 28px;
+            padding: 1.8rem;
+            border: 1px solid #eedbcb;
+        }
+        .result-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #b45f4b;
+            margin-bottom: 1rem;
+        }
+        .type-score {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            background: white;
+            border-radius: 20px;
+            padding: 0.7rem 1.2rem;
+            margin: 0.6rem 0;
+            align-items: center;
+        }
+        .type-name {
+            font-weight: 600;
+            width: 220px;
+            font-size: 0.85rem;
+        }
+        .score-bar {
+            flex: 1;
+            background: #eedbcb;
+            border-radius: 20px;
+            height: 10px;
+            margin: 0 1rem;
+        }
+        .score-fill {
+            background: #cb7b5c;
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
+        }
+        .score-value {
+            width: 45px;
+            text-align: right;
+            font-weight: 600;
+        }
+        .top-type {
+            margin-top: 1.2rem;
+            padding: 1rem;
+            background: #f1e1d6;
+            border-radius: 24px;
+            font-size: 1rem;
+        }
+        hr { margin: 1rem 0; border-color: #eedbcb; }
+        .footer-note {
+            font-size: 0.75rem;
+            text-align: center;
+            margin-top: 2rem;
+            color: #b28066;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="main-title">🍃 青春期痤疮自测表</div>
+        <div class="subtitle">安心滋养 · 饮食干预计划 旗下测评工具</div>
+        <div class="disclaimer">
+            ⚕️ 温馨提示：本测评仅作为饮食调理与健康评估参考，不能替代专业医疗诊断。严重囊肿/结节性痤疮请及时就医。
+        </div>
+    </div>
+
+    <div class="progress-section">
+        <span class="badge">🌱 六大功能医学分型</span>
+        <span class="q-counter" id="qCounter">加载中...</span>
+    </div>
+
+    <form id="quizForm">
+        <div id="questionsContainer"></div>
+        <div class="btn-group">
+            <button type="button" id="resetBtn">🗑️ 重置所有</button>
+            <button type="button" id="submitBtn" class="primary">📊 查看我的痤疮类型</button>
+        </div>
+    </form>
+
+    <div id="resultArea" class="result-box" style="display: none;"></div>
+    <div class="footer-note">
+        ✨ 基于代谢、激素、免疫炎症、肠道、神经压力、营养环境六型，匹配精准饮食干预方向。
+    </div>
+</div>
+
+<script>
+    // 六大类型
+    const TYPES = {
+        METABOLIC: "① 代谢/线粒体障碍型 (胰岛素抵抗)",
+        HORMONAL: "② 激素失衡型 (雄激素/IGF-1主导)",
+        IMMUNE: "③ 免疫/炎症失调型",
+        GUT: "④ 肠道健康失衡型 (肠漏/菌群)",
+        STRESS: "⑤ 神经系统/HPA轴失调型 (压力痘)",
+        NUTRITION: "⑥ 营养缺乏与环境毒素型"
+    };
+
+    // 精简后题目(共48题 + 2症状定位 = 50题)，每题评分0-4 (从不=0，很少=1，有时=2，经常=3，总是=4)
+    const questions = [
+        // 症状定位(不计分，仅展示)
+        { text: "【定位】痤疮主要部位？", typeKey: "LOC", isSymptom: true, optionsText: ["额头/发际","脸颊","下巴/下颌线","背部/前胸","全脸混合"] },
+        { text: "【定位】主要皮损类型？", typeKey: "LOC", isSymptom: true, optionsText: ["粉刺(白头/黑头)","红色丘疹","脓疱","结节/囊肿","混合"] },
+        
+        // ---- 代谢/线粒体型 (7题) ----
+        { text: "主食以白米饭、白面条、白面包等精制碳水为主？", typeKey: "METABOLIC" },
+        { text: "每周吃甜点、含糖饮料或奶茶超过3次？", typeKey: "METABOLIC" },
+        { text: "饭后容易困倦、乏力，甚至需要午睡？", typeKey: "METABOLIC" },
+        { text: "体重超重（BMI>24）或腰腹部脂肪明显？", typeKey: "METABOLIC" },
+        { text: "颈后/腋下皮肤出现黑褐色天鹅绒样斑块（黑棘皮症）？", typeKey: "METABOLIC" },
+        { text: "餐前容易心慌、手抖、头晕（低血糖倾向）？", typeKey: "METABOLIC" },
+        { text: "吃甜食或精制碳水后，第二天痤疮明显加重？", typeKey: "METABOLIC" },
+        
+        // ---- 激素失衡型 (8题) ----
+        { text: "痤疮集中在下巴、下颌线或颈部？", typeKey: "HORMONAL" },
+        { text: "月经前一周痤疮明显加重（女性）？", typeKey: "HORMONAL" },
+        { text: "月经周期不规律（稀发、闭经或周期紊乱）？", typeKey: "HORMONAL" },
+        { text: "身体多毛（面部、胸前、腹部）或脱发？", typeKey: "HORMONAL" },
+        { text: "每天喝牛奶、吃奶酪或酸奶超过1份？", typeKey: "HORMONAL" },
+        { text: "曾诊断多囊卵巢综合征（PCOS）或高雄激素血症？", typeKey: "HORMONAL" },
+        { text: "面部油脂分泌非常旺盛，毛孔粗大？", typeKey: "HORMONAL" },
+        { text: "停止吃乳制品后痤疮显著改善？", typeKey: "HORMONAL" },
+        
+        // ---- 免疫/炎症型 (7题) ----
+        { text: "痤疮以红色炎性丘疹、脓疱为主，粉刺少？", typeKey: "IMMUNE" },
+        { text: "皮肤敏感，容易泛红、发痒或刺痛？", typeKey: "IMMUNE" },
+        { text: "患有过敏性鼻炎、哮喘或湿疹？", typeKey: "IMMUNE" },
+        { text: "常吃油炸食品、烧烤或高饱和脂肪食物？", typeKey: "IMMUNE" },
+        { text: "很少吃深海鱼（三文鱼、沙丁鱼等）或补充鱼油？", typeKey: "IMMUNE" },
+        { text: "感冒或咽炎感染后，痤疮明显加重？", typeKey: "IMMUNE" },
+        { text: "痘印消退非常缓慢（红色印迹持续数周）？", typeKey: "IMMUNE" },
+        
+        // ---- 肠道健康失衡型 (7题) ----
+        { text: "长期便秘（每周排便<3次）或腹泻与便秘交替？", typeKey: "GUT" },
+        { text: "经常腹胀、排气多、腹部不适？", typeKey: "GUT" },
+        { text: "吃奶制品或小麦制品后，痤疮加重且消化不适？", typeKey: "GUT" },
+        { text: "过去一年内使用过抗生素（尤其是疗程超过1周）？", typeKey: "GUT" },
+        { text: "饮食中蔬菜、水果、全谷物吃得很少？", typeKey: "GUT" },
+        { text: "大便气味重、黏马桶？", typeKey: "GUT" },
+        { text: "补充益生菌后，消化或痤疮有所改善？", typeKey: "GUT" },
+        
+        // ---- 神经压力/HPA轴型 (7题) ----
+        { text: "考试、压力大或熬夜后，痤疮明显加重？", typeKey: "STRESS" },
+        { text: "经常感到焦虑、紧张或易怒？", typeKey: "STRESS" },
+        { text: "入睡困难、多梦或睡眠质量差？", typeKey: "STRESS" },
+        { text: "喜欢喝咖啡、浓茶或能量饮料提神？", typeKey: "STRESS" },
+        { text: "三餐不规律，经常长时间空腹（>5小时）？", typeKey: "STRESS" },
+        { text: "学习/工作压力长期处于较高水平？", typeKey: "STRESS" },
+        { text: "休息或度假时痤疮自然减轻？", typeKey: "STRESS" },
+        
+        // ---- 营养缺乏与环境毒素型 (7题) ----
+        { text: "挑食严重，很少吃红肉、贝类或坚果？", typeKey: "NUTRITION" },
+        { text: "日晒不足或几乎从不补充维生素D？", typeKey: "NUTRITION" },
+        { text: "经常吃外卖、含添加剂的加工零食？", typeKey: "NUTRITION" },
+        { text: "常用塑料容器微波加热食物或喝瓶装水？", typeKey: "NUTRITION" },
+        { text: "居住地靠近工业区或交通主干道？", typeKey: "NUTRITION" },
+        { text: "指甲有白斑、伤口愈合慢或味觉减退（缺锌表现）？", typeKey: "NUTRITION" },
+        { text: "嘴唇干裂、口角炎反复（B族/锌缺乏表现）？", typeKey: "NUTRITION" }
+    ];
+
+    const optionLabels = ["从不", "很少", "有时", "经常", "总是"];
+    let userAnswers = new Array(questions.length).fill(null);
+    const container = document.getElementById("questionsContainer");
+    const submitBtn = document.getElementById("submitBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const resultDiv = document.getElementById("resultArea");
+    const qCounterSpan = document.getElementById("qCounter");
+
+    function renderQuestions() {
+        container.innerHTML = "";
+        questions.forEach((q, idx) => {
+            const card = document.createElement("div");
+            card.className = "question-card";
+            const qText = document.createElement("div");
+            qText.className = "question-text";
+            qText.innerText = `${idx+1}. ${q.text}`;
+            card.appendChild(qText);
+            const optionsDiv = document.createElement("div");
+            optionsDiv.className = "options";
+            let optList = q.isSymptom ? q.optionsText : optionLabels;
+            for (let val = 0; val < optList.length; val++) {
+                const optDiv = document.createElement("div");
+                optDiv.className = "opt-item";
+                if (userAnswers[idx] === val) optDiv.classList.add("selected");
+                const radio = document.createElement("input");
+                radio.type = "radio";
+                radio.name = `q${idx}`;
+                radio.value = val;
+                radio.id = `q${idx}_${val}`;
+                radio.checked = (userAnswers[idx] === val);
+                radio.addEventListener("change", ((i, v) => () => {
+                    if (document.querySelector(`input[name="q${i}"]:checked`)) {
+                        userAnswers[i] = v;
+                        updateStyle(i, v);
+                        updateCounter();
+                    }
+                })(idx, val));
+                const label = document.createElement("label");
+                label.htmlFor = `q${idx}_${val}`;
+                label.innerText = optList[val];
+                optDiv.appendChild(radio);
+                optDiv.appendChild(label);
+                optionsDiv.appendChild(optDiv);
+            }
+            card.appendChild(optionsDiv);
+            container.appendChild(card);
+        });
+        updateCounter();
+    }
+
+    function updateStyle(index, val) {
+        const card = container.children[index];
+        if (card) {
+            const opts = card.querySelectorAll(".opt-item");
+            opts.forEach((opt, i) => {
+                const radio = opt.querySelector("input");
+                if (radio && parseInt(radio.value) === val) opt.classList.add("selected");
+                else opt.classList.remove("selected");
+            });
+        }
+    }
+
+    function updateCounter() {
+        const answered = userAnswers.filter(a => a !== null).length;
+        qCounterSpan.innerText = `${answered} / ${questions.length} 已答`;
+    }
+
+    function resetAll() {
+        userAnswers = new Array(questions.length).fill(null);
+        renderQuestions();
+        resultDiv.style.display = "none";
+        resultDiv.innerHTML = "";
+    }
+
+    function getSymptomInfo() {
+        let info = "";
+        const locIdx = userAnswers[0];
+        if (locIdx !== null) {
+            const locs = ["额头/发际","脸颊","下巴/下颌线","背部/前胸","全脸混合"];
+            info += `主要部位：${locs[locIdx]}`;
+        }
+        const typeIdx = userAnswers[1];
+        if (typeIdx !== null) {
+            const pts = ["粉刺为主","红色丘疹","脓疱","结节/囊肿","混合"];
+            info += `，皮损类型：${pts[typeIdx]}`;
+        }
+        return info || "未提供";
+    }
+
+    function computeScores() {
+        let scores = { METABOLIC:0, HORMONAL:0, IMMUNE:0, GUT:0, STRESS:0, NUTRITION:0 };
+        let counts = { METABOLIC:0, HORMONAL:0, IMMUNE:0, GUT:0, STRESS:0, NUTRITION:0 };
+        for (let i = 0; i < questions.length; i++) {
+            const q = questions[i];
+            if (q.isSymptom) continue;
+            const val = userAnswers[i];
+            if (val === null) continue;
+            const type = q.typeKey;
+            if (scores.hasOwnProperty(type)) {
+                scores[type] += val;
+                counts[type]++;
+            }
+        }
+        let avg = {};
+        for (let t in scores) {
+            avg[t] = counts[t] ? scores[t] / counts[t] : 0;
+        }
+        return avg;
+    }
+
+    function getAdvice(typeKey) {
+        const advice = {
+            METABOLIC: "🥗 低GI饮食：主食换成全谷物/豆类，戒除含糖饮料，增加膳食纤维，补充肌醇、镁、铬。",
+            HORMONAL: "🥛 低GI + 无乳制品饮食（4周），补充锌、维生素D，可尝试肌醇调节激素。",
+            IMMUNE: "🔥 高Omega-3（鱼油、亚麻籽）、低Omega-6，多吃姜黄、绿茶，补充维生素D3和锌。",
+            GUT: "🦠 4周无麸质无酪蛋白饮食试验，补充益生菌(LGG/BB536)、谷氨酰胺、可溶性纤维，修复肠漏。",
+            STRESS: "🧘 稳定血糖（规律加餐），补充镁、B族、L-茶氨酸，戒咖啡因/酒精，练习腹式呼吸。",
+            NUTRITION: "🌿 检测血清锌、维生素D、铁蛋白，针对性补充吡啶甲酸锌、维生素D3、鱼油，减少环境毒素暴露。"
+        };
+        return advice[typeKey] || "均衡饮食，避免高糖高脂，必要时咨询专业人士。";
+    }
+
+    function showResults() {
+        const answered = userAnswers.filter(a => a !== null).length;
+        if (answered < 25) {
+            if (!confirm(`您只完成了${answered}题（共${questions.length}题），结果可能不准。仍要查看吗？`)) return;
+        }
+        const avg = computeScores();
+        let sorted = Object.entries(avg).sort((a,b) => b[1] - a[1]);
+        const topType = sorted[0][0];
+        const topScore = sorted[0][1];
+        const second = sorted[1] ? sorted[1][0] : null;
+        const secondScore = sorted[1] ? sorted[1][1] : 0;
+        const typeNames = {
+            METABOLIC: TYPES.METABOLIC, HORMONAL: TYPES.HORMONAL, IMMUNE: TYPES.IMMUNE,
+            GUT: TYPES.GUT, STRESS: TYPES.STRESS, NUTRITION: TYPES.NUTRITION
+        };
+        let html = `<div class="result-title">📋 痤疮功能医学速查结果</div>`;
+        html += `<div style="background:#fff2e6; border-radius:20px; padding:0.6rem 1rem; margin-bottom:1rem;">📍 ${getSymptomInfo()}</div>`;
+        html += `<div class="top-type">✨ 最可能的类型：<strong>${typeNames[topType]}</strong> (匹配度 ${topScore.toFixed(1)}/4.0)</div>`;
+        if (secondScore > 1.6) {
+            html += `<div style="margin-top:8px;">⚠️ 次要倾向：${typeNames[second]} (${secondScore.toFixed(1)}分)，可能存在混合型。</div>`;
+        }
+        html += `<hr><div><strong>🍎 针对性饮食干预建议：</strong><br>${getAdvice(topType)}</div><hr>`;
+        html += `<div><strong>📊 六大类型得分：</strong></div>`;
+        for (let t of ["METABOLIC","HORMONAL","IMMUNE","GUT","STRESS","NUTRITION"]) {
+            let val = avg[t];
+            let percent = (val / 4 * 100).toFixed(0);
+            html += `<div class="type-score">
+                        <span class="type-name">${typeNames[t]}</span>
+                        <div class="score-bar"><div class="score-fill" style="width: ${percent}%;"></div></div>
+                        <span class="score-value">${val.toFixed(1)}</span>
+                    </div>`;
+        }
+        html += `<div style="margin-top:1rem; font-size:0.8rem; background:#f3eae2; border-radius:20px; padding:0.8rem;">
+        💡 本测评结果仅用于饮食营养参考，不可替代医生诊疗。囊肿/重度痤疮请尽快就医。
+        </div>`;
+        resultDiv.innerHTML = html;
+        resultDiv.style.display = "block";
+        window.scrollTo({ top: resultDiv.offsetTop - 20, behavior: "smooth" });
+    }
+
+    function onSubmit() {
+        const unanswered = userAnswers.filter(a => a === null).length;
+        if (unanswered > 10) {
+            if (confirm(`还有 ${unanswered} 题未答，可能影响准确性。继续查看吗？`)) showResults();
+        } else {
+            showResults();
+        }
+    }
+
+    function init() {
+        renderQuestions();
+        submitBtn.addEventListener("click", onSubmit);
+        resetBtn.addEventListener("click", resetAll);
+    }
+    init();
+</script>
+</body>
+</html>
