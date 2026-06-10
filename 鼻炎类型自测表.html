@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>鼻炎类型自测 · 安心滋养·饮食干预计划</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f7f9f4;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      color: #2e3b2c;
+      line-height: 1.6;
+      padding: 1.5rem;
+    }
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 2rem;
+      padding: 2rem 1.8rem;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.05), 0 8px 18px rgba(0,40,20,0.06);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .brand {
+      font-size: 1.5rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: #4a6741;
+      background: #eef5e9;
+      display: inline-block;
+      padding: 0.4rem 2rem;
+      border-radius: 3rem;
+      margin-bottom: 0.8rem;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #2d3a24;
+      margin: 0.5rem 0 0.2rem;
+    }
+    .subtitle {
+      color: #5e6b52;
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .disclaimer {
+      background: #fdf8ed;
+      border-left: 4px solid #e6b422;
+      padding: 1rem 1.2rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      color: #5a4a2e;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    .disclaimer strong {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: #b45309;
+    }
+    .progress {
+      background: #e9f0e4;
+      border-radius: 20px;
+      height: 8px;
+      margin-bottom: 2rem;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background: #6d8c54;
+      height: 100%;
+      width: 0%;
+      transition: width 0.2s ease;
+      border-radius: 20px;
+    }
+    .quiz-section {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .question-card {
+      border: 1px solid #e1e8db;
+      border-radius: 1.2rem;
+      padding: 1.3rem 1.2rem;
+      background: #fefefe;
+      transition: border-color 0.2s;
+    }
+    .question-card:hover {
+      border-color: #b8cfaa;
+    }
+    .question-title {
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .q-num {
+      background: #eaf1e4;
+      color: #3e5a2e;
+      border-radius: 2rem;
+      padding: 0.15rem 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .multi-badge {
+      background: #fff3e0;
+      color: #b85c1a;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.8rem;
+      border-radius: 1rem;
+      font-weight: 500;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.8rem;
+      background: #fafbf9;
+      transition: background 0.2s;
+      cursor: pointer;
+    }
+    .option-item:hover {
+      background: #f1f5ed;
+    }
+    input[type="radio"], input[type="checkbox"] {
+      margin-top: 0.25rem;
+      accent-color: #6d8c54;
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+    label {
+      cursor: pointer;
+      flex: 1;
+      font-size: 0.95rem;
+    }
+    .btn-submit {
+      background: #5b7a47;
+      color: white;
+      border: none;
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding: 1rem 2rem;
+      border-radius: 3rem;
+      width: 100%;
+      margin: 1.5rem 0 0.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      letter-spacing: 1px;
+    }
+    .btn-submit:hover {
+      background: #3f5a30;
+    }
+    .result-container {
+      margin-top: 2rem;
+      background: #f4f9f0;
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .result-type {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #2b4820;
+      margin-bottom: 0.5rem;
+    }
+    .result-sub {
+      color: #445a38;
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+    .result-detail {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.2rem 1.2rem;
+      margin: 1rem 0;
+      border: 1px solid #d6e2ce;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    .result-advice {
+      background: #fff9ea;
+      border-left: 5px solid #e6b422;
+      padding: 1rem 1.2rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    .ai-prompt-box {
+      background: #f0f4ff;
+      border: 1px solid #b8c9e0;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      margin: 1.5rem 0;
+    }
+    .ai-prompt-box h3 {
+      color: #2d3a5e;
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .ai-prompt-text {
+      background: white;
+      border-radius: 0.8rem;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid #d0daea;
+      color: #1e293b;
+    }
+    .copy-btn {
+      background: #3b5998;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.8rem;
+      transition: background 0.3s;
+    }
+    .copy-btn:hover {
+      background: #2d4373;
+    }
+    .reset-btn {
+      background: transparent;
+      border: 1px solid #6d8c54;
+      color: #4a5e3a;
+      padding: 0.7rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand">安心滋养·饮食干预计划</div>
+    <h1>鼻炎类型 · 自我评估</h1>
+    <div class="subtitle">识别高风险倾向，获取AI就绪的个性化提示词</div>
+  </header>
+
+  <div class="disclaimer">
+    <strong>⚕️ 免责声明</strong>
+    本测评仅为膳食营养辅助参考，不构成医疗诊断或治疗建议。自测结果不能替代专业医生的诊断和处方。如果您有严重的鼻部症状、呼吸困难、反复感染等情况，请务必及时就医。我们旨在帮助您更好地观察自身状况，配合专业指导进行健康管理。
+  </div>
+
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <form id="quizForm">
+    <div class="quiz-section" id="questionsContainer"></div>
+    <button type="button" class="btn-submit" id="submitBtn">查看我的鼻炎高风险类型</button>
+  </form>
+
+  <div class="result-container" id="resultContainer">
+    <div id="resultContent"></div>
+    <button class="reset-btn" id="resetBtn">重新测评</button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // 鼻炎题库（35题）
+    const questions = [
+      { id:1, text:"您的鼻部不适，最有规律的诱发因素是什么？", multi:false, options:[
+        {val:"A", label:"每年到特定月份（如春天或秋天）就准时发作，比日历还准。"},
+        {val:"B", label:"一接触灰尘、打扫卫生、或躺在床上时就加重。"},
+        {val:"C", label:"没有固定规律，但天气一冷、一吹风、或闻到烟味等刺激性气味就发作。"},
+        {val:"D", label:"好像每次都是先感冒、发烧、喉咙痛，然后才出现严重的鼻塞和流脓涕。"},
+        {val:"E", label:"我实在找不出什么规律。【不确定】"}
+      ]},
+      { id:2, text:"您的鼻部症状，最典型的特征是什么？", multi:true, options:[
+        {val:"A", label:"一阵一阵地狂打喷嚏，同时流大量清水样的鼻涕。"},
+        {val:"B", label:"主要是鼻塞，鼻涕不多但很黏，或者总感觉有东西倒流到喉咙里。"},
+        {val:"C", label:"鼻子干干涩涩的，有时还带点血丝，感觉呼吸时鼻腔里很不舒服。"},
+        {val:"D", label:"流黄色或绿色的脓鼻涕，有时还有一股怪味，感觉面部或眼眶周围胀痛。"}
+      ]},
+      { id:3, text:"从鼻涕的性状来看，最符合您的是？", multi:false, options:[
+        {val:"A", label:"清水样，像水龙头一样关不住。"},
+        {val:"B", label:"粘稠、透明或白色，像胶水一样，擤不出来。"},
+        {val:"C", label:"黄脓或绿脓，很浑浊。"},
+        {val:"D", label:"基本没什么鼻涕，但就是感觉鼻子堵住了。"},
+        {val:"E", label:"我没太留意鼻涕长什么样。【不确定】"}
+      ]},
+      { id:4, text:"您的症状在一天中有没有明显的轻重变化？", multi:false, options:[
+        {val:"A", label:"早晨刚醒时最严重，打喷嚏、鼻塞、鼻涕倒流很明显，活动开或起床后过一会儿就好转。"},
+        {val:"B", label:"白天没什么事，但一到晚上躺下睡觉时鼻塞就明显加重，甚至影响睡眠。"},
+        {val:"C", label:"没有明显的时间规律，全天都差不多。"},
+        {val:"D", label:"我没太留意过时间上的变化。【不确定】"}
+      ]},
+      { id:5, text:"当您从外面进入一个很冷的空调房，或者冬天从室内走到室外，您的鼻子会？", multi:false, options:[
+        {val:"A", label:"没什么特别的反应。"},
+        {val:"B", label:"会马上打几个喷嚏，然后就好了。"},
+        {val:"C", label:"会立刻鼻塞加重，感觉喘不上气，要过好一会儿才缓过来。"},
+        {val:"D", label:"我没太留意这种情况。【不确定】"}
+      ]},
+      { id:6, text:"吃辛辣、过烫的食物，或者情绪激动、大笑时，您的鼻子会？", multi:false, options:[
+        {val:"A", label:"完全没影响。"},
+        {val:"B", label:"会突然流很多清鼻涕，但很快就好了。"},
+        {val:"C", label:"不会流鼻涕，但会感觉鼻塞和不适感加重了。"},
+        {val:"D", label:"我没太留意这种情况。【不确定】"}
+      ]},
+      { id:7, text:"回想一下，您的症状在什么时候会感觉稍微好一点？", multi:false, options:[
+        {val:"A", label:"离开特定环境（如花粉季结束、出差旅游、不住在家里）后就明显好转。"},
+        {val:"B", label:"洗完热水澡、或者运动出点汗后，鼻子会通畅一些。"},
+        {val:"C", label:"只要饮食清淡、不上火、不吃油腻的，鼻子就舒服很多。"},
+        {val:"D", label:"好像没有什么办法能让它好一点。【不确定】"}
+      ]},
+      { id:8, text:"除了鼻子，您身体其他部位有类似的问题吗？", multi:true, options:[
+        {val:"A", label:"经常眼睛痒、流泪、发红，或者身上有湿疹、荨麻疹。"},
+        {val:"B", label:"好像没有，主要就是鼻子的毛病。"},
+        {val:"C", label:"有“鸡皮肤”（手臂、大腿外侧摸起来粗粗糙糙的），或者皮肤非常干燥、爱长干性湿疹。"},
+        {val:"D", label:"面部和头发爱出油、皮肤爱长痘，身上容易起一些红疙瘩或毛囊炎。"}
+      ]},
+      { id:9, text:"您的口腔、咽喉和面部有无以下感觉？", multi:true, options:[
+        {val:"A", label:"经常口腔上颚痒，用舌头去顶它，耳朵里也痒。"},
+        {val:"B", label:"感觉鼻子里有股怪味，或者嗅觉明显下降了。"},
+        {val:"C", label:"口腔溃疡反反复复，嘴角也容易开裂。"},
+        {val:"D", label:"早上起来口干口苦，舌苔很厚，刷牙时干呕。"},
+        {val:"E", label:"以上都没有。"}
+      ]},
+      { id:10, text:"您感觉自己的精力状态最符合哪种描述？", multi:false, options:[
+        {val:"A", label:"只要鼻炎不犯，我就精力充沛，一切正常。"},
+        {val:"B", label:"长期感觉昏昏沉沉，头上像裹了层布，睡不醒，注意力很难集中。"},
+        {val:"C", label:"感觉身体很沉重，容易累，午饭后尤其困，能躺着就不想坐着。"},
+        {val:"D", label:"我没觉得鼻炎影响了我的精力。【不确定】"}
+      ]},
+      { id:11, text:"您的睡眠质量如何？", multi:false, options:[
+        {val:"A", label:"鼻塞严重影响睡眠，晚上经常被憋醒，或睡眠很浅。"},
+        {val:"B", label:"睡觉不憋气，但白天还是觉得很困，睡不醒。"},
+        {val:"C", label:"睡得还可以，但早上起来总感觉喉咙里有痰。"},
+        {val:"D", label:"我的睡眠完全不受影响。【不确定】"}
+      ]},
+      { id:12, text:"您有没有感觉听力或耳朵有不适？", multi:false, options:[
+        {val:"A", label:"经常感觉耳朵里痒。"},
+        {val:"B", label:"感觉耳朵里闷闷的，像塞了团棉花，或者听到自己呼吸的声音，听力有下降。"},
+        {val:"C", label:"没有特别的感觉。"},
+        {val:"D", label:"我没太留意耳朵的问题。【不确定】"}
+      ]},
+      { id:13, text:"您的孩子（或您自己）是否经常被说有“腺样体面容”特征（嘴唇上翘、有点龅牙、下巴后缩、黑眼圈）？", multi:false, options:[
+        {val:"A", label:"是的，有这个趋势。"},
+        {val:"B", label:"没有，面容正常。"},
+        {val:"C", label:"我不太确定什么是腺样体面容。【不确定】"}
+      ]},
+      { id:14, text:"您在入睡前或躺下时，喉咙或气管部位有没有异常感觉？", multi:false, options:[
+        {val:"A", label:"刚躺下时会突然剧烈干咳一阵，不躺下就没事。"},
+        {val:"B", label:"感觉喉咙痒，总想清嗓子。"},
+        {val:"C", label:"感觉胃里有东西反流上来，嘴里发酸、胸口发热。"},
+        {val:"D", label:"没有这些感觉。"},
+        {val:"E", label:"我没太留意。【不确定】"}
+      ]},
+      { id:15, text:"您的鼻部症状和饮食有关系吗？", multi:false, options:[
+        {val:"A", label:"没关系，吃什么都一样。"},
+        {val:"B", label:"有明确关系，一吃某些水果（如苹果、桃子、哈密瓜）或坚果，嘴巴和喉咙马上就痒，有时鼻子也跟着犯。"},
+        {val:"C", label:"有，但不是很直接的过敏，而是吃了很多肉、油炸食品、甜食或喝大酒后，鼻涕和痰会变多变黏，鼻塞也会加重。"},
+        {val:"D", label:"我没注意过饮食的影响。【不确定】"}
+      ]},
+      { id:16, text:"您的大便习惯和性状如何？", multi:false, options:[
+        {val:"A", label:"很正常，每天1-2次，成形。"},
+        {val:"B", label:"经常不成形，或者前面干后面稀，粘马桶冲不干净。"},
+        {val:"C", label:"大便偏干，呈羊粪球状，排便费力，好几天才一次。"},
+        {val:"D", label:"很容易拉肚子，尤其是在吃了某些东西或受凉后。"},
+        {val:"E", label:"我没太关注自己的大便情况。【不确定】"}
+      ]},
+      { id:17, text:"您有没有观察到，当大便不通畅时，您的鼻部症状会如何变化？", multi:false, options:[
+        {val:"A", label:"没注意过，应该没关系。"},
+        {val:"B", label:"好像确实是这样，一便秘，鼻涕就更多、更黏，鼻塞也更重，排便后会好一些。"}
+      ]},
+      { id:18, text:"您使用抗过敏药（如氯雷他定、西替利嗪）的效果如何？", multi:false, options:[
+        {val:"A", label:"效果很好，吃药后打喷嚏、流鼻涕和鼻痒很快能缓解。"},
+        {val:"B", label:"效果一般，只能缓解一点点鼻塞，对其他症状没什么用。"},
+        {val:"C", label:"基本没用，吃了跟没吃一样。"},
+        {val:"D", label:"我以前没怎么用过这些药。【不确定】"}
+      ]},
+      { id:19, text:"您使用鼻用激素喷剂（如辅舒良、内舒拿）的效果如何？", multi:false, options:[
+        {val:"A", label:"效果很好，坚持用几天后鼻塞明显好转。"},
+        {val:"B", label:"刚开始有用，现在感觉越来越没效果了。"},
+        {val:"C", label:"有用，但一停药马上就复发，不敢停。"},
+        {val:"D", label:"我以前没怎么用过这类喷剂。【不确定】"}
+      ]},
+      { id:20, text:"您或您的孩子在过去一年中，使用抗生素（如阿莫西林、头孢等）的频率是？", multi:false, options:[
+        {val:"A", label:"很少或几乎没吃过。"},
+        {val:"B", label:"只要一感冒、流脓涕、嗓子疼就得吃，不然感觉好不了。"},
+        {val:"C", label:"一年得吃四五次以上，感觉已经离不开了。"},
+        {val:"D", label:"每次一吃就好，但停药没两三周就又生病了，反反复复。"}
+      ]},
+      { id:21, text:"您记忆中，儿时是否被诊断过以下情况？", multi:true, options:[
+        {val:"A", label:"被诊断过特应性皮炎/湿疹。"},
+        {val:"B", label:"被诊断过哮喘。"},
+        {val:"C", label:"经常被诊断为中耳炎。"},
+        {val:"D", label:"以上都没有。"}
+      ]},
+      { id:22, text:"您的直系亲属（父母、兄弟姐妹、子女）中，是否有人有明确的过敏性鼻炎、哮喘或湿疹？", multi:false, options:[
+        {val:"A", label:"有很多人有。"},
+        {val:"B", label:"有一两个。"},
+        {val:"C", label:"完全没有。"},
+        {val:"D", label:"我不太清楚家族病史。【不确定】"}
+      ]},
+      { id:23, text:"您的生活或工作环境如何？", multi:true, options:[
+        {val:"A", label:"住在潮湿、有霉味、可见霉斑的房子里，或者在地下室工作。"},
+        {val:"B", label:"经常接触装修材料、油漆、消毒剂、化学试剂等。"},
+        {val:"C", label:"长期吸烟或吸二手烟。"},
+        {val:"D", label:"以上都没有。"}
+      ]},
+      { id:24, text:"您是否经常感到需要清嗓子，觉得喉咙里总有个东西，咳不出来又咽不下去？", multi:false, options:[
+        {val:"A", label:"是，有这种感觉。"},
+        {val:"B", label:"没有。"}
+      ]},
+      { id:25, text:"您的症状是否在接触特定动物（如猫、狗、兔子）时立刻加重？", multi:false, options:[
+        {val:"A", label:"是。"},
+        {val:"B", label:"否。"},
+        {val:"C", label:"我没接触过动物，不确定。【不确定】"}
+      ]},
+      { id:26, text:"您是否有打鼾或睡眠呼吸暂停（被观察到睡觉时呼吸中断、憋气）的情况？", multi:false, options:[
+        {val:"A", label:"经常打鼾，声音很大，有时会憋气。"},
+        {val:"B", label:"偶尔打鼾，比较轻微。"},
+        {val:"C", label:"基本不打鼾。"},
+        {val:"D", label:"我不太清楚自己睡觉时是什么情况。【不确定】"}
+      ]},
+      { id:27, text:"您的鼻部症状，是否在一次明确的、很严重的病毒性感冒或流感之后，才开始变得迁延不愈的？", multi:false, options:[
+        {val:"A", label:"好像是的，从那之后就断断续续没好透。"},
+        {val:"B", label:"不是，从小就有，或慢慢出现的，跟哪次感冒关系不大。"},
+        {val:"C", label:"我记不清了。【不确定】"}
+      ]},
+      { id:28, text:"当您处于精神压力很大、或睡眠严重不足的一段时间里，您的鼻炎症状会如何变化？", multi:false, options:[
+        {val:"A", label:"明显加重。"},
+        {val:"B", label:"没什么变化。"},
+        {val:"C", label:"没注意过压力和鼻炎的关系。【不确定】"}
+      ]},
+      { id:29, text:"您有没有一吃完热的食物（如热汤面）、或者洗热水澡时，就有大量清鼻涕流出来？", multi:false, options:[
+        {val:"A", label:"有，经常这样。"},
+        {val:"B", label:"没有。"}
+      ]},
+      { id:30, text:"您是否观察到，当您喝了很多酒（仅限成人）或者吃了特别多的甜食的第二天，鼻部症状会加重？", multi:false, options:[
+        {val:"A", label:"会。"},
+        {val:"B", label:"不会。"},
+        {val:"C", label:"我没注意过。【不确定】"}
+      ]},
+      { id:31, text:"对于家长：您的孩子是否经常表现出“注意力不集中”、“烦躁易怒”，但在鼻炎控制好的时候，这些情况会减轻？", multi:false, options:[
+        {val:"A", label:"是的，有明显关联，鼻子一好精神就好很多。"},
+        {val:"B", label:"没有明显关联。"},
+        {val:"C", label:"我不太确定。【不确定】"}
+      ]},
+      { id:32, text:"您是否曾因为长期的鼻炎问题，感到过焦虑、烦躁，或影响了正常的生活和工作/学习效率？", multi:false, options:[
+        {val:"A", label:"是，影响很大，感觉生活质量严重下降。"},
+        {val:"B", label:"有一些影响，但可以接受。"},
+        {val:"C", label:"基本没影响。"}
+      ]},
+      { id:33, text:"鼻塞时，您有没有用过一些能快速通气的减充血剂（如滴鼻净、羟甲唑啉、赛洛唑啉喷剂）？使用频率是？", multi:false, options:[
+        {val:"A", label:"没用过。"},
+        {val:"B", label:"偶尔在严重鼻塞影响呼吸和睡眠时用一下，但会控制天数。"},
+        {val:"C", label:"经常用，感觉已经离不开它了，不用就完全堵死，一用就好几个小时。"},
+        {val:"D", label:"我没注意过药名，不确定用没用过这类药。【不确定】"}
+      ]},
+      { id:34, text:"当您侧躺时，哪边的鼻孔在下方，哪边就会鼻塞，反过来也一样吗？", multi:false, options:[
+        {val:"A", label:"是的，会随着翻身交替堵塞。"},
+        {val:"B", label:"不是，我是固定的一侧鼻塞，无论怎么躺都一样。"},
+        {val:"C", label:"没注意过。【不确定】"}
+      ]},
+      { id:35, text:"您的鼻部不适，是否让您感觉同时伴有慢性的头部、颈部或肩背部的紧张和疼痛？", multi:false, options:[
+        {val:"A", label:"是，感觉整个人都很紧绷。"},
+        {val:"B", label:"没有这个感觉。"}
+      ]}
+    ];
+
+    const container = document.getElementById('questionsContainer');
+    function renderQuestions() {
+      let html = '';
+      questions.forEach((q) => {
+        html += `<div class="question-card" id="q-${q.id}">
+          <div class="question-title">
+            <span class="q-num">${q.id}</span> ${q.text}
+            ${q.multi ? '<span class="multi-badge">可多选</span>' : ''}
+          </div>
+          <div class="options">`;
+        q.options.forEach(opt => {
+          const inputType = q.multi ? 'checkbox' : 'radio';
+          html += `<div class="option-item">
+            <input type="${inputType}" name="q${q.id}" value="${opt.val}" id="q${q.id}_${opt.val}">
+            <label for="q${q.id}_${opt.val}">${opt.label}</label>
+          </div>`;
+        });
+        html += `</div></div>`;
+      });
+      container.innerHTML = html;
+      document.querySelectorAll('#quizForm input').forEach(input => {
+        input.addEventListener('change', updateProgress);
+      });
+    }
+
+    function updateProgress() {
+      let answered = 0;
+      questions.forEach(q => {
+        if (document.querySelectorAll(`input[name="q${q.id}"]:checked`).length > 0) answered++;
+      });
+      const percent = Math.round((answered / questions.length) * 100);
+      document.getElementById('progressBar').style.width = percent + '%';
+    }
+
+    function collectCounts() {
+      const counts = { A:0, B:0, C:0, D:0 };
+      questions.forEach(q => {
+        const checked = document.querySelectorAll(`input[name="q${q.id}"]:checked`);
+        checked.forEach(cb => {
+          if (cb.value in counts) counts[cb.value]++;
+        });
+      });
+      return counts;
+    }
+
+    function getHighScoreTypes(counts, threshold = 0.6) {
+      const max = Math.max(counts.A, counts.B, counts.C, counts.D);
+      if (max === 0) return [];
+      const types = [];
+      if (counts.A >= max * threshold) types.push('A');
+      if (counts.B >= max * threshold) types.push('B');
+      if (counts.C >= max * threshold) types.push('C');
+      if (counts.D >= max * threshold) types.push('D');
+      return types;
+    }
+
+    function getSelectedAnswers() {
+      const selected = {};
+      questions.forEach(q => {
+        const checked = document.querySelectorAll(`input[name="q${q.id}"]:checked`);
+        if (checked.length > 0) {
+          const labels = [];
+          checked.forEach(cb => {
+            const label = document.querySelector(`label[for="q${q.id}_${cb.value}"]`);
+            if (label) labels.push(label.textContent.trim());
+          });
+          selected[q.id] = labels;
+        }
+      });
+      return selected;
+    }
+
+    const knowledgeCategories = {
+      A: "《过敏性鼻炎（尘螨/花粉/Th2主导型）》",
+      B: "《屏障功能缺陷型》",
+      C: "《毒性/代谢淤积型》",
+      D: "《抗生素滥用/抵抗力缺陷型》"
+    };
+
+    const typeNames = {
+      A: "过敏性鼻炎高风险",
+      B: "屏障功能缺陷型高风险",
+      C: "毒性/代谢淤积型高风险",
+      D: "抗生素滥用/抵抗力缺陷型高风险"
+    };
+
+    const typeDetails = {
+      A: `🔍 高风险线索：症状与过敏原相关，抗组胺药有效，常合并其他过敏问题。\n📋 建议方向：明确过敏原，环境控制，规范用药，评估脱敏治疗。\n🥗 膳食营养方向：控糖、Omega-3、维生素D、益生菌、槲皮素。`,
+      B: `🔍 高风险线索：对冷空气、刺激气味敏感，抗过敏药效果差，皮肤干燥。\n📋 建议方向：停止破坏（加湿、避烟），修复黏膜（锌、维生素A、C），同步修复肠道。\n🥗 膳食营养方向：补充锌-维生素A-维生素C修复铁三角，益生菌，Omega-3。`,
+      C: `🔍 高风险线索：高脂高糖饮食后加重，便秘，舌苔厚腻，皮肤出油。\n📋 建议方向：饮食净化，打通排泄，支持肝脏解毒。\n🥗 膳食营养方向：NAC、镁、水飞蓟素、姜黄素。`,
+      D: `🔍 高风险线索：反复感染-抗生素循环，非感染期也鼻塞，消化不良。\n📋 建议方向：严格掌握抗生素指征，重建肠道菌群，纠正营养缺乏。\n🥗 膳食营养方向：高剂量多菌株益生菌、维生素D、锌、NAC。`
+    };
+
+    function generatePrompt(types, counts, selectedAnswers) {
+      let prompt = "请根据以下鼻炎自测结果，生成个性化的膳食营养辅助方案。\n\n";
+      prompt += "【高风险类型】\n";
+      if (types.length === 0) {
+        prompt += "未明确识别主导类型。\n";
+      } else {
+        types.forEach(t => prompt += `- ${typeNames[t]}\n`);
+      }
+      prompt += "\n【关键线索摘要】\n";
+      for (let i = 1; i <= questions.length; i++) {
+        if (selectedAnswers[i]) {
+          const qText = questions[i-1].text;
+          prompt += `- ${qText}：${selectedAnswers[i].join('；')}\n`;
+        }
+      }
+      prompt += "\n【分类计数】\n";
+      prompt += `A类（典型过敏）选项数量：${counts.A}\n`;
+      prompt += `B类（屏障脆弱）选项数量：${counts.B}\n`;
+      prompt += `C类（代谢淤积）选项数量：${counts.C}\n`;
+      prompt += `D类（抗生素相关）选项数量：${counts.D}\n`;
+      prompt += "\n请基于以上信息，结合安心滋养知识库中的鼻炎专题，提供包括膳食原则、营养补剂建议及干预要点的综合方案。";
+      return prompt;
+    }
+
+    function generateResult(types, counts, selectedAnswers) {
+      let html = '';
+      if (types.length === 0) {
+        html += `<div class="result-type">未能识别高风险类型</div><p>您可能选择了较多“不确定”选项。建议带着问卷中的问题，有意识地观察自己1-2周后重新测评。</p>`;
+        return html;
+      }
+
+      if (types.length === 1) {
+        const type = types[0];
+        html += `<div class="result-type">📌 ${typeNames[type]}</div>`;
+        html += `<div class="result-sub">基于您的自测结果，提示您可能存在该类型的鼻炎倾向。</div>`;
+        html += `<div class="result-detail">${typeDetails[type]}</div>`;
+        html += `<div class="result-advice"><strong>📖 下一步：</strong>请前往安心滋养知识库，查阅<strong>${knowledgeCategories[type]}</strong>专题，获取完整的干预思路。</div>`;
+      } else {
+        const names = types.map(t => typeNames[t]).join(' 与 ');
+        html += `<div class="result-type">📌 混合类型高风险</div>`;
+        html += `<div class="result-sub">您的情况较为复杂，呈现多种类型的特征。</div>`;
+        html += `<div class="result-detail">🔗 混合类型干预原则：按“先解决排泄和感染，再修复屏障，最后调节免疫”的顺序。<br><br>`;
+        types.forEach(t => html += `▶ ${typeNames[t]}：<br>${typeDetails[t]}<br><br>`);
+        html += `</div>`;
+        const categoryList = types.map(t => knowledgeCategories[t]).join('、');
+        html += `<div class="result-advice"><strong>📖 下一步：</strong>请结合安心滋养知识库中的<strong>${categoryList}</strong>专题。</div>`;
+      }
+
+      const promptText = generatePrompt(types, counts, selectedAnswers);
+      html += `
+        <div class="ai-prompt-box">
+          <h3>🤖 AI个性化方案提示词</h3>
+          <p style="font-size:0.9rem; margin-bottom:0.6rem;">复制以下内容，粘贴到任意AI助手，即可获得针对您情况的初步膳食营养建议。</p>
+          <div class="ai-prompt-text" id="aiPromptText">${escapeHtml(promptText)}</div>
+          <button class="copy-btn" id="copyPromptBtn">📋 一键复制提示词</button>
+        </div>
+      `;
+      return html;
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function showResults() {
+      const counts = collectCounts();
+      const types = getHighScoreTypes(counts);
+      const selectedAnswers = getSelectedAnswers();
+      const resultDiv = document.getElementById('resultContent');
+      resultDiv.innerHTML = generateResult(types, counts, selectedAnswers);
+      document.getElementById('resultContainer').style.display = 'block';
+      window.scrollTo({ top: document.getElementById('resultContainer').offsetTop - 50, behavior: 'smooth' });
+
+      const copyBtn = document.getElementById('copyPromptBtn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function() {
+          const promptText = document.getElementById('aiPromptText').textContent;
+          navigator.clipboard.writeText(promptText).then(() => {
+            copyBtn.textContent = '✅ 已复制';
+            setTimeout(() => { copyBtn.textContent = '📋 一键复制提示词'; }, 2000);
+          });
+        });
+      }
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('#quizForm input').forEach(input => input.checked = false);
+      document.getElementById('resultContainer').style.display = 'none';
+      document.getElementById('progressBar').style.width = '0%';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderQuestions();
+    document.getElementById('submitBtn').addEventListener('click', function() {
+      let answered = 0;
+      questions.forEach(q => {
+        if (document.querySelectorAll(`input[name="q${q.id}"]:checked`).length > 0) answered++;
+      });
+      if (answered < questions.length * 0.7) {
+        alert(`您还有 ${questions.length - answered} 题未作答。为了结果更准确，建议至少完成70%的题目。`);
+      }
+      showResults();
+    });
+    document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+  })();
+</script>
+</body>
+</html>

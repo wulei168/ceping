@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>挑食类型快速自查表 · 安心滋养</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #fef9ef;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: #2c3a2b;
+            padding: 20px 16px 60px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .card {
+            background: white;
+            border-radius: 32px;
+            padding: 24px 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e7dcc8;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: #3c6b3a;
+        }
+        .sub {
+            color: #6c7a5a;
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
+        .principle-box {
+            background: #eef5e9;
+            border-left: 5px solid #7caf5e;
+            padding: 16px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+        .group-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 24px 0 12px 0;
+            color: #3a5e35;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid #7caf5e;
+            padding-left: 14px;
+        }
+        .question-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0e7da;
+        }
+        .question-text {
+            flex: 1;
+            font-size: 0.9rem;
+            padding-right: 12px;
+        }
+        .options {
+            display: flex;
+            gap: 20px;
+            flex-shrink: 0;
+        }
+        .options label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        button {
+            background: #7caf5e;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #5e9142;
+        }
+        .result-area {
+            background: #fefcf5;
+            border-radius: 32px;
+            padding: 28px;
+            border-left: 6px solid #7caf5e;
+            margin-top: 16px;
+        }
+        .score-card {
+            background: #faf4e8;
+            border-radius: 24px;
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 12px;
+        }
+        .score-item {
+            text-align: center;
+            min-width: 80px;
+        }
+        .score-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #3c6b3a;
+        }
+        .type-badge {
+            display: inline-block;
+            background: #e9f0e2;
+            padding: 6px 16px;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            margin: 8px 4px 0 0;
+        }
+        .divider {
+            margin: 24px 0;
+            border-top: 1px dashed #ddd2bc;
+        }
+        .misuse-list {
+            background: #fef2e0;
+            padding: 14px 18px;
+            border-radius: 24px;
+            margin: 16px 0;
+        }
+        .action-steps {
+            background: #eef4e6;
+            padding: 18px;
+            border-radius: 28px;
+            margin: 20px 0;
+        }
+        .footer-note {
+            font-size: 0.7rem;
+            color: #9b8e6a;
+            text-align: center;
+            margin-top: 24px;
+        }
+        @media (max-width: 550px) {
+            .question-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .options { align-self: flex-end; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🍽️ 挑食类型快速自查表</h1>
+        <div class="sub">2-12岁儿童 · 尤其关注ADHD儿童的感官与执行功能特点</div>
+    </div>
+
+    <div id="safetyCard" class="card">
+        <div class="principle-box">
+            <strong>📋 使用说明</strong><br>
+            • 请根据孩子近1-3个月的日常表现，勾选“是”或“否”，不必纠结“有时候”。<br>
+            • 孩子可能同时符合多种类型，请以勾选数量最多的为主要干预方向。<br>
+            • 如果两种类型得分接近（相差≤1分），说明挑食由多重因素叠加，需综合应对。<br>
+            • 本自查表适用于2-12岁儿童，ADHD儿童常见感官敏感型和环境干扰型得分较高。
+        </div>
+        <label style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+            <input type="checkbox" id="agreeCheck"> 我已阅读使用说明，开始评估
+        </label>
+        <button id="startBtn" disabled>开始填写问卷</button>
+    </div>
+
+    <div id="questionnaire" style="display: none;"></div>
+    <div id="resultArea" style="display: none;"></div>
+    <div class="footer-note">⚠️ 本评估仅供参考，不能替代专业医疗意见。持续严重挑食建议咨询儿科或营养科医生。</div>
+</div>
+
+<script>
+    // 题目库
+    const groups = [
+        { name: "感官敏感型", code: "A", items: [
+            "拒绝某类质地的食物（如泥状、糊状、纤维粗糙、滑黏、脆硬），与味道无关",
+            "对食物温度敏感（只吃特定温度，太烫或太凉就拒绝）",
+            "对混合在一起的食物排斥（如菜和饭不能混在一起，酱汁不能碰到其他食物）",
+            "对食物的气味非常敏感，闻到不熟悉或不喜欢的味道就拒食",
+            "只接受特定品牌或特定包装的食物（换包装或换品牌就不吃）",
+            "喜欢口味非常单一、可预测的食物（如白米饭、白面条、原味面包），抗拒调味复杂或“惊喜”味道",
+            "拒绝食物时表情痛苦、作呕，或生理性干呕，而非单纯“不想吃”",
+            "口腔内有过度的触觉防御（如拒绝刷牙、讨厌某些材质的餐具、不喜欢手被弄脏）"
+        ]},
+        { name: "行为对抗型", code: "B", items: [
+            "餐桌上经常出现“拉锯战”——你越让他吃，他越不吃；你不理他，他反而可能吃几口",
+            "同样的食物，在幼儿园/学校或别人家吃得挺好，在家就坚决不吃",
+            "对“必须吃”“最后一口”等指令反应激烈，情绪对抗明显",
+            "用“不吃”来获取关注、逃避其他任务（如不吃就可以离开餐桌去玩）",
+            "一旦你妥协给了替代食物（如零食、他喜欢的特定食物），他立刻情绪好转并接受",
+            "你感觉吃饭变成了你和孩子之间的“权力斗争”，而非单纯的进食问题",
+            "孩子在餐桌上频繁试探规则边界（如故意扔食物、玩弄餐具、多次离开座位），观察你的反应",
+            "当你使用奖惩手段（如“吃完就可以看动画片”“不吃就别想玩”）时，短期内有效但很快失效或变本加厉"
+        ]},
+        { name: "食欲节律紊乱型", code: "C", items: [
+            "正餐几乎不饿，但两餐之间频繁要求零食或饮料（尤其是高糖高碳水的零食）",
+            "餐前1-2小时内吃过零食（即使量不大），正餐就明显吃得少",
+            "早餐食欲差，或上午加餐后午餐不吃，放学后极度饥饿，晚餐暴食或要求睡前加餐",
+            "大便不规律（便秘、羊粪蛋、或腹泻），且挑食情况与排便状态相关",
+            "饮水量不足，常以含糖饮料、果汁、牛奶代替水",
+            "活动量大的日子食量正常或偏多，活动量小的日子食量锐减",
+            "服用ADHD药物期间午餐几乎不饿，药物假期或晚间食欲明显回升",
+            "你难以判断孩子是“真的不饿”还是“故意不吃”，因为他的饥饿信号不明显"
+        ]},
+        { name: "经验固化型", code: "D", items: [
+            "拒绝某食物后，你很少或从未再次尝试提供（“试过，他不吃”）",
+            "家庭餐桌上经常出现同样的几道菜，新食材出现的频率很低",
+            "孩子有强烈的“食物标签”——“我是不吃青菜的人”“我讨厌红色食物”",
+            "孩子看到不熟悉的食物，不等尝试就说“我不喜欢”",
+            "你或家人曾在孩子面前对该食物表达过负面评价（“这个不好吃”“我也不爱吃”）",
+            "孩子曾经因为某次不愉快的进食经历（如被强迫吃、呛到、吃到异物、生病时吃的食物）而从此拒绝该食物或类似食物",
+            "孩子只吃“看得见原料”的食物（如整块的肉、完整的菜叶），拒绝任何“加工过”或“看不出来是什么”的食物（如肉丸、饺子馅、汤羹）",
+            "孩子对自己“不吃什么”有清晰且固定的描述，且维持超过6个月"
+        ]},
+        { name: "环境干扰型", code: "E", items: [
+            "吃饭时必须开着电视/iPad/手机，否则不吃或吃得极差",
+            "餐桌上经常催促、命令、恳求或威胁孩子吃饭，进餐氛围紧张",
+            "孩子吃饭时分心严重，东张西望、玩餐具、发呆，需要不断提醒“快吃”",
+            "孩子无法安静坐在餐椅上吃完一顿饭，频繁离开座位",
+            "家庭进餐时间不固定，或孩子经常单独进食（先吃或后吃，不与他人同桌）",
+            "餐桌上存在让孩子分心的物品（玩具、书本、杂物），或进餐环境嘈杂",
+            "家长在餐桌上过于关注孩子的进食量，频繁看孩子的碗、数吃了多少口",
+            "孩子吃饭时表现出对周围环境的高度警觉，容易被声音、走动、光线变化干扰"
+        ]}
+    ];
+
+    let scores = { A:0, B:0, C:0, D:0, E:0 };
+    let answered = { A:0, B:0, C:0, D:0, E:0 };
+
+    // 详细的类型解读和干预建议库
+    const typeDetails = {
+        A: {
+            name: "感官敏感型",
+            core: "孩子不是“不想吃”，而是食物的某些感官属性（质地、气味、温度、外观）触发了生理性防御反应。拒食时往往伴随痛苦表情或干呕。",
+            common: ["只吃特定质地", "食物不能混合", "对气味敏感", "口腔触觉防御明显"],
+            adhd_link: "ADHD儿童共现感官处理差异的比例较高。这不是“挑食坏习惯”，而是神经系统对感官刺激的异常处理。",
+            missteps: ["误区6：过早添加调味品/培养重口味", "误区7：家庭饮食结构单一或独食制", "误区10：家长对食物做负面评价", "误区11：对新食物放弃太快"],
+            intervention: [
+                "❶ 尊重感官边界，不强迫吃无法接受的质地。允许孩子使用“吐出来专用碗”，降低口腔试探的压力。",
+                "❷ 采用「食物链」梯度脱敏：看→闻→摸→舔→咬一小口。每进步一小步都给予积极反馈。",
+                "❸ 在可接受的质地里寻找同营养替代品（如不吃软烂蔬菜，可提供生脆蔬菜）。",
+                "❹ 将新食物与安全食物并排摆放，不要求吃，只是“盘边暴露”。",
+                "❺ 借助触觉游戏（玩米、玩面团、手指画）降低口腔触觉防御，不局限在餐桌上。"
+            ]
+        },
+        B: {
+            name: "行为对抗型",
+            core: "挑食是亲子权力斗争的表现形式。孩子在餐桌上通过“不吃”来获得控制权、吸引关注或逃避任务。食物本身可能并非问题。",
+            common: ["你越催越不吃", "同样食物在外面吃", "对指令反应激烈", "获得替代食物后立刻好转"],
+            adhd_link: "ADHD儿童对“被控制”高度敏感，易触发对立违抗。餐桌是少数他们能完全掌控的领域。",
+            missteps: ["误区1：追着喂饭/强迫进食", "误区3：用食物作为奖惩", "误区4：包办喂食，剥夺自主权", "误区9：破坏进食氛围的沟通方式"],
+            intervention: [
+                "❶ 彻底退出权力斗争：执行“责任划分”——家长决定吃什么、何时吃、在哪儿吃；孩子决定吃不吃、吃多少。不说教、不追喂。",
+                "❷ 使用「离开餐桌=进餐结束」规则，如果孩子中途离开，平静收走食物，等到下一餐。",
+                "❸ 用选择权替代指令：“你想先吃西兰花还是胡萝卜？”给予有限的控制感。",
+                "❹ 给予餐桌上的正面关注（聊天、互动、表扬积极行为），而非只在“不吃”时关注。",
+                "❺ 固定用餐时间和时长（如30分钟），使用可视化计时器，减少权力拉锯。"
+            ]
+        },
+        C: {
+            name: "食欲节律紊乱型",
+            core: "孩子不是“不爱吃”，而是进餐时确实不饿。饥饿-饱足节律被零食、饮料、不规律进餐或药物扰乱。",
+            common: ["正餐不饿，零食不断", "餐前零食毁正餐", "早餐差、放学后暴食", "服药期间午餐不饿"],
+            adhd_link: "ADHD药物直接抑制食欲；ADHD儿童冲动控制差易导致零食失控；执行功能障碍影响饥饿信号识别。",
+            missteps: ["误区2：饭前零食不限量", "误区5：认为“孩子吃得少=有问题”", "误区8：边吃边看电视/玩玩具"],
+            intervention: [
+                "❶ 建立「零食窗口制」：固定上下午各一次零食，份量固定（如一小杯酸奶/半个水果），其余时间厨房关门。",
+                "❷ 放学后提供「过渡小吃」：高蛋白、低GI（如奶酪棒、鸡蛋、一小把坚果），保护晚餐食欲。",
+                "❸ 服药儿童将营养重心移至早餐（高蛋白、高能量）和下午加餐；午餐“不强求量”，可用流质营养补充。",
+                "❹ 用生长曲线客观评估营养状况，缓解“食量焦虑”。只要身高体重曲线平稳，不必纠结单餐食量。",
+                "❺ 增加白天活动量，调节饥饿节律。"
+            ]
+        },
+        D: {
+            name: "经验固化型",
+            core: "挑食源于不足够的正面暴露、负面的早期经历或家庭环境中的负面暗示。大脑已将“某食物=不好吃/不安全”固化为认知。",
+            common: ["拒绝一次后不再提供", "强烈的自我标签", "家人负面评价影响", "单次不愉快经历永久拒绝"],
+            adhd_link: "ADHD的“全有或全无”思维模式易将单次负面经验固化为永久规则；执行功能困难使克服“新事物恐惧”需要更多重复暴露。",
+            missteps: ["误区7：家庭饮食结构单一", "误区10：家长对食物做负面评价", "误区11：对新食物放弃太快"],
+            intervention: [
+                "❶ 建立「暴露计数器」思维：目标是“完成15次中性暴露”（盘中出现，不强迫吃），而非“让他吃下去”。",
+                "❷ 改变呈现方式：切碎、改变质地、换烹饪方法、与新名字+安全食物搭配。",
+                "❸ 家长示范中性或正面态度：“妈妈觉得这个青菜脆脆的，很好吃。” 盘边暴露法。",
+                "❹ 用新名字+新形态绕过旧的负面标签（“这不是西兰花，这是绿色小树”）。",
+                "❺ 与孩子一起购物、洗菜、参与简单烹饪，增加正面接触。"
+            ]
+        },
+        E: {
+            name: "环境干扰型",
+            core: "挑食主要由进餐环境中的外部刺激或家庭互动模式引发。当环境安静、规则清晰、压力降低时，进食行为改善。",
+            common: ["必须边看屏幕边吃", "餐桌氛围紧张", "分心严重坐不住", "时间不固定或独食"],
+            adhd_link: "ADHD儿童注意力易被环境劫持，需要外部结构支持；对情绪氛围敏感，压力环境下食欲关闭；执行功能困难需清晰规则。",
+            missteps: ["误区8：边吃边看电视/玩玩具", "误区9：破坏进食氛围的沟通方式", "误区7：独食制"],
+            intervention: [
+                "❶ 关掉屏幕，收起玩具，锚定至少一餐为「无干扰共食餐」（从早餐或晚餐开始）。",
+                "❷ 使用可视化计时器替代语言催促：“还有10分钟收碗，我们看着时间慢慢吃。”",
+                "❸ 家长示范专注进食和轻松互动，不监控孩子吃多少，只营造愉快的聊天氛围。",
+                "❹ 建立可预测的进餐流程：固定时间、固定座位、饭前洗手、摆放餐具等仪式。",
+                "❺ 减少餐桌上的分心物（玩具、书本、杂物），调暗灯光或关掉背景噪音。"
+            ]
+        }
+    };
+
+    function renderQuestionnaire() {
+        let html = `<form id="surveyForm">`;
+        for (let g of groups) {
+            html += `<div class="group-title">${g.name}（${g.code}组）</div>`;
+            g.items.forEach((text, idx) => {
+                const qid = `${g.code}_${idx}`;
+                html += `<div class="question-row">
+                            <div class="question-text">${text}</div>
+                            <div class="options">
+                                <label><input type="radio" name="${qid}" value="1"> 是</label>
+                                <label><input type="radio" name="${qid}" value="0" checked> 否</label>
+                            </div>
+                        </div>`;
+            });
+        }
+        html += `<button type="button" id="submitBtn">查看详细测评报告</button></form>`;
+        document.getElementById('questionnaire').innerHTML = html;
+        document.getElementById('submitBtn').addEventListener('click', computeResult);
+    }
+
+    function computeResult() {
+        // 重置得分
+        scores = { A:0, B:0, C:0, D:0, E:0 };
+        let totalPerGroup = { A:8, B:8, C:8, D:8, E:8 };
+        for (let g of groups) {
+            let groupScore = 0;
+            for (let i = 0; i < g.items.length; i++) {
+                const qid = `${g.code}_${i}`;
+                const selected = document.querySelector(`input[name="${qid}"]:checked`);
+                if (selected && selected.value === "1") groupScore++;
+            }
+            scores[g.code] = groupScore;
+        }
+
+        // 找出最高分和次高分
+        let sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+        let primaryCode = sorted[0][0];
+        let primaryScore = sorted[0][1];
+        let secondaryCode = sorted[1][0];
+        let secondaryScore = sorted[1][1];
+        let isMixed = (primaryScore - secondaryScore) <= 1 && secondaryScore >= 4;
+
+        // 获取类型详情
+        const primaryDetail = typeDetails[primaryCode];
+        const secondaryDetail = secondaryCode ? typeDetails[secondaryCode] : null;
+
+        // 构建结果HTML
+        let resultHtml = `<div class="result-area">
+            <h3>📊 评估结果：${primaryDetail.name}</h3>
+            <div class="score-card">
+                ${Object.entries(scores).map(([code, sc]) => `<div class="score-item"><div>${typeDetails[code].name}</div><div class="score-value">${sc}/8</div></div>`).join('')}
+            </div>`;
+
+        if (isMixed) {
+            resultHtml += `<div class="principle-box" style="background:#fef0d9;"><strong>🔍 综合型挑食提示</strong><br>
+            您的孩子在 ${primaryDetail.name}（${primaryScore}分）和 ${secondaryDetail.name}（${secondaryScore}分）两个类型得分非常接近，说明挑食由多重因素共同驱动。建议先以最影响日常功能（如食欲节律紊乱导致营养摄入不足，或行为对抗导致每餐都像战争）的类型作为优先干预起点，稳定后再处理第二个维度。</div>`;
+        }
+
+        // 核心特征解读
+        resultHtml += `<div class="divider"></div>
+        <h4>🧩 核心特征解读</h4>
+        <p><strong>${primaryDetail.core}</strong></p>
+        <p>常见表现：${primaryDetail.common.join("、")}。</p>
+        <p><strong>与ADHD的关联：</strong> ${primaryDetail.adhd_link}</p>`;
+
+        // 需要重点阅读的误区
+        resultHtml += `<div class="misuse-list"><strong>⚠️ 需要重点阅读的误区章节</strong><br>${primaryDetail.missteps.map(m => `• ${m}`).join('<br>')}</div>`;
+
+        // 干预方案
+        resultHtml += `<div class="action-steps"><strong>🎯 分步干预方案（从最容易的一步开始）</strong><br>${primaryDetail.intervention.map(s => `<div style="margin-bottom: 8px;">${s}</div>`).join('')}</div>`;
+
+        // 如果是混合型，增加第二个类型的补充建议
+        if (isMixed && secondaryDetail) {
+            resultHtml += `<div class="divider"></div><h4>🔄 次要类型 "${secondaryDetail.name}" 的补充建议</h4>
+            <p>当您处理完主要类型的核心冲突后，可参照以下方向叠加干预：</p>
+            <div class="action-steps" style="background:#faf2e2;">${secondaryDetail.intervention.slice(0,3).map(s => `<div style="margin-bottom: 6px;">${s}</div>`).join('')}</div>`;
+        }
+
+        // 综合通用建议 + 给家长的提醒
+        resultHtml += `<div class="divider"></div>
+        <div class="principle-box"><strong>💡 给家长的提醒</strong><br>
+        • 类型不是固定不变的。随着干预和孩子成长，主要类型可能迁移。<br>
+        • 得分高低不代表“问题严重程度”，只代表该类型的特征更为集中。<br>
+        • 如果你感觉“好像每种都有点”，别焦虑。选择得分最高的1-2个类型作为起点即可。<br>
+        • ADHD儿童的挑食往往需要更长的干预周期和更多的重复暴露。进步的单位是“月”，不是“天”。<br>
+        • 建议从最小、最容易成功的一项调整开始（如“固定零食窗口”“关掉电视吃一餐”），积累成功体验后再逐步扩展。
+        </div>`;
+
+        resultHtml += `<button id="restartBtn">重新填写问卷</button></div>`;
+        document.getElementById('questionnaire').style.display = 'none';
+        document.getElementById('resultArea').style.display = 'block';
+        document.getElementById('resultArea').innerHTML = resultHtml;
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            document.getElementById('questionnaire').style.display = 'block';
+            document.getElementById('resultArea').style.display = 'none';
+            renderQuestionnaire();
+        });
+    }
+
+    // 启动交互
+    document.getElementById('startBtn').addEventListener('click', () => {
+        document.getElementById('safetyCard').style.display = 'none';
+        document.getElementById('questionnaire').style.display = 'block';
+        renderQuestionnaire();
+    });
+    const agreeCheck = document.getElementById('agreeCheck');
+    const startBtn = document.getElementById('startBtn');
+    agreeCheck.addEventListener('change', () => { startBtn.disabled = !agreeCheck.checked; });
+</script>
+</body>
+</html>

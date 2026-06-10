@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>高组胺不耐受自我筛查 · 安心滋养</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #f4f1e6 0%, #fef9ed 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Roboto', sans-serif;
+            color: #2c3a2b;
+            padding: 24px 20px 60px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255, 252, 242, 0.96);
+            border-radius: 48px;
+            padding: 28px 30px;
+            margin-bottom: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08);
+            border: 1px solid rgba(210,195,150,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #3c6b3a, #6f9e4f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sub {
+            display: block;
+            color: #5e7256;
+            background: rgba(255,255,245,0.8);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            margin: 12px auto 0;
+            max-width: fit-content;
+        }
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 20px 0 16px 0;
+            border-left: 4px solid #7caf5e;
+            padding-left: 16px;
+        }
+        .question {
+            margin-bottom: 28px;
+        }
+        .question h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-left: 8px;
+        }
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 12px;
+            background: #ffffffcc;
+            border-radius: 60px;
+            border: 1px solid #e1d2b6;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .option-item:hover {
+            background: #f7f2e4;
+        }
+        .option-item input {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .btn-submit {
+            background: #7caf5e;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn-submit:hover {
+            background: #649a46;
+        }
+        .result-box {
+            background: #fefcf5;
+            border-radius: 48px;
+            padding: 28px;
+            margin-top: 28px;
+            border-left: 6px solid #7caf5e;
+        }
+        .risk-badge {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 60px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+        .risk-high { background: #f5c6b0; color: #9b4a2e; }
+        .risk-mid { background: #fae6b3; color: #b87c2e; }
+        .risk-low { background: #d9edc7; color: #4a784a; }
+        .risk-verylow { background: #e0e0d0; color: #5e5e4a; }
+        .warning-box {
+            background: #fef2e0;
+            border-radius: 28px;
+            padding: 16px;
+            margin: 16px 0;
+            font-size: 0.85rem;
+            border-left: 4px solid #d4b87a;
+        }
+        hr {
+            margin: 16px 0;
+            border-color: #ece0ca;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #bbaa82;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            .card { padding: 20px; }
+            .option-item { padding: 8px 12px; }
+        }
+        button {
+            background: #7caf5e;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-allergies"></i> 高组胺不耐受自我筛查</h1>
+        <div class="sub">请根据近3个月常态填写 | 自动评估风险等级</div>
+    </div>
+
+    <div class="card" id="questionnaire">
+        <!-- 第一部分：症状特征 -->
+        <div class="section-title"><i class="fas fa-stethoscope"></i> 第一部分：症状特征</div>
+
+        <div class="question">
+            <h3>Q1. 进食后短时间内（数分钟至2小时），您是否经常出现以下不适？<br><small>（可多选）</small></h3>
+            <div class="options-list" id="q1Options">
+                <label class="option-item"><input type="checkbox" value="flush" data-score="2"> 面部、颈部突然潮红、发热 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="nasal" data-score="1.5"> 鼻塞、流清涕（非感冒引起） (+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="headache" data-score="2"> 偏头痛或搏动性头痛 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="palpitations" data-score="1.5"> 心跳加快、心悸 (+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="rash" data-score="2"> 皮肤瘙痒、出现荨麻疹样皮疹或风团 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="none_q1" data-score="0"> 以上均无 (0分)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>Q2. 这些快速发作的症状出现频率是？（单选）</h3>
+            <div class="options-list" id="q2Options">
+                <label class="option-item"><input type="radio" name="freq" value="A" data-score="2"> A. 几乎每天都有 (+2分)</label>
+                <label class="option-item"><input type="radio" name="freq" value="B" data-score="1.5"> B. 每周3-5次 (+1.5分)</label>
+                <label class="option-item"><input type="radio" name="freq" value="C" data-score="0.5"> C. 每周1-2次 (+0.5分)</label>
+                <label class="option-item"><input type="radio" name="freq" value="D" data-score="0"> D. 很少或偶尔 (0分)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>Q3. 除上述快速症状外，您是否还长期被以下问题困扰？<br><small>（可多选）</small></h3>
+            <div class="options-list" id="q3Options">
+                <label class="option-item"><input type="checkbox" value="wake" data-score="1.5"> 凌晨3-4点左右无故醒来，难以再入睡 (+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="chronic_headache" data-score="1.5"> 无明确过敏原的反复头痛或偏头痛 (+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="urticaria" data-score="2"> 慢性荨麻疹（反复发作超过6周，查不出过敏原） (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="anxiety" data-score="1"> 莫名的焦虑感或惊恐感，无心理诱因 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="none_q3" data-score="0"> 以上均无 (0分)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>Q4. 您的头痛是否具有以下特征？<br><small>（可多选，取最高分项计分）</small></h3>
+            <div class="options-list" id="q4Options">
+                <label class="option-item"><input type="checkbox" value="migraine" data-score="2"> 单侧搏动性头痛，对光线或声音敏感 —— 典型偏头痛 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="tension" data-score="1"> 双侧紧张性头痛，无明显搏动 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="no_headache" data-score="0"> 没有明显头痛 (0分)</label>
+            </div>
+        </div>
+
+        <!-- 第二部分：触发食物 -->
+        <div class="section-title"><i class="fas fa-utensils"></i> 第二部分：触发食物</div>
+
+        <div class="question">
+            <h3>Q5. 进食以下哪几类食物后，常出现脸潮红、头痛、鼻塞、心跳快或荨麻疹？<br><small>（可多选）</small></h3>
+            <div class="options-list" id="q5Options">
+                <label class="option-item"><input type="checkbox" value="red_wine" data-score="2.5"> 红酒 (+2.5分)</label>
+                <label class="option-item"><input type="checkbox" value="beer" data-score="1.5"> 啤酒或起泡酒（香槟等）(+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="cheese" data-score="2"> 陈年奶酪（帕尔玛、切达、蓝纹、高达等）(+2分)</label>
+                <label class="option-item"><input type="checkbox" value="fermented_veg" data-score="1.5"> 发酵蔬菜（泡菜、酸菜、腌黄瓜等）(+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="fermented_soy" data-score="1.5"> 发酵豆制品（酱油大量使用、味噌、纳豆、豆腐乳）(+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="cured_meat" data-score="2"> 风干火腿、萨拉米香肠、熏肉或鱼露、虾酱 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="canned_fish" data-score="2"> 沙丁鱼罐头、腌鲱鱼或储存不当的鱼 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="avocado" data-score="1.5"> 牛油果 (+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="tomato_eggplant" data-score="1"> 番茄、茄子 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="chocolate" data-score="1"> 黑巧克力/可可制品 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="leftovers" data-score="2.5"> 吃剩菜（做熟后放置超过2小时的任何肉或菜）(+2.5分)</label>
+                <label class="option-item"><input type="checkbox" value="none_q5" data-score="0"> 以上食物都没特别感觉 (0分)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>Q6. 您是否曾经尝试过“减少或不碰”上述某类食物，上述快速症状有明显改善？（单选）</h3>
+            <div class="options-list" id="q6Options">
+                <label class="option-item"><input type="radio" name="elimination" value="yes" data-score="3"> A. 是，试过且症状减轻 (+3分)</label>
+                <label class="option-item"><input type="radio" name="elimination" value="no_try" data-score="0"> B. 没有试过，不确定 (0分)</label>
+                <label class="option-item"><input type="radio" name="elimination" value="no_effect" data-score="-1"> C. 试过，但没改善 (-1分)</label>
+            </div>
+        </div>
+
+        <!-- 第三部分：相关因素 -->
+        <div class="section-title"><i class="fas fa-pills"></i> 第三部分：相关因素</div>
+
+        <div class="question">
+            <h3>Q7. 您是否长期服用以下药物？<br><small>（可多选，每个选项计分）</small></h3>
+            <div class="options-list" id="q7Options">
+                <label class="option-item"><input type="checkbox" value="nsaids" data-score="2"> 布洛芬、阿司匹林、双氯芬酸等非甾体抗炎止痛药 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="antidepressant" data-score="1"> 部分抗抑郁药（如阿米替林、氟西汀等）(+1分)</label>
+                <label class="option-item"><input type="checkbox" value="none_q7" data-score="0"> 以上均无 (0分)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>Q8. 女性用户：以下哪种情况符合您？（男性或不符合者请选D）</h3>
+            <div class="options-list" id="q8Options">
+                <label class="option-item"><input type="radio" name="female" value="premenstrual" data-score="2"> A. 月经前1周内症状明显加重 (+2分)</label>
+                <label class="option-item"><input type="radio" name="female" value="ovulation" data-score="1.5"> B. 排卵期前后症状明显加重 (+1.5分)</label>
+                <label class="option-item"><input type="radio" name="female" value="hormone" data-score="1.5"> C. 正在服用含雌激素的避孕药或接受激素替代疗法 (+1.5分)</label>
+                <label class="option-item"><input type="radio" name="female" value="none" data-score="0"> D. 不适用 (0分)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>Q9. 您是否曾被诊断有慢性念珠菌感染史（如反复鹅口疮、阴道酵母菌感染）或真菌过度生长？（单选）</h3>
+            <div class="options-list" id="q9Options">
+                <label class="option-item"><input type="radio" name="candida" value="yes" data-score="1"> A. 是 (+1分)</label>
+                <label class="option-item"><input type="radio" name="candida" value="no" data-score="0"> B. 否 (0分)</label>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>Q10. 您是否已有肠漏、肠易激综合征（IBS）、炎症性肠病（IBD）或小肠细菌过度生长（SIBO）的诊断？（单选）</h3>
+            <div class="options-list" id="q10Options">
+                <label class="option-item"><input type="radio" name="gut" value="yes" data-score="2"> A. 是 (+2分)</label>
+                <label class="option-item"><input type="radio" name="gut" value="no" data-score="0"> B. 否 (0分)</label>
+            </div>
+        </div>
+
+        <button class="btn-submit" id="submitBtn">提交并获取评估结果</button>
+    </div>
+
+    <div id="resultContainer" style="display: none;"></div>
+    <footer>🔍 本筛查基于临床特征设计，不能替代医生诊断。如有严重过敏症状请立即就医。</footer>
+</div>
+
+<script>
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        // 计算总分
+        let totalScore = 0;
+
+        // Q1 多选计分 (排除"以上均无"与其他项同时选中的冲突处理)
+        const q1Checks = document.querySelectorAll('#q1Options input[type="checkbox"]');
+        let q1Selected = [];
+        let q1None = false;
+        q1Checks.forEach(cb => {
+            if (cb.checked) {
+                if (cb.value === 'none_q1') q1None = true;
+                else q1Selected.push(cb);
+            }
+        });
+        if (!q1None) {
+            q1Selected.forEach(cb => {
+                totalScore += parseFloat(cb.getAttribute('data-score'));
+            });
+        }
+
+        // Q2 单选
+        const q2Selected = document.querySelector('input[name="freq"]:checked');
+        if (q2Selected) totalScore += parseFloat(q2Selected.getAttribute('data-score'));
+
+        // Q3 多选 (需处理“以上均无”)
+        const q3Checks = document.querySelectorAll('#q3Options input[type="checkbox"]');
+        let q3Selected = [];
+        let q3None = false;
+        q3Checks.forEach(cb => {
+            if (cb.checked) {
+                if (cb.value === 'none_q3') q3None = true;
+                else q3Selected.push(cb);
+            }
+        });
+        if (!q3None) {
+            q3Selected.forEach(cb => {
+                totalScore += parseFloat(cb.getAttribute('data-score'));
+            });
+        }
+
+        // Q4 取最高分 (多选，只加最高分的一项)
+        const q4Checks = document.querySelectorAll('#q4Options input[type="checkbox"]');
+        let maxQ4 = 0;
+        q4Checks.forEach(cb => {
+            if (cb.checked) {
+                let score = parseFloat(cb.getAttribute('data-score'));
+                if (score > maxQ4) maxQ4 = score;
+            }
+        });
+        totalScore += maxQ4;
+
+        // Q5 多选 (处理“以上都没有”)
+        const q5Checks = document.querySelectorAll('#q5Options input[type="checkbox"]');
+        let q5Selected = [];
+        let q5None = false;
+        q5Checks.forEach(cb => {
+            if (cb.checked) {
+                if (cb.value === 'none_q5') q5None = true;
+                else q5Selected.push(cb);
+            }
+        });
+        if (!q5None) {
+            q5Selected.forEach(cb => {
+                totalScore += parseFloat(cb.getAttribute('data-score'));
+            });
+        }
+
+        // Q6 单选
+        const q6Selected = document.querySelector('input[name="elimination"]:checked');
+        if (q6Selected) totalScore += parseFloat(q6Selected.getAttribute('data-score'));
+
+        // Q7 多选
+        const q7Checks = document.querySelectorAll('#q7Options input[type="checkbox"]');
+        let q7None = false;
+        q7Checks.forEach(cb => {
+            if (cb.checked) {
+                if (cb.value === 'none_q7') q7None = true;
+                else totalScore += parseFloat(cb.getAttribute('data-score'));
+            }
+        });
+        // 如果选了“以上均无”且与其他项冲突，应忽略其他项？但按逻辑互斥，我们强制：如果none被选中，其他不应加分
+        if (q7None) {
+            // 但需要保证其他项未选中？实际上界面已经通过"以上均无"单独项，但用户可能同时选，我们简单处理：如果none选中，则不加其他项分数。
+            // 因为我们已经在循环中加了非none的分数，如果none被选中，需要减去之前加的非none分数。简便：重新计算Q7部分
+            let q7Total = 0;
+            let hasNone = false;
+            q7Checks.forEach(cb => {
+                if (cb.checked && cb.value === 'none_q7') hasNone = true;
+            });
+            if (hasNone) {
+                // 重置Q7贡献
+                let originalAdd = 0;
+                q7Checks.forEach(cb => {
+                    if (cb.checked && cb.value !== 'none_q7') originalAdd += parseFloat(cb.getAttribute('data-score'));
+                });
+                totalScore -= originalAdd; // 减去之前错误添加的
+            }
+        }
+
+        // Q8 单选
+        const q8Selected = document.querySelector('input[name="female"]:checked');
+        if (q8Selected) totalScore += parseFloat(q8Selected.getAttribute('data-score'));
+
+        // Q9 单选
+        const q9Selected = document.querySelector('input[name="candida"]:checked');
+        if (q9Selected) totalScore += parseFloat(q9Selected.getAttribute('data-score'));
+
+        // Q10 单选
+        const q10Selected = document.querySelector('input[name="gut"]:checked');
+        if (q10Selected) totalScore += parseFloat(q10Selected.getAttribute('data-score'));
+
+        // 风险等级及解读
+        let riskLevel = '', riskClass = '', interpretation = '';
+        if (totalScore >= 15) {
+            riskLevel = '高风险';
+            riskClass = 'risk-high';
+            interpretation = '您的症状和触发食物模式高度指向组胺不耐受。肠道DAO酶活性可能不足。强烈建议进行2-4周的严格低组胺饮食排除期，同时注意食材极端新鲜、不吃剩菜。若症状明显改善（减轻>50%），可确认并进入再引入阶段。建议在功能医学医生或注册营养师指导下评估是否需要补充DAO酶、维生素C或槲皮素。';
+        } else if (totalScore >= 10) {
+            riskLevel = '中风险';
+            riskClass = 'risk-mid';
+            interpretation = '您存在组胺不耐受的中等可能性。建议先从Q5中勾选的最高分触发食物开始，回避2周，观察快速症状（脸红、头痛、鼻塞）是否减轻。特别注意：红酒、陈年奶酪、剩菜、发酵食品是四大最核心触发源。如果改善明显，再逐步扩展为全面低组胺饮食。';
+        } else if (totalScore >= 5) {
+            riskLevel = '低风险';
+            riskClass = 'risk-low';
+            interpretation = '组胺可能不是您的主要驱动因素，但存在一定敏感性。可尝试减少Q5中得分最高的1-2类食物，并尽量做到食材新鲜、不食剩菜，观察是否有变化。若同时有腹胀主诉，优先排查FODMAP。';
+        } else {
+            riskLevel = '极低风险';
+            riskClass = 'risk-verylow';
+            interpretation = '您的症状与典型组胺不耐受模式不符。若仍有头痛、脸红等症状，建议就诊变态反应科排查IgE过敏或肥大细胞问题。';
+        }
+
+        // 特殊提醒（通用）
+        const specialReminder = `
+            <div class="warning-box">
+                <i class="fas fa-exclamation-triangle"></i> <strong>特殊提醒</strong><br>
+                • 剩菜是隐藏的地雷：如果您在Q5中勾选了“吃剩菜后出现症状”，这是最易纠正的高危因素。所有熟食烹饪后2小时内应放入冰箱冷藏，再次食用需充分加热，但加热不能消除已产生的组胺。<br>
+                • 红酒+陈年奶酪是最经典的组合触发：如果您在Q5中同时勾选这两项并出现快速症状，组胺不耐受的可能性非常高，这两样建议首先排除。<br>
+                • 番茄和茄子兼具组胺释放剂和茄科双重身份：如果您同时有关节晨僵，请一并完成凝集素/茄科筛查问卷。<br>
+                • 低组胺饮食不是永久饮食：组胺不耐受的根本解决路径是修复肠道、恢复DAO酶活性，而非终身禁食。排除期不要超过4-6周，症状改善后应逐步测试个人组胺阈值。<br>
+                • <strong>紧急提醒</strong>：如果您的症状中出现喉头水肿、呼吸困难、血压骤降，这是过敏性休克的可能前兆，必须立即急诊，不可自行当作组胺不耐受处理。
+            </div>
+        `;
+
+        const resultHtml = `
+            <div class="result-box">
+                <h2><i class="fas fa-chart-line"></i> 评估结果</h2>
+                <div class="risk-badge ${riskClass}">${riskLevel} (总分: ${totalScore.toFixed(1)}分)</div>
+                <p style="margin: 16px 0;">${interpretation}</p>
+                ${specialReminder}
+                <hr>
+                <button id="restartBtn" style="background:#e6ddca; color:#4a6741; margin-top:8px;">重新填写问卷</button>
+            </div>
+        `;
+
+        document.getElementById('questionnaire').style.display = 'none';
+        const resultDiv = document.getElementById('resultContainer');
+        resultDiv.innerHTML = resultHtml;
+        resultDiv.style.display = 'block';
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            location.reload();
+        });
+    });
+</script>
+</body>
+</html>

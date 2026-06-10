@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>高FODMAP敏感自测 · 安心滋养</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #f4f1e6 0%, #fef9ed 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Roboto', sans-serif;
+            color: #2c3a2b;
+            padding: 24px 20px 60px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255, 252, 242, 0.96);
+            border-radius: 48px;
+            padding: 28px 30px;
+            margin-bottom: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08);
+            border: 1px solid rgba(210,195,150,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #3c6b3a, #6f9e4f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sub {
+            display: block;
+            color: #5e7256;
+            background: rgba(255,255,245,0.8);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            margin: 12px auto 0;
+            max-width: fit-content;
+        }
+        .question {
+            margin-bottom: 32px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #efe3cf;
+        }
+        .question h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-left: 8px;
+        }
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 12px;
+            background: #ffffffcc;
+            border-radius: 60px;
+            border: 1px solid #e1d2b6;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .option-item:hover {
+            background: #f7f2e4;
+        }
+        .option-item input {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 32px;
+        }
+        button {
+            background: #7caf5e;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 12px 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1;
+        }
+        button.secondary {
+            background: #e6ddca;
+            color: #4a6741;
+        }
+        button:hover {
+            background: #649a46;
+        }
+        .result-box {
+            background: #fefcf5;
+            border-radius: 48px;
+            padding: 28px;
+            border-left: 6px solid #7caf5e;
+            margin-top: 20px;
+        }
+        .result-box h2 {
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+        }
+        .risk-badge {
+            display: inline-block;
+            padding: 6px 20px;
+            border-radius: 60px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .risk-high { background: #f5c6b0; color: #9b4a2e; }
+        .risk-mid { background: #fae6b3; color: #b87c2e; }
+        .risk-low { background: #d9edc7; color: #4a784a; }
+        .risk-verylow { background: #e3e2d8; color: #6b6a5c; }
+        .special-note {
+            background: #fef2e0;
+            border-radius: 28px;
+            padding: 16px;
+            margin-top: 20px;
+            font-size: 0.85rem;
+            border-left: 4px solid #d4b87a;
+        }
+        hr {
+            margin: 20px 0;
+            border-color: #ece0ca;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #a0926e;
+            margin-top: 30px;
+        }
+        @media (max-width: 600px) {
+            .card { padding: 20px; }
+            .option-item { padding: 8px 12px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-corn"></i> 高FODMAP敏感自测问卷</h1>
+        <div class="sub">科学评估 · 找出腹胀/排气的饮食触发因素</div>
+    </div>
+
+    <div id="formCard" class="card">
+        <!-- 动态生成表单，保留现有结构以防止刷新丢失答案 -->
+        <div id="questionsArea"></div>
+        <div class="btn-group">
+            <button id="submitBtn"><i class="fas fa-calculator"></i> 提交评估</button>
+            <button id="resetBtn" class="secondary"><i class="fas fa-redo-alt"></i> 重置所有选项</button>
+        </div>
+    </div>
+    <div id="resultArea" style="display: none;"></div>
+    <footer>🔍 本问卷基于低FODMAP饮食国际指南设计，仅供健康参考，不能替代专业医疗诊断。</footer>
+</div>
+
+<script>
+    // ---------- 定义问题及计分规则 ----------
+    const questions = [
+        {
+            id: 'q1',
+            text: 'Q1. 餐后（30分钟至2小时内），您是否经常出现以下不适？（多选，每个选项计分）',
+            type: 'checkbox',
+            options: [
+                { label: '腹部胀气、肚子鼓胀感', value: 'bloat', score: 1 },
+                { label: '排气明显增多', value: 'gas', score: 1 },
+                { label: '腹部绞痛或痉挛性疼痛', value: 'cramp', score: 1 },
+                { label: '排便急迫感（想马上去厕所）', value: 'urgency', score: 1 },
+                { label: '以上均无', value: 'none', score: 0, exclusive: true }
+            ]
+        },
+        {
+            id: 'q2',
+            text: 'Q2. 这些症状的发作频率是？（单选）',
+            type: 'radio',
+            options: [
+                { label: '几乎每天都有', value: 'A', score: 2 },
+                { label: '每周3-5次', value: 'B', score: 1.5 },
+                { label: '每周1-2次', value: 'C', score: 0.5 },
+                { label: '很少或偶尔', value: 'D', score: 0 }
+            ]
+        },
+        {
+            id: 'q3',
+            text: 'Q3. 腹痛或腹胀是否在排便或排气后明显减轻？（单选）',
+            type: 'radio',
+            options: [
+                { label: '是，非常明显', value: 'A', score: 2 },
+                { label: '有一定缓解', value: 'B', score: 1 },
+                { label: '没有变化', value: 'C', score: 0 }
+            ]
+        },
+        {
+            id: 'q4',
+            text: 'Q4. 过去3个月，您的大便性状最接近以下哪种（布里斯托分类法）？（可多选，取最高分项计分）',
+            type: 'checkbox',
+            options: [
+                { label: '1-2型（硬块状、香肠状但疙疙瘩瘩，难以排出）', value: 'constipation', score: 1 },
+                { label: '3-5型（正常柔软成形、糊状）', value: 'normal', score: 0 },
+                { label: '6-7型（松散糊状、水样便）', value: 'diarrhea', score: 1 },
+                { label: '性状多变，有时便秘有时腹泻', value: 'mixed', score: 1.5 }
+            ],
+            maxScoreTake: true  // 取最高分，而非累加
+        },
+        {
+            id: 'q5',
+            text: 'Q5. 进食以下哪几类食物后，常在2小时内出现明显腹胀或排气增多？（多选，每选一项计分）',
+            type: 'checkbox',
+            options: [
+                { label: '洋葱或大蒜（也包括含洋葱/蒜的菜肴、蒜粉等）', value: 'onion', score: 2 },
+                { label: '白面包、面条、包子、馒头等大量小麦制品', value: 'wheat', score: 2 },
+                { label: '豆类：黄豆、扁豆、鹰嘴豆、芸豆等（不含嫩豌豆）', value: 'legumes', score: 2 },
+                { label: '苹果、梨、西瓜、芒果', value: 'fruits', score: 1.5 },
+                { label: '牛奶、酸奶、软奶酪（非无乳糖产品）', value: 'dairy', score: 1.5 },
+                { label: '蜂蜜、龙舌兰糖浆或含高果糖玉米糖浆的饮料', value: 'sweet', score: 1 },
+                { label: '花椰菜、抱子甘蓝、蘑菇', value: 'veg', score: 1 },
+                { label: '腰果、开心果', value: 'nuts', score: 1 },
+                { label: '以上食物都没特别感觉', value: 'none', score: 0, exclusive: true }
+            ]
+        },
+        {
+            id: 'q6',
+            text: 'Q6. 您是否曾经尝试过“少吃或不碰”上述某类食物，腹胀症状有明显改善？（单选）',
+            type: 'radio',
+            options: [
+                { label: '是，试过且有效', value: 'A', score: 2 },
+                { label: '没有试过，不确定', value: 'B', score: 0 },
+                { label: '试过，但没改善', value: 'C', score: -1 }
+            ]
+        },
+        {
+            id: 'q7',
+            text: 'Q7. 您是否已被消化科医生诊断为“肠易激综合征（IBS）”？（单选）',
+            type: 'radio',
+            options: [
+                { label: '是', value: 'A', score: 2 },
+                { label: '否', value: 'B', score: 0 }
+            ]
+        },
+        {
+            id: 'q8',
+            text: 'Q8. 您是否有长期服用胃药（奥美拉唑、泮托拉唑等质子泵抑制剂）超过3个月？（单选）',
+            type: 'radio',
+            options: [
+                { label: '是', value: 'A', score: 1 },
+                { label: '否', value: 'B', score: 0 }
+            ]
+        },
+        {
+            id: 'q9',
+            text: 'Q9. 最近2年内，您是否因非消化系统问题使用过抗生素≥3个疗程？（单选）',
+            type: 'radio',
+            options: [
+                { label: '是', value: 'A', score: 1 },
+                { label: '否', value: 'B', score: 0 }
+            ]
+        },
+        {
+            id: 'q10',
+            text: 'Q10. 您是否曾进行过腹部手术（如阑尾切除、胆囊切除、剖腹产等）？（单选）',
+            type: 'radio',
+            options: [
+                { label: '是', value: 'A', score: 1 },
+                { label: '否', value: 'B', score: 0 }
+            ]
+        }
+    ];
+
+    // 存储用户答案
+    let userAnswers = {};
+
+    // 渲染表单
+    function renderForm() {
+        const container = document.getElementById('questionsArea');
+        if (!container) return;
+        let html = '';
+        for (let q of questions) {
+            html += `<div class="question"><h3>${q.text}</h3><div class="options-list" id="group-${q.id}">`;
+            for (let opt of q.options) {
+                const checkedAttr = (userAnswers[q.id] && (userAnswers[q.id].includes(opt.value) || userAnswers[q.id] === opt.value)) ? 'checked' : '';
+                if (q.type === 'checkbox') {
+                    html += `<label class="option-item"><input type="checkbox" name="${q.id}" value="${opt.value}" ${checkedAttr}> ${opt.label}</label>`;
+                } else if (q.type === 'radio') {
+                    html += `<label class="option-item"><input type="radio" name="${q.id}" value="${opt.value}" ${checkedAttr}> ${opt.label}</label>`;
+                }
+            }
+            html += `</div></div>`;
+        }
+        container.innerHTML = html;
+
+        // 绑定互斥逻辑：Q1 如果选中"以上均无"，则取消其他选项
+        const q1Group = document.getElementById('group-q1');
+        if (q1Group) {
+            const checkboxes = q1Group.querySelectorAll('input[type="checkbox"]');
+            const noneCheckbox = Array.from(checkboxes).find(cb => cb.value === 'none');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    if (cb.value === 'none' && cb.checked) {
+                        checkboxes.forEach(c => { if (c !== cb) c.checked = false; });
+                    } else if (cb.checked && noneCheckbox && noneCheckbox.checked) {
+                        noneCheckbox.checked = false;
+                    }
+                });
+            });
+        }
+        // Q5 互斥逻辑
+        const q5Group = document.getElementById('group-q5');
+        if (q5Group) {
+            const checkboxes = q5Group.querySelectorAll('input[type="checkbox"]');
+            const noneCheckbox = Array.from(checkboxes).find(cb => cb.value === 'none');
+            checkboxes.forEach(cb => {
+                cb.addEventListener('change', () => {
+                    if (cb.value === 'none' && cb.checked) {
+                        checkboxes.forEach(c => { if (c !== cb) c.checked = false; });
+                    } else if (cb.checked && noneCheckbox && noneCheckbox.checked) {
+                        noneCheckbox.checked = false;
+                    }
+                });
+            });
+        }
+    }
+
+    // 计算总分
+    function computeScore() {
+        let total = 0;
+        // 收集当前界面答案
+        for (let q of questions) {
+            const group = document.getElementById(`group-${q.id}`);
+            if (!group) continue;
+            if (q.type === 'radio') {
+                const selected = group.querySelector('input[type="radio"]:checked');
+                if (selected) {
+                    const opt = q.options.find(o => o.value === selected.value);
+                    if (opt) total += opt.score;
+                    userAnswers[q.id] = selected.value;
+                } else {
+                    userAnswers[q.id] = null;
+                }
+            } else if (q.type === 'checkbox') {
+                const selected = Array.from(group.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+                userAnswers[q.id] = selected;
+                if (q.id === 'q4') {
+                    // 取最高分，且只考虑选中项中的最高分
+                    let maxScore = 0;
+                    for (let val of selected) {
+                        const opt = q.options.find(o => o.value === val);
+                        if (opt && opt.score > maxScore) maxScore = opt.score;
+                    }
+                    total += maxScore;
+                } else {
+                    // 常规累加，但注意互斥选项'none'时得分0且不计其他
+                    if (selected.includes('none')) {
+                        // 如果选了none，此项得0分且不计算其他选项
+                        continue;
+                    }
+                    for (let val of selected) {
+                        const opt = q.options.find(o => o.value === val);
+                        if (opt) total += opt.score;
+                    }
+                }
+            }
+        }
+        return total;
+    }
+
+    // 根据总分获取风险等级和解读
+    function getRiskLevel(total) {
+        if (total >= 12) return { level: '高风险', class: 'risk-high', text: '您的症状和触发食物模式高度指向FODMAP敏感。强烈建议进行为期2-4周的严格低FODMAP饮食排除期，记录症状变化。若有明显改善（症状减轻50%以上），可确认并进入再引入阶段。同时排查小肠细菌过度生长（SIBO）可能。' };
+        if (total >= 8) return { level: '中风险', class: 'risk-mid', text: '您存在FODMAP敏感的中等可能性。建议先针对您Q5中勾选的触发食物进行2周的“选择性回避”，观察腹胀是否减轻。如果效果不明显，可进一步升级为全面低FODMAP排除饮食。' };
+        if (total >= 4) return { level: '低风险', class: 'risk-low', text: 'FODMAP可能不是您腹胀的主要驱动因素。可留意是否合并其他维度的敏感（如组胺、IgG食物敏感）。若持续有轻度不适，不妨从饮食中减少最明显的1-2种高FODMAP食物开始。' };
+        return { level: '极低风险', class: 'risk-verylow', text: '您的症状与典型FODMAP敏感模式不符。腹胀原因可能为胃排空延迟、便秘、盆底功能障碍等，建议就诊消化内科进一步评估。' };
+    }
+
+    // 显示结果
+    function displayResult(total) {
+        const risk = getRiskLevel(total);
+        const resultHtml = `
+            <div class="result-box">
+                <h2><i class="fas fa-chart-line"></i> 评估结果</h2>
+                <div class="risk-badge ${risk.class}">${risk.level} (总分: ${total}分)</div>
+                <p>${risk.text}</p>
+                <div class="special-note">
+                    <i class="fas fa-lightbulb"></i> <strong>特殊提醒</strong><br>
+                    • 如果Q5中您对“洋葱、大蒜、小麦”反应强烈，但未尝试过回避，这些是FODMAP中最常见的触发源，值得优先测试。<br>
+                    • 如果您得分≥12分但同时有不明原因的体重下降、便血或夜间痛醒，请务必先就诊排除器质性疾病，不可只依赖FODMAP饮食。<br>
+                    • 低FODMAP饮食不建议长期执行（不超过6周），症状缓解后需要系统重新引入，以维持肠道菌群多样性。
+                </div>
+                <button id="retakeBtn" class="secondary" style="margin-top:20px;"><i class="fas fa-sync-alt"></i> 重新测试</button>
+            </div>
+        `;
+        document.getElementById('formCard').style.display = 'none';
+        const resultDiv = document.getElementById('resultArea');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = resultHtml;
+        document.getElementById('retakeBtn').addEventListener('click', () => {
+            resetForm();
+        });
+    }
+
+    // 重置表单
+    function resetForm() {
+        userAnswers = {};
+        document.getElementById('formCard').style.display = 'block';
+        document.getElementById('resultArea').style.display = 'none';
+        renderForm();
+        // 清除所有输入状态重新渲染
+    }
+
+    // 提交处理
+    function onSubmit() {
+        // 检查必填（所有问题都必须有答案）
+        let missing = [];
+        for (let q of questions) {
+            const group = document.getElementById(`group-${q.id}`);
+            if (!group) continue;
+            if (q.type === 'radio') {
+                const selected = group.querySelector('input[type="radio"]:checked');
+                if (!selected) missing.push(q.id);
+            } else if (q.type === 'checkbox') {
+                const selected = group.querySelectorAll('input[type="checkbox"]:checked');
+                if (selected.length === 0) missing.push(q.id);
+            }
+        }
+        if (missing.length > 0) {
+            alert('请完成所有题目后再提交（第 ' + missing.map(m => m.toUpperCase()).join(', ') + ' 题未选）');
+            return;
+        }
+        const total = computeScore();
+        displayResult(total);
+    }
+
+    // 初始化
+    renderForm();
+    document.getElementById('submitBtn').addEventListener('click', onSubmit);
+    document.getElementById('resetBtn').addEventListener('click', resetForm);
+</script>
+</body>
+</html>

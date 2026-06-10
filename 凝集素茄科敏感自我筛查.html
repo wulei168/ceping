@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>凝集素/茄科敏感自我筛查 · 安心滋养</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #f4f1e6 0%, #fef9ed 100%);
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'Roboto', sans-serif;
+            color: #2c3a2b;
+            padding: 24px 20px 60px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+        .card {
+            background: rgba(255, 252, 242, 0.96);
+            border-radius: 48px;
+            padding: 28px 30px;
+            margin-bottom: 28px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.08);
+            border: 1px solid rgba(210,195,150,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #3c6b3a, #6f9e4f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sub {
+            display: block;
+            color: #5e7256;
+            background: rgba(255,255,245,0.8);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            margin: 12px auto 0;
+            max-width: fit-content;
+        }
+        .section-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 20px 0 16px 0;
+            border-left: 4px solid #7caf5e;
+            padding-left: 16px;
+        }
+        .question {
+            margin-bottom: 28px;
+        }
+        .question h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-left: 8px;
+        }
+        .option-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 8px 12px;
+            background: #ffffffcc;
+            border-radius: 60px;
+            border: 1px solid #e1d2b6;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .option-item:hover {
+            background: #f7f2e4;
+        }
+        .option-item input {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+        .btn-submit {
+            background: #7caf5e;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn-submit:hover {
+            background: #649a46;
+        }
+        .result-box {
+            background: #fefcf5;
+            border-radius: 48px;
+            padding: 28px;
+            margin-top: 28px;
+            border-left: 6px solid #7caf5e;
+        }
+        .risk-badge {
+            display: inline-block;
+            padding: 6px 22px;
+            border-radius: 60px;
+            font-weight: bold;
+            margin: 12px 0;
+        }
+        .risk-high { background: #f5c6b0; color: #9b4a2e; }
+        .risk-mid { background: #fae6b3; color: #b87c2e; }
+        .risk-low { background: #d9edc7; color: #4a784a; }
+        .risk-verylow { background: #e0e0d0; color: #5e5e4a; }
+        .warning-box {
+            background: #fef2e0;
+            border-radius: 28px;
+            padding: 16px;
+            margin: 16px 0;
+            font-size: 0.85rem;
+            border-left: 4px solid #d4b87a;
+        }
+        hr {
+            margin: 16px 0;
+            border-color: #ece0ca;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #bbaa82;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            .card { padding: 20px; }
+            .option-item { padding: 8px 12px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-seedling"></i> 凝集素/茄科敏感自我筛查</h1>
+        <div class="sub">近3个月常态填写 · 自动评估风险等级</div>
+    </div>
+
+    <div class="card" id="questionnaire">
+        <!-- 第一部分 -->
+        <div class="section-title"><i class="fas fa-stethoscope"></i> 第一部分：症状特征</div>
+
+        <!-- Q1 -->
+        <div class="question">
+            <h3>Q1. 您是否在早晨起床时感到关节僵硬，需要活动一段时间才能缓解？</h3>
+            <div class="options-list" id="q1Group">
+                <label class="option-item"><input type="radio" name="q1" value="3"> A. 是，几乎每天早晨都这样 (+3分)</label>
+                <label class="option-item"><input type="radio" name="q1" value="2"> B. 是，每周出现3-5次 (+2分)</label>
+                <label class="option-item"><input type="radio" name="q1" value="1"> C. 是，每周出现1-2次 (+1分)</label>
+                <label class="option-item"><input type="radio" name="q1" value="0"> D. 很少或从不 (0分)</label>
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="question">
+            <h3>Q2. 您的晨僵通常持续多长时间？</h3>
+            <div class="options-list" id="q2Group">
+                <label class="option-item"><input type="radio" name="q2" value="2"> A. 超过30分钟 (+2分)</label>
+                <label class="option-item"><input type="radio" name="q2" value="1.5"> B. 15-30分钟 (+1.5分)</label>
+                <label class="option-item"><input type="radio" name="q2" value="0.5"> C. 5-15分钟 (+0.5分)</label>
+                <label class="option-item"><input type="radio" name="q2" value="0"> D. 少于5分钟或没有晨僵 (0分)</label>
+            </div>
+        </div>
+
+        <!-- Q3 多选 -->
+        <div class="question">
+            <h3>Q3. 以下哪些关节部位最常出现隐痛、酸痛或僵硬感？（可多选，每选一项计分）</h3>
+            <div class="options-list" id="q3Group">
+                <label class="option-item"><input type="checkbox" value="1.5"> 手指关节（指间关节） (+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 手腕 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 膝盖 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 脚趾或脚踝 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 肩部或颈部 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 游走性关节痛（今天这里痛，明天那里痛） (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="0" class="noneOption" data-group="q3"> 没有关节疼痛 (0分)</label>
+            </div>
+        </div>
+
+        <!-- Q4 多选（自身免疫病） -->
+        <div class="question">
+            <h3>Q4. 您是否曾被风湿免疫科医生诊断为以下任何一种情况？（可多选，每选一项计分）</h3>
+            <div class="options-list" id="q4Group">
+                <label class="option-item"><input type="checkbox" value="3"> 类风湿关节炎 (+3分)</label>
+                <label class="option-item"><input type="checkbox" value="3"> 银屑病关节炎 (+3分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 桥本甲状腺炎 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 炎症性肠病（克罗恩病、溃疡性结肠炎） (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 系统性红斑狼疮 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 多发性硬化症 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 已确诊其他自身免疫性疾病 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="0" class="noneOption" data-group="q4"> 未被诊断以上任何疾病 (0分)</label>
+            </div>
+        </div>
+
+        <!-- Q5 多选 -->
+        <div class="question">
+            <h3>Q5. 除关节问题外，您是否还长期被以下困扰？（可多选，每选一项计分）</h3>
+            <div class="options-list" id="q5Group">
+                <label class="option-item"><input type="checkbox" value="1"> 持续性疲劳，即使睡足了也难以恢复 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 脑雾（思维不清晰、健忘、反应迟钝） (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 肌肉酸痛或僵硬，不限于关节附近 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 皮肤问题（湿疹、银屑病样皮疹）反复不愈 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="0" class="noneOption" data-group="q5"> 以上均无 (0分)</label>
+            </div>
+        </div>
+
+        <!-- 第二部分：触发食物 -->
+        <div class="section-title"><i class="fas fa-utensils"></i> 第二部分：触发食物</div>
+
+        <!-- Q6 多选 -->
+        <div class="question">
+            <h3>Q6. 进食以下哪几类食物后，您在当晚或次日早晨感到关节僵硬或酸痛明显加重？（可多选，每选一项计分）</h3>
+            <div class="options-list" id="q6Group">
+                <label class="option-item"><input type="checkbox" value="2.5"> 土豆（尤其是带皮土豆、土豆泥、炸薯条） (+2.5分)</label>
+                <label class="option-item"><input type="checkbox" value="2.5"> 番茄（包括番茄酱、意面酱、番茄汤等） (+2.5分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 茄子 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 辣椒或辣椒油、辣椒粉 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 花生或花生酱（次日关节发沉、隐痛） (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="1.5"> 豆类（扁豆、鹰嘴豆、红芸豆等，即使充分煮熟） (+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 小麦制品（全麦面包、面条等，大量食用时） (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="0.5"> 葵花籽或南瓜籽 (+0.5分)</label>
+                <label class="option-item"><input type="checkbox" value="0" class="noneOption" data-group="q6"> 以上食物都没特别感觉 (0分)</label>
+            </div>
+        </div>
+
+        <!-- Q7 单选 -->
+        <div class="question">
+            <h3>Q7. 您是否曾经尝试过“不吃茄科食物”（土豆、番茄、茄子、辣椒）一段时间，关节症状有明显改善？</h3>
+            <div class="options-list" id="q7Group">
+                <label class="option-item"><input type="radio" name="q7" value="3"> A. 是，试过且晨僵/关节痛明显减轻 (+3分)</label>
+                <label class="option-item"><input type="radio" name="q7" value="0"> B. 没有试过，不确定 (0分)</label>
+                <label class="option-item"><input type="radio" name="q7" value="-1"> C. 试过，但没改善 (-1分)</label>
+            </div>
+        </div>
+
+        <!-- 第三部分：相关因素 -->
+        <div class="section-title"><i class="fas fa-dna"></i> 第三部分：相关因素</div>
+
+        <!-- Q8 多选 -->
+        <div class="question">
+            <h3>Q8. 您的一级亲属（父母、兄弟姐妹）中是否有人患有自身免疫性疾病？（可多选，每选一项计分）</h3>
+            <div class="options-list" id="q8Group">
+                <label class="option-item"><input type="checkbox" value="2"> 是，与我的疾病相同或相似 (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 是，但与我的疾病不同 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="0" class="noneOption" data-group="q8"> 否，或不清楚 (0分)</label>
+            </div>
+        </div>
+
+        <!-- Q9 多选 -->
+        <div class="question">
+            <h3>Q9. 您是否有以下饮食或生活习惯？（可多选，每选一项计分）</h3>
+            <div class="options-list" id="q9Group">
+                <label class="option-item"><input type="checkbox" value="1.5"> 几乎每日吃大量花生或花生酱作为零食 (+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="1"> 日常生活主食以全麦面包、黑麦面包为主 (+1分)</label>
+                <label class="option-item"><input type="checkbox" value="1.5"> 遵循植物基或纯素饮食，每天摄入大量豆类作为蛋白质来源 (+1.5分)</label>
+                <label class="option-item"><input type="checkbox" value="2"> 经常吃生或未充分煮熟的豆类（如沙拉中的鹰嘴豆、扁豆） (+2分)</label>
+                <label class="option-item"><input type="checkbox" value="0" class="noneOption" data-group="q9"> 以上均无 (0分)</label>
+            </div>
+        </div>
+
+        <!-- Q10 单选 -->
+        <div class="question">
+            <h3>Q10. 您是否已有肠漏、肠易激综合征（IBS）或小肠细菌过度生长（SIBO）的诊断或高度怀疑？</h3>
+            <div class="options-list" id="q10Group">
+                <label class="option-item"><input type="radio" name="q10" value="2"> A. 是，已有诊断 (+2分)</label>
+                <label class="option-item"><input type="radio" name="q10" value="1"> B. 高度怀疑，但未正式检查 (+1分)</label>
+                <label class="option-item"><input type="radio" name="q10" value="0"> C. 否 (0分)</label>
+            </div>
+        </div>
+
+        <button class="btn-submit" id="submitBtn">提交并查看风险评估</button>
+    </div>
+
+    <div id="resultArea" style="display: none;"></div>
+    <footer>🔒 本评估仅提供健康信息参考，不能替代专业医疗诊断。如有持续关节红肿、发热等症状，请立即就诊风湿免疫科。</footer>
+</div>
+
+<script>
+    // 辅助函数：处理“以上均无”的互斥逻辑
+    function bindNoneLogic() {
+        // 处理每个多选题组，点击“以上均无”时取消同组其他选项
+        const noneSelectors = document.querySelectorAll('.noneOption');
+        noneSelectors.forEach(none => {
+            none.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    const group = e.target.getAttribute('data-group');
+                    if (group) {
+                        const parentDiv = document.getElementById(`${group}Group`);
+                        if (parentDiv) {
+                            const otherChecks = parentDiv.querySelectorAll('input[type="checkbox"]:not(.noneOption)');
+                            otherChecks.forEach(cb => cb.checked = false);
+                        }
+                    } else {
+                        // 兼容旧结构：找到同级其他checkbox
+                        const container = none.closest('.options-list');
+                        if (container) {
+                            const otherChecks = container.querySelectorAll('input[type="checkbox"]:not(.noneOption)');
+                            otherChecks.forEach(cb => cb.checked = false);
+                        }
+                    }
+                }
+            });
+        });
+    }
+
+    // 计算总分
+    function calculateScore() {
+        let total = 0;
+
+        // Q1 单选
+        const q1 = document.querySelector('input[name="q1"]:checked');
+        if (q1) total += parseFloat(q1.value);
+
+        // Q2 单选
+        const q2 = document.querySelector('input[name="q2"]:checked');
+        if (q2) total += parseFloat(q2.value);
+
+        // Q3 多选
+        const q3Checks = document.querySelectorAll('#q3Group input[type="checkbox"]:checked');
+        q3Checks.forEach(cb => { total += parseFloat(cb.value); });
+
+        // Q4 多选
+        const q4Checks = document.querySelectorAll('#q4Group input[type="checkbox"]:checked');
+        q4Checks.forEach(cb => { total += parseFloat(cb.value); });
+
+        // Q5 多选
+        const q5Checks = document.querySelectorAll('#q5Group input[type="checkbox"]:checked');
+        q5Checks.forEach(cb => { total += parseFloat(cb.value); });
+
+        // Q6 多选
+        const q6Checks = document.querySelectorAll('#q6Group input[type="checkbox"]:checked');
+        q6Checks.forEach(cb => { total += parseFloat(cb.value); });
+
+        // Q7 单选
+        const q7 = document.querySelector('input[name="q7"]:checked');
+        if (q7) total += parseFloat(q7.value);
+
+        // Q8 多选
+        const q8Checks = document.querySelectorAll('#q8Group input[type="checkbox"]:checked');
+        q8Checks.forEach(cb => { total += parseFloat(cb.value); });
+
+        // Q9 多选
+        const q9Checks = document.querySelectorAll('#q9Group input[type="checkbox"]:checked');
+        q9Checks.forEach(cb => { total += parseFloat(cb.value); });
+
+        // Q10 单选
+        const q10 = document.querySelector('input[name="q10"]:checked');
+        if (q10) total += parseFloat(q10.value);
+
+        return total;
+    }
+
+    function getRiskCategory(score) {
+        if (score >= 15) return { level: '高风险', class: 'risk-high', text: '您的症状和触发食物模式高度指向凝集素/茄科敏感。肠道屏障可能已受损，凝集素和茄科糖苷生物碱通过肠漏进入循环，驱动关节炎症和晨僵。强烈建议进行4周严格茄科排除（土豆、番茄、茄子、辣椒），并根据情况考虑也排除花生和高凝集素豆类。**如果您有自身免疫病诊断，建议在功能医学医生或注册营养师指导下进行AIP（自身免疫协议）排除饮食。**' };
+        if (score >= 10) return { level: '中风险', class: 'risk-mid', text: '您存在凝集素/茄科敏感的中等可能性。建议先从Q6中得分最高的触发食物开始，优先排除所有茄科食物4周，详细记录晨僵时间和关节疼痛程度的变化。若有明显改善，再考虑是否扩展到其他高凝集素食物（花生、豆类）。请务必配合充分的烹饪处理（土豆去皮、茄子去皮焯水，即使如此敏感期间也建议先排除）。' };
+        if (score >= 5) return { level: '低风险', class: 'risk-low', text: '凝集素/茄科可能不是您最主要的驱动因素，但存在一定的敏感性。可以尝试以下简单的调整：①土豆削皮后再烹饪；②茄子去皮焯水后再吃；③减少或避免花生；④观察2-3周看晨僵或关节不适是否有任何改善。若同时有腹胀或脸红等其他主诉，请一并完成FODMAP或组胺筛查。' };
+        return { level: '极低风险', class: 'risk-verylow', text: '您的症状与典型凝集素/茄科敏感模式不符。晨僵若仍明显，建议首先就诊风湿免疫科，完善类风湿因子、抗CCP抗体等检查，排除器质性关节疾病。无差别地排除所有含凝集素的食物对您弊大于利。' };
+    }
+
+    function showResult() {
+        const score = calculateScore();
+        const risk = getRiskCategory(score);
+        const resultDiv = document.getElementById('resultArea');
+        const specialReminder = `
+            <div class="warning-box">
+                <i class="fas fa-bell"></i> <strong>特殊提醒</strong><br>
+                • <strong>晨僵是核心信号</strong>：如果您Q1和Q2得分较高但Q6没发现明显触发食物，仍建议尝试2-4周茄科排除。因为延迟反应（当晚至次日晨）很难自发与单一食物联系，只有通过系统排除才能发现关联。<br>
+                • <strong>土豆皮和芽眼是糖苷生物碱的集中部位</strong>：即使不完全排除土豆，削皮、挖除芽眼、丢弃发绿土豆是所有人的安全底线。发绿或发芽的土豆绝不能食用。<br>
+                • <strong>番茄和茄子兼具组胺释放剂身份</strong>：如果您同时有脸红、头痛等快速症状，请一并完成组胺不耐受筛查问卷。<br>
+                • <strong>凝集素敏感性可逆</strong>：凝集素/茄科敏感不等于永久禁忌。许多人在修复肠道屏障后，可以逐步重新引入低凝集素处理后的茄科食物。排除期不应超过6周，症状改善后应进入系统再引入阶段。<br>
+                • <strong>花生无法通过烹饪灭活凝集素</strong>：与其他豆类不同，花生的凝集素（PNA）在烘烤后活性反而可能增加。对花生敏感者需要严格回避。<br>
+                • <strong>就医提醒</strong>：如果您的关节症状伴有红肿热痛、活动受限或发热，请立即就诊风湿免疫科，不可只依赖饮食调整。
+            </div>
+        `;
+        resultDiv.innerHTML = `
+            <div class="result-box">
+                <h2><i class="fas fa-chart-line"></i> 评估结果</h2>
+                <div class="risk-badge ${risk.class}">${risk.level} (总分: ${score}分)</div>
+                <p style="margin: 16px 0;">${risk.text}</p>
+                ${specialReminder}
+                <hr>
+                <button id="restartBtn" style="background:#e6ddca; color:#4a6741; border:none; border-radius:60px; padding:10px 20px; margin-top:12px; width:100%; cursor:pointer;">重新评估</button>
+            </div>
+        `;
+        document.getElementById('questionnaire').style.display = 'none';
+        resultDiv.style.display = 'block';
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            location.reload();
+        });
+    }
+
+    // 页面初始化绑定互斥逻辑和提交按钮
+    window.addEventListener('DOMContentLoaded', () => {
+        bindNoneLogic();
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            // 简单检查是否至少完成一部分关键问题（不强求全填，但有打分即可）
+            const anyFilled = document.querySelector('input[name="q1"]:checked') || 
+                              document.querySelector('input[name="q2"]:checked') ||
+                              document.querySelector('#q3Group input[type="checkbox"]:checked') ||
+                              document.querySelector('#q4Group input[type="checkbox"]:checked');
+            if (!anyFilled) {
+                alert('请至少回答部分问题，以便进行评估。');
+                return;
+            }
+            showResult();
+        });
+    });
+</script>
+</body>
+</html>

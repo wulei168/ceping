@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>安心滋养 · 儿童消化分型自测</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #fef9f0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 20px 16px 48px;
+        }
+
+        .container {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .brand {
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: #d97706;
+            background: #fff3e6;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #b45309, #d97706);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+        .sub {
+            font-size: 15px;
+            color: #7c5e3a;
+            background: #fff7ed;
+            border-radius: 24px;
+            padding: 6px 18px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .card {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            padding: 20px 20px 28px;
+            margin-bottom: 24px;
+        }
+
+        .progress-area {
+            margin-bottom: 20px;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #a87c4a;
+            margin-bottom: 6px;
+        }
+        .progress-bar-bg {
+            background: #f0e6da;
+            border-radius: 20px;
+            height: 8px;
+        }
+        .progress-fill {
+            background: #d97706;
+            width: 0%;
+            height: 100%;
+            border-radius: 20px;
+            transition: width 0.3s;
+        }
+
+        .question-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #4c2f1d;
+            margin-bottom: 16px;
+        }
+        .hint {
+            font-size: 13px;
+            color: #b67e45;
+            margin-bottom: 16px;
+            background: #fffbee;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .option-item {
+            background: #fef9f2;
+            border: 1.5px solid #f0dfce;
+            border-radius: 100px;
+            padding: 10px 18px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #5c3a21;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .option-item.selected {
+            background: #ffedd5;
+            border-color: #d97706;
+            color: #b45309;
+        }
+        .option-prefix {
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            border: 1px solid #e2c7ac;
+        }
+        .selected .option-prefix {
+            background: #d97706;
+            border-color: #d97706;
+            color: white;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            border: none;
+            font-size: 15px;
+            cursor: pointer;
+            background: #f1e7dc;
+            color: #5c3a21;
+        }
+        .btn-primary {
+            background: #d97706;
+            color: white;
+            box-shadow: 0 2px 6px rgba(217,119,6,0.3);
+        }
+        .btn-primary:active { background: #b45309; transform: scale(0.97);}
+        .btn:active { transform: scale(0.97);}
+        .btn:disabled { opacity: 0.5; }
+
+        .result-card {
+            background: white;
+            border-radius: 32px;
+            padding: 24px;
+            border-top: 6px solid #d97706;
+        }
+        .result-type {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #4c2f1d;
+        }
+        .type-badge {
+            display: inline-block;
+            background: #ffedd5;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #b45309;
+            margin-bottom: 16px;
+        }
+        .mix-tag {
+            background: #fff0db;
+            color: #b45f1b;
+            margin-left: 8px;
+        }
+        .advice-box {
+            background: #fefce8;
+            padding: 16px 18px;
+            border-radius: 24px;
+            margin: 18px 0;
+            border-left: 4px solid #e9b35f;
+        }
+        .advice-box ul {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+        .advice-box li {
+            margin: 8px 0;
+        }
+        .medical-note {
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 12px;
+            font-size: 12px;
+            color: #475569;
+            margin-top: 16px;
+        }
+        .reset-btn {
+            background: #eef2f8;
+            width: 100%;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .footnote {
+            font-size: 11px;
+            color: #9c7e64;
+            text-align: center;
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="brand">🌱 安心滋养饮食干预计划</div>
+        <h1>儿童消化分型自测</h1>
+        <div class="sub">酶动力 vs 菌群平衡，孩子属于哪一种？</div>
+    </div>
+    <div id="app"></div>
+    <div class="footnote">
+        🌿 本工具依据典型症状对比，提供饮食调理方向，不能替代医学检查。<br>
+        如孩子持续腹胀、腹泻、体重不增，请及时就医。
+    </div>
+</div>
+
+<script>
+    // 两种类型定义及建议
+    const TYPES = {
+        enzyme: {
+            name: "🧪 酶动力不足倾向",
+            short: "酶动力型",
+            desc: "典型表现为进食含乳糖或蔗糖的食物后很快出现水样便、泡沫便、酸臭味、肠鸣音活跃，放屁多但不臭，症状来得快去得快。",
+            advice: [
+                "🥛 暂停或减少乳制品（牛奶、酸奶、奶酪），观察2-3天，若明显改善则高度怀疑乳糖不耐受。",
+                "🍰 避免高糖零食、蛋糕、甜饮料，蔗糖酶缺乏者吃糖后也会腹泻。",
+                "🔄 尝试无乳糖配方奶或添加乳糖酶滴剂，餐前补充消化酶。",
+                "📅 记录“食物-症状日记”，锁定具体诱因（是奶制品还是甜食）。",
+                "🍌 严重腹泻时注意补水补电解质，推荐口服补液盐。"
+            ]
+        },
+        microbiome: {
+            name: "🦠 菌群平衡失调倾向",
+            short: "菌群型",
+            desc: "典型表现为餐后2-4小时甚至更晚出现症状，粘液便、糊状便、恶臭，放屁非常臭，常伴有疲劳、脑雾、情绪不稳。",
+            advice: [
+                "🥦 暂时减少高FODMAP食物（洋葱、大蒜、豆类、苹果、小麦等），可尝试低FODMAP饮食2周。",
+                "🥄 补充针对性益生菌（如布拉氏酵母菌、鼠李糖乳杆菌），但避免使用含益生元（低聚果糖）的产品，以免加重腹胀。",
+                "🧴 考虑使用小檗碱（黄连素）或抗菌植物提取物，但需在医生指导下进行。",
+                "🍃 避免滥用抗生素，减少加工食品、甜味剂，增加蔬菜多样性。",
+                "⏳ 严重者建议做甲烷氢呼气试验排查SIBO，或肠道菌群检测。"
+            ]
+        }
+    };
+
+    // 问卷问题（基于用户提供的对比维度）
+    const QUESTIONS = [
+        { // 0: 吃完多久出现症状
+            text: "孩子吃完可疑食物后，通常多久出现不适症状？",
+            options: [
+                { text: "很快，30分钟~2小时内", scores: { enzyme: 2, microbiome: 0 } },
+                { text: "较慢，2~4小时后甚至第二天", scores: { enzyme: 0, microbiome: 2 } },
+                { text: "时间不固定，有时快有时慢", scores: { enzyme: 1, microbiome: 1 } }
+            ]
+        },
+        { // 1: 典型大便特征
+            text: "孩子腹泻/大便的典型特征是？",
+            options: [
+                { text: "水样便、泡沫便、酸臭味、可能带奶瓣", scores: { enzyme: 2, microbiome: 0 } },
+                { text: "粘液便、糊状便、恶臭味、有时带未消化食物", scores: { enzyme: 0, microbiome: 2 } },
+                { text: "上述两者都有过，或介于之间", scores: { enzyme: 1, microbiome: 1 } }
+            ]
+        },
+        { // 2: 放屁特征
+            text: "孩子放屁的特点？",
+            options: [
+                { text: "放屁多，但不怎么臭（主要氢气和二氧化碳）", scores: { enzyme: 2, microbiome: 0 } },
+                { text: "放屁非常臭（像臭鸡蛋、硫化氢味）", scores: { enzyme: 0, microbiome: 2 } },
+                { text: "屁多且臭，或有时不臭", scores: { enzyme: 1, microbiome: 1 } }
+            ]
+        },
+        { // 3: 与食物的关系是否固定
+            text: "症状与特定食物的关系是否非常固定？",
+            options: [
+                { text: "非常固定：喝奶/吃甜食后必定发作", scores: { enzyme: 2, microbiome: 0 } },
+                { text: "不固定，吃多种食物后都可能加重，尤其是高FODMAP食物", scores: { enzyme: 0, microbiome: 2 } },
+                { text: "有一定规律，但偶尔也莫名其妙发作", scores: { enzyme: 1, microbiome: 1 } }
+            ]
+        },
+        { // 4: 饭后腹痛位置与特点
+            text: "孩子腹痛的位置和特点？",
+            options: [
+                { text: "肚脐周围或全腹，咕噜响，排气后缓解，来得快去得快", scores: { enzyme: 2, microbiome: 0 } },
+                { text: "下腹或左下腹，胀痛、感觉有气排不完，持续时间长", scores: { enzyme: 0, microbiome: 2 } },
+                { text: "说不清楚，有时中间有时下面", scores: { enzyme: 1, microbiome: 1 } }
+            ]
+        },
+        { // 5: 孩子精神状态（全身影响）
+            text: "发作期间及之后，孩子的精神状态？",
+            options: [
+                { text: "拉完或放屁后精神立即好转，像没事一样", scores: { enzyme: 2, microbiome: 0 } },
+                { text: "常伴有疲劳、脑雾、情绪不稳，即使肚子不疼也蔫蔫的", scores: { enzyme: 0, microbiome: 2 } },
+                { text: "偶尔疲倦，但大部分时间还行", scores: { enzyme: 1, microbiome: 1 } }
+            ]
+        },
+        { // 6: 什么情况容易诱发
+            text: "什么情况下症状更容易出现？",
+            options: [
+                { text: "一次性吃大量乳制品或高糖食物", scores: { enzyme: 2, microbiome: 0 } },
+                { text: "长期吃加工食品、抗生素使用后、压力大时", scores: { enzyme: 0, microbiome: 2 } },
+                { text: "两者都有关联", scores: { enzyme: 1, microbiome: 1 } }
+            ]
+        },
+        { // 7: 额外：抗生素使用史（辅助判断）
+            text: "孩子近期（3个月内）是否使用过抗生素？",
+            options: [
+                { text: "没有或很少使用", scores: { enzyme: 0, microbiome: 0 } },
+                { text: "使用过1次，之后出现了消化问题", scores: { enzyme: 0, microbiome: 1 } },
+                { text: "使用过2次以上，症状通常在抗生素后加重", scores: { enzyme: 0, microbiome: 2 } }
+            ]
+        }
+    ];
+
+    let currentStep = 0;       // 0 为第一个问题，最后为结果
+    let answers = new Array(QUESTIONS.length).fill(null); // 存储每道题选中的选项索引
+    const app = document.getElementById('app');
+
+    function render() {
+        if (currentStep < QUESTIONS.length) {
+            renderQuestion(currentStep);
+        } else {
+            renderResult();
+        }
+    }
+
+    function renderQuestion(idx) {
+        const q = QUESTIONS[idx];
+        const selectedIdx = answers[idx];
+        const progressPercent = (idx / QUESTIONS.length) * 100;
+        let html = `
+            <div class="card">
+                <div class="progress-area">
+                    <div class="progress-label"><span>问题 ${idx+1}/${QUESTIONS.length}</span><span>${Math.round(progressPercent)}%</span></div>
+                    <div class="progress-bar-bg"><div class="progress-fill" style="width: ${progressPercent}%;"></div></div>
+                </div>
+                <div class="question-text">${q.text}</div>
+                <div class="options" id="optionsContainer"></div>
+                <div class="nav-buttons">
+                    <button class="btn" id="prevBtn" ${idx === 0 ? 'disabled' : ''}>← 上一题</button>
+                    <button class="btn btn-primary" id="nextBtn">${idx === QUESTIONS.length-1 ? '查看结果' : '下一题 →'}</button>
+                </div>
+            </div>
+        `;
+        app.innerHTML = html;
+        const container = document.getElementById('optionsContainer');
+        q.options.forEach((opt, optIdx) => {
+            const isSelected = (selectedIdx === optIdx);
+            const div = document.createElement('div');
+            div.className = `option-item ${isSelected ? 'selected' : ''}`;
+            div.innerHTML = `<span class="option-prefix">${String.fromCharCode(65+optIdx)}</span><span>${opt.text}</span>`;
+            div.addEventListener('click', () => {
+                answers[idx] = optIdx;
+                renderQuestion(idx);
+            });
+            container.appendChild(div);
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            if (idx > 0) {
+                currentStep--;
+                render();
+            }
+        });
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (answers[idx] === null || answers[idx] === undefined) {
+                alert("请选择一个选项");
+                return;
+            }
+            if (idx === QUESTIONS.length-1) {
+                currentStep = QUESTIONS.length;
+                render();
+            } else {
+                currentStep++;
+                render();
+            }
+        });
+    }
+
+    function computeScores() {
+        let enzymeScore = 0;
+        let microbiomeScore = 0;
+        for (let i = 0; i < QUESTIONS.length; i++) {
+            const selected = answers[i];
+            if (selected !== null) {
+                const scores = QUESTIONS[i].options[selected].scores;
+                enzymeScore += scores.enzyme || 0;
+                microbiomeScore += scores.microbiome || 0;
+            }
+        }
+        return { enzymeScore, microbiomeScore };
+    }
+
+    function getResultType(scores) {
+        const { enzymeScore, microbiomeScore } = scores;
+        if (enzymeScore <= 2 && microbiomeScore <= 2) {
+            return { primary: null, secondary: null, lowSignal: true };
+        }
+        let diff = enzymeScore - microbiomeScore;
+        if (diff >= 2) {
+            return { primary: 'enzyme', secondary: null, lowSignal: false, mixed: false };
+        } else if (diff <= -2) {
+            return { primary: 'microbiome', secondary: null, lowSignal: false, mixed: false };
+        } else {
+            let primary = enzymeScore > microbiomeScore ? 'enzyme' : 'microbiome';
+            let secondary = primary === 'enzyme' ? 'microbiome' : 'enzyme';
+            return { primary, secondary, lowSignal: false, mixed: true };
+        }
+    }
+
+    function renderResult() {
+        const scores = computeScores();
+        const result = getResultType(scores);
+        const primaryType = result.primary;
+        const secondaryType = result.secondary;
+        const lowSignal = result.lowSignal;
+        const isMixed = result.mixed;
+
+        let resultHtml = `<div class="result-card">
+            <div class="result-type">
+                ${lowSignal ? '📊 消化倾向不明显' : (primaryType ? TYPES[primaryType].name : '暂时无法明确判断')}
+                ${(!lowSignal && isMixed && secondaryType) ? `<span class="type-badge mix-tag">混合 · 兼有${TYPES[secondaryType].short}</span>` : ''}
+            </div>
+            <div class="type-badge">基于典型症状对比 · 饮食干预参考</div>
+            <p>${lowSignal ? '您的描述未明显偏向酶动力不足或菌群平衡失调，可能症状不典型或两种因素并存。建议继续观察并记录食物日记。' : (primaryType ? TYPES[primaryType].desc : '请结合医生面诊进一步评估。')}</p>`;
+
+        if (!lowSignal && primaryType) {
+            resultHtml += `<div class="advice-box"><strong>🥗 安心滋养调理建议（${TYPES[primaryType].name}）</strong><ul>`;
+            TYPES[primaryType].advice.forEach(item => {
+                resultHtml += `<li>${item}</li>`;
+            });
+            resultHtml += `</ul>`;
+            if (isMixed && secondaryType) {
+                resultHtml += `<hr><strong>🔄 兼有${TYPES[secondaryType].short}的可能性 · 额外关注</strong><ul>`;
+                TYPES[secondaryType].advice.slice(0,2).forEach(item => {
+                    resultHtml += `<li>✨ ${item}</li>`;
+                });
+                resultHtml += `</ul>`;
+            }
+            resultHtml += `</div>`;
+        } else if (lowSignal) {
+            resultHtml += `<div class="advice-box"><strong>🌱 通用饮食生活调整</strong><ul>
+                <li>📓 记录“食物-症状-大便”日记，找到规律。</li>
+                <li>🥄 暂时停止可疑食物（奶、甜食、豆类、洋葱等），逐一重新引入测试。</li>
+                <li>🧪 如怀疑乳糖不耐受，可去医院做氢呼气试验或大便还原糖检测。</li>
+                <li>🩺 若症状持续超过2周，建议儿童消化科就诊。</li>
+            </ul></div>`;
+        }
+
+        resultHtml += `<div class="medical-note">
+            📌 本工具仅基于典型症状对比，辅助家长初步判断。儿童消化问题复杂，可能是酶动力不足、菌群平衡失调、食物不耐受、过敏等共同作用。<br>
+            ⚠️ 若孩子出现体重不增、便血、反复发热、严重脱水，请立即就医。
+        </div>
+        <button class="btn reset-btn" id="resetAll">重新测试</button></div>`;
+        app.innerHTML = resultHtml;
+        document.getElementById('resetAll')?.addEventListener('click', () => {
+            answers = new Array(QUESTIONS.length).fill(null);
+            currentStep = 0;
+            render();
+        });
+    }
+
+    render();
+</script>
+</body>
+</html>

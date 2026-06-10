@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>肠漏风险深度评估 · 安心滋养</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f7f5ee;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: #2c3a2b;
+            padding: 20px 16px 60px;
+            line-height: 1.45;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .card, .result-card {
+            background: white;
+            border-radius: 32px;
+            padding: 24px 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #ebe2cf;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #2c6e2c, #6f9e4f);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+        .sub {
+            color: #6c7a5a;
+            font-size: 0.85rem;
+            margin-top: 6px;
+        }
+        .safety-box {
+            background: #fef1e6;
+            border-left: 5px solid #e09d5e;
+            padding: 16px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        .principle-box {
+            background: #eef5e9;
+            border-left: 5px solid #7caf5e;
+            padding: 16px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            font-size: 0.9rem;
+        }
+        .question-group {
+            margin-bottom: 32px;
+            border-bottom: 1px solid #e9e0ce;
+            padding-bottom: 16px;
+        }
+        .group-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 20px 0 12px 0;
+            color: #3a5e35;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .question-block {
+            margin: 20px 0;
+        }
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-left: 10px;
+        }
+        .option {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .option input {
+            width: 18px;
+            height: 18px;
+            margin-top: 3px;
+            flex-shrink: 0;
+        }
+        .option label {
+            font-weight: normal;
+            font-size: 0.9rem;
+        }
+        button {
+            background: #7caf5e;
+            color: white;
+            border: none;
+            border-radius: 60px;
+            padding: 14px 24px;
+            font-weight: 700;
+            font-size: 1rem;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #5e9142;
+        }
+        .result-area {
+            background: #fefcf5;
+            border-radius: 32px;
+            padding: 24px;
+            border-left: 6px solid #7caf5e;
+        }
+        .risk-tag {
+            display: inline-block;
+            background: #e9f0e2;
+            padding: 6px 16px;
+            border-radius: 60px;
+            font-size: 0.75rem;
+            margin-bottom: 12px;
+        }
+        .divider {
+            margin: 20px 0;
+            border-top: 1px dashed #ded3bb;
+        }
+        .special-alert {
+            background: #fcedcd;
+            padding: 14px;
+            border-radius: 24px;
+            margin: 16px 0;
+        }
+        .action-list {
+            background: #faf4e8;
+            padding: 14px 18px;
+            border-radius: 24px;
+            margin: 16px 0;
+        }
+        .footer-note {
+            font-size: 0.7rem;
+            color: #9b8e6a;
+            text-align: center;
+            margin-top: 20px;
+        }
+        @media (max-width: 550px) {
+            .card, .result-card { padding: 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🧬 肠漏风险深度评估</h1>
+        <div class="sub">六大系统独立筛查 · 精准定位影响领域</div>
+    </div>
+
+    <!-- 安全声明 -->
+    <div id="safetyCard" class="card">
+        <div class="safety-box">
+            <strong>📢 安全声明</strong><br>
+            本问卷为健康信息参考，不能替代专业诊断。如存在严重症状（呼吸困难、便血、体重急剧下降等）请立即就医。<br>
+            请根据近6个月的真实情况勾选。所有选项均匿名，仅用于生成个人风险提示。
+        </div>
+        <label style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+            <input type="checkbox" id="agreeCheck"> 我已阅读并同意进行自我评估
+        </label>
+        <button id="startBtn" disabled>开始填写问卷</button>
+    </div>
+
+    <!-- 问卷主体（动态生成） -->
+    <div id="questionnaire" style="display: none;"></div>
+
+    <!-- 结果区域 -->
+    <div id="resultArea" style="display: none;"></div>
+    <div class="footer-note">⚠️ 本评估仅供参考，建议结合临床医生意见制定干预计划</div>
+</div>
+
+<script>
+    // ---------- 问卷数据结构（同前，略，但保持完整） ----------
+    const coreQuestions = [
+        { id: "q1", text: "您的消化系统是否有以下持续超过3个月的表现？（多选）", limit: 5, options: [
+            { txt: "餐后腹胀、肚子鼓胀感", pt: 2 },{ txt: "排气明显增多", pt: 1.5 },{ txt: "腹部绞痛或痉挛性疼痛，排便或排气后缓解", pt: 2 },
+            { txt: "大便不成形、糊状或水样便（布里斯托6-7型）", pt: 2 },{ txt: "便秘（硬块状、排便费力，布里斯托1-2型）", pt: 1.5 },
+            { txt: "便秘与腹泻交替", pt: 2.5 },{ txt: "大便中可见未消化的食物残渣", pt: 2 },{ txt: "大便带有黏液", pt: 2.5 },
+            { txt: "已明确诊断肠易激综合征（IBS）或功能性消化不良", pt: 3 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定/没注意", pt: 0.5 }
+        ] },
+        { id: "q2", text: "您是否有以下口腔或肛周表现？（多选）", limit: 3, options: [
+            { txt: "反复口腔溃疡（阿弗他溃疡）", pt: 1.5 },{ txt: "口臭（排除口腔疾病后仍存在）", pt: 1 },
+            { txt: "舌苔厚腻、舌边有明显齿痕", pt: 1.5 },{ txt: "肛周瘙痒反复发作", pt: 1.5 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定/没注意", pt: 0.5 }
+        ] },
+        { id: "q15", text: "您是否有以下药物或医疗暴露史？（多选）", limit: 8, options: [
+            { txt: "近2年内反复使用抗生素（≥3个疗程）", pt: 3 },{ txt: "长期服用质子泵抑制剂（奥美拉唑等胃药）超过6个月", pt: 3 },
+            { txt: "长期服用非甾体抗炎止痛药（布洛芬、阿司匹林、双氯芬酸等）", pt: 2.5 },{ txt: "曾接受全身麻醉手术", pt: 1.5 },
+            { txt: "曾接受化疗或放疗", pt: 3 },{ txt: "曾服用过口服异维A酸（泰尔丝等治痤疮药物）", pt: 2 },
+            { txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定/记不清", pt: 0.5 }
+        ] },
+        { id: "q16", text: "您是否有以下肠道相关病史？（多选）", limit: 10, options: [
+            { txt: "曾患急性胃肠炎或食物中毒后，症状迁延不愈", pt: 3 },{ txt: "曾被诊断小肠细菌过度生长（SIBO）", pt: 3 },
+            { txt: "有乳糜泻或非乳糜泻麸质敏感", pt: 4 },{ txt: "曾接受腹部手术（阑尾切除、胆囊切除、剖腹产等）", pt: 2 },
+            { txt: "曾患艰难梭菌感染", pt: 3 },{ txt: "有长期旅行者腹泻史", pt: 1.5 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定/记不清", pt: 0.5 }
+        ] },
+        { id: "q17", text: "生活方式评估（多选）", limit: 5, options: [
+            { txt: "长期睡眠不足（<7小时/晚）或轮班工作", pt: 2.5 },{ txt: "长期处于高压状态（工作/生活/情感等）", pt: 2.5 },
+            { txt: "规律或过量饮酒（每天≥2杯）", pt: 2 },{ txt: "吸烟或长期被动吸烟", pt: 1.5 },
+            { txt: "每周运动过度（每天高强度训练且无恢复日）", pt: 1.5 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+        ] }
+    ];
+
+    const topics = [
+        { name: "神经发育与注意力", id: "neuro", threshold: 10, items: [
+            { id: "q3", text: "您或您的孩子是否有以下诊断？（多选）", options: [
+                { txt: "注意缺陷多动障碍（ADHD）或注意缺陷障碍（ADD）", pt: 3 },{ txt: "孤独症谱系障碍（ASD）", pt: 3 },
+                { txt: "抽动障碍（眨眼睛、清嗓子、耸肩膀等不自主动作或发声）", pt: 2.5 },{ txt: "感觉统合失调（对声音/光线/触觉过度敏感或迟钝）", pt: 2 },
+                { txt: "学习困难、注意力集中时间明显短于同龄人", pt: 2 },{ txt: "多种过敏性疾病并存（食物过敏、过敏性鼻炎、哮喘等）", pt: 2.5 },
+                { txt: "发育迟缓史（语言、运动、社交等落后于同龄人）", pt: 2 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+            ] },
+            { id: "q4", text: "以下行为或表现是否出现在您或孩子身上？（多选）", options: [
+                { txt: "挑食极其严重，只吃少数几种特定食物", pt: 2.5 },{ txt: "对麸质（小麦制品）或酪蛋白（奶制品）有明确反应", pt: 3 },
+                { txt: "食用含人工色素或添加剂的食品后，多动或情绪明显加剧", pt: 2 },{ txt: "无明显原因的兴奋与烦躁交替", pt: 1.5 },
+                { txt: "睡眠障碍：入睡困难、频繁夜醒、早醒", pt: 1.5 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定/没注意", pt: 0.5 }
+            ] }
+        ] },
+        { name: "代谢与内分泌", id: "metabolic", threshold: 8, items: [
+            { id: "q5", text: "您是否有以下代谢或内分泌诊断？（多选）", options: [
+                { txt: "2型糖尿病或糖尿病前期（糖耐量异常）", pt: 3 },{ txt: "超重或肥胖（BMI≥24），尤其腹型肥胖", pt: 2.5 },
+                { txt: "高血压", pt: 2 },{ txt: "高血脂（高甘油三酯或高胆固醇）", pt: 2 },{ txt: "非酒精性脂肪肝", pt: 2.5 },
+                { txt: "高尿酸血症或痛风", pt: 2 },{ txt: "多囊卵巢综合征（PCOS）", pt: 3 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定/没检查过", pt: 0.5 }
+            ] },
+            { id: "q6", text: "以下哪些描述与您相符？（多选）", options: [
+                { txt: "餐后犯困严重，或低血糖时心慌手抖易怒", pt: 2 },{ txt: "对甜食或精制碳水化合物有强烈渴望", pt: 2 },
+                { txt: "饮食控制和运动后体重仍然很难下降", pt: 2.5 },{ txt: "痛风发作与饮食关系不大，甚至吃素也发作", pt: 2 },
+                { txt: "女性：月经周期不规律，伴有痤疮、多毛等雄激素高表现", pt: 2 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+            ] }
+        ] },
+        { name: "耳鼻喉与皮肤", id: "ent_derm", threshold: 10, items: [
+            { id: "q7", text: "您或您的孩子是否有以下耳鼻喉问题？（多选）", options: [
+                { txt: "过敏性鼻炎（阵发性打喷嚏、流清涕、鼻塞）", pt: 2.5 },{ txt: "慢性鼻窦炎、鼻后滴漏", pt: 2 },{ txt: "腺样体肥大", pt: 2.5 },
+                { txt: "慢性咽炎（咽喉异物感、频繁清嗓子）", pt: 2 },{ txt: "分泌性中耳炎反复发作", pt: 2 },{ txt: "睡觉打鼾、张口呼吸", pt: 2 },
+                { txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+            ] },
+            { id: "q8", text: "您是否有以下皮肤表现？（多选）", options: [
+                { txt: "慢性湿疹（尤其手部折侧、面部、头皮）", pt: 3 },{ txt: "慢性荨麻疹（反复发作>6周，常规抗过敏药效果不佳）", pt: 3 },
+                { txt: "痤疮（下巴、下颌线周围为主，或成年后顽固不愈）", pt: 2 },{ txt: "银屑病（牛皮癣）", pt: 3 },
+                { txt: "皮肤划痕症（轻划皮肤即出现红色凸痕）", pt: 2 },{ txt: "皮肤干燥、粗糙、严重脱屑，外用药改善有限", pt: 1.5 },
+                { txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+            ] }
+        ] },
+        { name: "免疫与慢性炎症", id: "immune", threshold: 8, items: [
+            { id: "q9", text: "您是否已被确诊以下自身免疫性疾病？（多选）", options: [
+                { txt: "桥本甲状腺炎", pt: 4 },{ txt: "类风湿关节炎", pt: 4 },{ txt: "银屑病（关节病性或寻常型）", pt: 4 },
+                { txt: "炎症性肠病（克罗恩病、溃疡性结肠炎）", pt: 5 },{ txt: "系统性红斑狼疮", pt: 4 },{ txt: "多发性硬化症", pt: 4 },
+                { txt: "1型糖尿病", pt: 3 },{ txt: "乳糜泻", pt: 5 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定/没检查过", pt: 0.5 }
+            ] },
+            { id: "q10", text: "即使未被确诊，您是否有以下“诊断不明的免疫样症状”？（多选）", options: [
+                { txt: "游走性关节痛（今天这里痛，明天那里痛，风湿检查阴性）", pt: 3 },{ txt: "早晨起床关节僵硬持续超过15分钟", pt: 3 },
+                { txt: "反复不明原因低热（37.3-38℃，查无感染）", pt: 2 },{ txt: "对多种食物“说不上过敏但吃完不适”（≥3种）", pt: 3 },
+                { txt: "季节性过敏或哮喘在成年后反而加重", pt: 2 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+            ] }
+        ] },
+        { name: "精神心理与情绪障碍", id: "mental", threshold: 10, items: [
+            { id: "q11", text: "您是否有以下精神心理诊断？（多选）", options: [
+                { txt: "抑郁症或持续性抑郁障碍", pt: 3 },{ txt: "广泛性焦虑障碍或惊恐障碍", pt: 3 },{ txt: "躯体症状障碍（反复各种身体不适，检查却正常）", pt: 3 },
+                { txt: "强迫症（OCD）", pt: 2 },{ txt: "双相情感障碍", pt: 2 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+            ] },
+            { id: "q12", text: "以下哪些描述与您相符？（多选）", options: [
+                { txt: "情绪状态与饮食明显相关：吃某些食物后更消沉或更焦虑", pt: 3 },{ txt: "有“脑雾”感：思维不清晰、反应迟钝、记忆力下降", pt: 3 },
+                { txt: "即使休息充足，仍持续感到无法恢复的疲劳", pt: 3 },{ txt: "服用精神类药物后效果不佳或副作用过大", pt: 2 },
+                { txt: "同时有肠易激综合征（IBS）和焦虑/抑郁", pt: 3 },{ txt: "压力大或睡眠不足时精神症状显著加重", pt: 2 },
+                { txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+            ] }
+        ] },
+        { name: "神经退行性疾病与运动障碍", id: "neurodegenerative", threshold: 8, items: [
+            { id: "q13", text: "您或亲属中是否有以下诊断或高度担忧？（多选）", options: [
+                { txt: "阿尔茨海默病或轻度认知障碍", pt: 3 },{ txt: "帕金森病", pt: 4 },{ txt: "肌萎缩侧索硬化症（ALS）", pt: 3 },
+                { txt: "有运动障碍表现（震颤、僵硬、运动迟缓、步态改变）", pt: 3 },{ txt: "直系亲属有早发性痴呆或帕金森", pt: 2 },
+                { txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+            ] },
+            { id: "q14", text: "以下早期预警信号是否存在？（多选）", options: [
+                { txt: "嗅觉明显减退（比同龄人更难闻到气味）", pt: 2.5 },{ txt: "记忆力下降已影响日常工作和生活", pt: 2 },
+                { txt: "长期便秘（帕金森前驱信号）", pt: 3 },{ txt: "睡眠中大喊大叫、拳打脚踢（RBD）", pt: 2.5 },
+                { txt: "认知功能波动：时而清晰时而模糊", pt: 2 },{ txt: "以上均无", pt: 0, special: "none" },{ txt: "不确定", pt: 0.5 }
+            ] }
+        ] }
+    ];
+
+    let coreScores = { q1:0, q2:0, q15:0, q16:0, q17:0 };
+    let topicScores = {};
+    let autoImmuneTrigger = false;
+
+    function computeCoreScore() {
+        let total = 0;
+        for (let q of coreQuestions) {
+            let sum = coreScores[q.id];
+            if (sum > q.limit) sum = q.limit;
+            total += sum;
+        }
+        return total;
+    }
+
+    function computeTopicScore(topic) {
+        let sum = 0;
+        for (let item of topic.items) {
+            sum += topicScores[item.id] || 0;
+        }
+        return sum;
+    }
+
+    // 渲染问卷（加入设计原则说明）
+    function renderQuestionnaire() {
+        let html = `<form id="surveyForm">`;
+
+        // 设计原则说明框
+        html += `<div class="principle-box">
+            <strong>🧠 为什么需要填写多个领域的问题？</strong><br>
+            肠漏（肠道通透性增加）不是单纯的消化问题，它像一个“破损的筛子”，会让未被完全消化的食物蛋白、细菌毒素等进入血液，从而影响全身多个系统——包括大脑（注意力/情绪/抽动）、皮肤（湿疹/鼻炎）、关节（自身免疫）、代谢（糖尿病/肥胖）、甚至神经退行性疾病风险。<br><br>
+            <strong>✅ 独立领域计分 + 核心层合并评估</strong><br>
+            • 每个健康领域（如神经发育、代谢、皮肤等）独立计分：因为不同人的肠漏表现可能只突出在一个系统，如果将所有得分混在一起，容易漏掉“单一领域严重但总分不高”的情况。<br>
+            • 核心层（消化道症状、药物史、生活方式等）是所有肠漏风险的共同基础，无论您属于哪个领域，这部分都会合并计算，给出整体风险等级。<br>
+            • 如果您发现某些题目与您无关（比如没有孩子或没有某些诊断），直接跳过即可，系统只根据您勾选的项目进行评估。
+        </div>`;
+
+        // 第一部分：核心层
+        html += `<div class="group-title"><i class="fas fa-shield-alt"></i> 第一部分：通用高危因素（所有人必填）</div>`;
+        for (let q of coreQuestions) {
+            html += `<div class="question-block"><div class="question-text">${q.text}</div><div class="options-list">`;
+            q.options.forEach(opt => {
+                html += `<label class="option"><input type="checkbox" data-qid="${q.id}" data-pts="${opt.pt}" data-special="${opt.special || ''}"> <span>${opt.txt}</span></label>`;
+            });
+            html += `</div></div>`;
+        }
+
+        // 六大专题
+        for (let topic of topics) {
+            html += `<div class="group-title">📌 ${topic.name}</div>`;
+            for (let item of topic.items) {
+                html += `<div class="question-block"><div class="question-text">${item.text}</div><div class="options-list">`;
+                item.options.forEach(opt => {
+                    html += `<label class="option"><input type="checkbox" data-qid="${item.id}" data-pts="${opt.pt}" data-special="${opt.special || ''}"> <span>${opt.txt}</span></label>`;
+                });
+                html += `</div></div>`;
+            }
+        }
+
+        html += `<button type="button" id="submitSurvey">提交评估，获取详细行动指南</button></form>`;
+        document.getElementById('questionnaire').innerHTML = html;
+
+        document.getElementById('submitSurvey').addEventListener('click', collectAndResult);
+    }
+
+    function collectAndResult() {
+        coreScores = { q1:0, q2:0, q15:0, q16:0, q17:0 };
+        topicScores = {};
+        autoImmuneTrigger = false;
+
+        const allCheckboxes = document.querySelectorAll('#surveyForm input[type="checkbox"]');
+        allCheckboxes.forEach(cb => {
+            if (cb.checked) {
+                let pts = parseFloat(cb.getAttribute('data-pts'));
+                let qid = cb.getAttribute('data-qid');
+                let special = cb.getAttribute('data-special');
+                if (special === 'none') return;
+                if (coreQuestions.some(q => q.id === qid)) {
+                    coreScores[qid] = (coreScores[qid] || 0) + pts;
+                } else {
+                    topicScores[qid] = (topicScores[qid] || 0) + pts;
+                }
+                if (qid === 'q9' && pts >= 3) autoImmuneTrigger = true;
+            }
+        });
+
+        let coreTotal = 0;
+        for (let q of coreQuestions) {
+            let val = coreScores[q.id] || 0;
+            if (val > q.limit) val = q.limit;
+            coreTotal += val;
+        }
+
+        // 收集各领域结果
+        let highTopics = [];
+        let midTopics = [];
+        for (let topic of topics) {
+            let score = computeTopicScore(topic);
+            if (topic.id === 'immune' && autoImmuneTrigger) {
+                highTopics.push({ name: topic.name, advice: '您已有自身免疫病诊断，肠漏是这类疾病的共同病理基础。建议在医生指导下进行肠道屏障修复，排查凝集素/茄科敏感和IgG食物敏感，关注AIP饮食模式。' });
+            } else if (score >= topic.threshold) {
+                let advice = '';
+                if (topic.id === 'neuro') advice = '您的神经发育表现与肠漏高度关联（肠-脑轴受损）。应优先排查麸质与酪蛋白回避实验，同时结合IgG食物敏感和FODMAP筛查。';
+                else if (topic.id === 'metabolic') advice = '代谢紊乱与肠漏明确关联，顽固性肥胖和“吃素也痛风”是特别信号。重点排查精制碳水，并结合草酸盐和FODMAP筛查。';
+                else if (topic.id === 'ent_derm') advice = '耳鼻喉和皮肤表现是组胺不耐受和IgG食物敏感的经典靶器官。优先排查组胺不耐受和IgG食物敏感（尤其乳制品、蛋清）。';
+                else if (topic.id === 'immune') advice = '存在高度疑似自身免疫倾向的炎症表现。建议排查IgG食物敏感和凝集素/茄科敏感。';
+                else if (topic.id === 'mental') advice = '精神心理表现高度指向肠-脑轴紊乱。优先排查麸质、乳制品，同时关注组胺不耐受（尤其凌晨早醒者）。';
+                else if (topic.id === 'neurodegenerative') advice = '神经退行性风险与肠-脑轴密切相关。长期便秘是帕金森前驱信号，应将肠道修复作为核心策略。';
+                highTopics.push({ name: topic.name, advice });
+            } else if (score >= topic.threshold * 0.6) {
+                midTopics.push({ name: topic.name });
+            }
+        }
+
+        // 构建详细结果报告
+        let resultHtml = `<div class="result-area"><h3>📋 肠漏综合风险评估 & 行动指南</h3>`;
+
+        // 自身免疫病特殊预警
+        if (autoImmuneTrigger) {
+            resultHtml += `<div class="special-alert"><strong>⚠️ 自身免疫病特殊提示</strong><br>您已确诊自身免疫性疾病，修复肠道屏障是抗炎饮食的核心目标。请务必在医生指导下进行针对性干预（如AIP饮食），不要自行停用处方药。</div>`;
+        }
+
+        // 核心层判定
+        let coreRiskText = '';
+        if (coreTotal >= 12) {
+            coreRiskText = '<span style="color:#c0392b;">🔴 核心层高风险</span> 您的肠道直接表现和高危因素已足以提示肠漏存在，修复肠道屏障应作为优先健康事项。';
+        } else if (coreTotal >= 6) {
+            coreRiskText = '<span style="color:#e67e22;">🟡 核心层中风险</span> 存在一定程度的肠漏风险，请结合下方专题建议综合判断。';
+        } else {
+            coreRiskText = '<span style="color:#27ae60;">🟢 核心层低风险</span> 核心层通用因素不明显，但若专题层出现高风险仍值得警惕。';
+        }
+        resultHtml += `<div class="risk-tag" style="background:#f0e7d8;">📌 核心层风险：${coreRiskText}</div>`;
+
+        // 高风险领域详细建议
+        if (highTopics.length > 0) {
+            resultHtml += `<div class="divider"></div><h4>🎯 需要紧急干预的领域（高风险）</h4>`;
+            for (let t of highTopics) {
+                resultHtml += `<div><strong>${t.name}</strong><br>${t.advice}</div><div class="divider" style="margin:12px 0;"></div>`;
+            }
+        } else if (midTopics.length > 0) {
+            resultHtml += `<div class="divider"></div><h4>⚠️ 需要关注的领域（中风险）</h4>`;
+            resultHtml += `<p>以下领域存在一定关联，建议从生活调整和症状日记开始：${midTopics.map(t=>t.name).join('、')}。</p><div class="divider"></div>`;
+        } else if (coreTotal < 6 && !autoImmuneTrigger) {
+            resultHtml += `<div class="divider"></div><p>✅ 根据您的回答，当前未发现明确的肠漏高风险信号。继续保持健康生活方式即可。</p>`;
+        }
+
+        // 综合行动优先级（增强价值感）
+        resultHtml += `<div class="action-list"><strong>📌 综合行动优先级（按重要性排序）</strong><br>
+        <ol style="margin-left: 20px; margin-top: 8px;">
+            <li><strong>修复肠道屏障基础</strong>：补充谷氨酰胺、锌、维生素D、Omega-3；保证睡眠质量；管理压力；避免不必要的抗生素和NSAIDs。</li>
+            <li><strong>根据高风险领域选择第一轮饮食排除</strong>：${highTopics.length>0 ? highTopics[0].name+'：'+highTopics[0].advice.split('。')[0] : '如无高风险，可尝试先从“三大白”（麸质、乳制品、蛋清）开始排除2-4周'}</li>
+            <li><strong>记录症状-食物日记</strong>：至少2周，寻找个人触发规律。</li>
+            <li><strong>考虑功能性检测</strong>：如果症状持续，可在功能医学医生指导下进行“肠漏检测”（乳果糖/甘露醇比值）、IgG食物不耐受检测、SIBO呼气试验等。</li>
+        </ol>
+        </div>`;
+
+        // 日常修复基础
+        resultHtml += `<div class="special-alert" style="background:#eef4e6;"><strong>🌿 日常肠道修复基础措施（通用）</strong><br>
+        • <strong>饮食调整</strong>：增加骨汤、发酵蔬菜、可溶性纤维（燕麦、香蕉、秋葵）；减少超加工食品、精制糖、工业种子油。<br>
+        • <strong>营养补充</strong>：谷氨酰胺（5g/天）、锌(15-30mg)、维生素D（维持血清水平50-80ng/mL）、鱼油（至少1g EPA）。<br>
+        • <strong>生活方式</strong>：每天7-8小时睡眠；正念减压；适度运动（避免过度训练）。<br>
+        • <strong>避免损伤</strong>：除非必要，不长期使用胃药、布洛芬等；控制酒精摄入。
+        </div>`;
+
+        resultHtml += `<button id="resetSurvey">重新填写问卷</button></div>`;
+        document.getElementById('questionnaire').style.display = 'none';
+        document.getElementById('resultArea').style.display = 'block';
+        document.getElementById('resultArea').innerHTML = resultHtml;
+        document.getElementById('resetSurvey').addEventListener('click', () => {
+            document.getElementById('questionnaire').style.display = 'block';
+            document.getElementById('resultArea').style.display = 'none';
+            renderQuestionnaire();
+        });
+    }
+
+    document.getElementById('startBtn').addEventListener('click', () => {
+        document.getElementById('safetyCard').style.display = 'none';
+        document.getElementById('questionnaire').style.display = 'block';
+        renderQuestionnaire();
+    });
+    const agreeCheck = document.getElementById('agreeCheck');
+    const startBtn = document.getElementById('startBtn');
+    agreeCheck.addEventListener('change', () => { startBtn.disabled = !agreeCheck.checked; });
+</script>
+</body>
+</html>

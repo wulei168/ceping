@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>安心滋养 · 家庭铅暴露风险自查表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f5f9f0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            padding: 20px 16px 48px;
+        }
+
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .brand {
+            font-size: 12px;
+            letter-spacing: 1px;
+            color: #2d6a4f;
+            background: #e9f5e9;
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 40px;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1f5e3a, #2d8c5a);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 8px;
+        }
+        .sub {
+            font-size: 14px;
+            color: #4a6a3b;
+            background: #f1f8e8;
+            border-radius: 24px;
+            padding: 6px 18px;
+            display: inline-block;
+            font-weight: 500;
+        }
+        .desc-note {
+            background: #fefce8;
+            border-left: 4px solid #d4a373;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: #7d6236;
+            margin-bottom: 24px;
+            border-radius: 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.05);
+            padding: 20px 20px 24px;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2d6a4f;
+            border-left: 5px solid #2d8c5a;
+            padding-left: 14px;
+            margin-bottom: 18px;
+        }
+
+        .question {
+            margin-bottom: 22px;
+        }
+        .question-text {
+            font-weight: 600;
+            color: #2c3e2f;
+            margin-bottom: 10px;
+            font-size: 16px;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .badge-info {
+            background: #eef2f5;
+            font-size: 11px;
+            font-weight: normal;
+            padding: 2px 8px;
+            border-radius: 30px;
+            color: #5a6e5a;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8faf5;
+            border-radius: 40px;
+            padding: 6px 14px;
+            border: 1px solid #dde6d5;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .option-item.selected {
+            background: #e0f2e9;
+            border-color: #2d8c5a;
+        }
+        .option-item input {
+            margin: 0;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .option-item label {
+            font-size: 14px;
+            color: #2f4d2d;
+            cursor: pointer;
+        }
+        .inline-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+        input[type="text"], input[type="number"], input[type="year"] {
+            padding: 10px 16px;
+            border-radius: 40px;
+            border: 1px solid #cbdcc0;
+            font-size: 15px;
+            width: 180px;
+            background: white;
+        }
+        hr {
+            margin: 16px 0;
+            border: 0;
+            height: 1px;
+            background: #e2e8e0;
+        }
+        .btn-submit {
+            background: #2d8c5a;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 60px;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 8px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(45,140,90,0.3);
+        }
+        .btn-submit:active {
+            background: #1f6e46;
+            transform: scale(0.98);
+        }
+        .result-card {
+            background: #ffffffdd;
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            padding: 20px;
+            margin-top: 24px;
+            border: 1px solid #cfe3cf;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+        }
+        .risk-badge {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .high-risk { background: #f8d7da; color: #a11f2c; }
+        .mid-risk { background: #fff3cd; color: #b36b0e; }
+        .low-risk { background: #d4edda; color: #155724; }
+        .guide-list {
+            padding-left: 20px;
+            margin-top: 12px;
+        }
+        .guide-list li {
+            margin: 8px 0;
+        }
+        .footnote {
+            font-size: 11px;
+            color: #8faa8a;
+            text-align: center;
+            margin-top: 24px;
+        }
+        .medical-note {
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 12px;
+            font-size: 12px;
+            color: #4b6a4b;
+            margin-top: 16px;
+        }
+        @media (max-width: 550px) {
+            .option-item { padding: 5px 12px; }
+            input[type="text"] { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="brand">🌱 安心滋养饮食干预计划 · 环境健康模块</div>
+        <h1>家庭铅暴露风险自查表</h1>
+        <div class="sub">CDC风险评估框架 · 国内改良版</div>
+    </div>
+    <div class="desc-note">
+        ⚠️ 铅对儿童神经系统有不可逆损害，ADHD孩子尤其敏感。本表基于美国CDC及WHO推荐的核心风险评估框架，结合国内实际情况设计，帮助快速识别家中铅暴露风险点。填写后页面将自动生成个性化行动指南。
+    </div>
+
+    <div id="app">
+        <form id="leadRiskForm">
+            <!-- 一、房屋年龄与状况 -->
+            <div class="card">
+                <div class="section-title">🏠 一、房屋年龄与状况</div>
+                <div class="question">
+                    <div class="question-text">1.1 您家房屋是哪一年建成的？ <span class="badge-info">年份</span></div>
+                    <input type="number" id="houseYear" placeholder="例如 1995" style="width: 160px;">
+                </div>
+                <div class="question">
+                    <div class="question-text">1.2 房屋（尤其是2000年前建的）近期（6个月内）是否进行过装修、翻新，或存在油漆剥落？</div>
+                    <div class="options" data-q="renovation">
+                        <div class="option-item" data-val="yes"><input type="radio" name="renovation" value="yes"> <label>是</label></div>
+                        <div class="option-item" data-val="no"><input type="radio" name="renovation" value="no"> <label>否</label></div>
+                    </div>
+                </div>
+                <div class="question">
+                    <div class="question-text">1.3 家中是否有老旧油漆墙皮剥落的情况？</div>
+                    <div class="options" data-q="paintPeel">
+                        <div class="option-item" data-val="yes"><input type="radio" name="paintPeel" value="yes"> <label>有</label></div>
+                        <div class="option-item" data-val="no"><input type="radio" name="paintPeel" value="no"> <label>无</label></div>
+                    </div>
+                </div>
+                <div class="medical-note">📘 说明：2000年前建成的房屋需重点关注含铅油漆风险，2007年前装修的也建议留意。</div>
+            </div>
+
+            <!-- 二、职业与爱好暴露 -->
+            <div class="card">
+                <div class="section-title">🧑‍🏭 二、职业与爱好暴露（家庭成员）</div>
+                <div class="question">
+                    <div class="question-text">2.1 家庭成员是否从事以下高风险行业？（可多选）</div>
+                    <div class="options" id="jobOptions">
+                        <div class="option-item"><input type="checkbox" value="铅蓄电池制造/回收"> <label>铅蓄电池制造/回收</label></div>
+                        <div class="option-item"><input type="checkbox" value="金属冶炼/熔炼"> <label>金属冶炼/熔炼</label></div>
+                        <div class="option-item"><input type="checkbox" value="电子元器件拆装/焊接"> <label>电子元器件拆装/焊接</label></div>
+                        <div class="option-item"><input type="checkbox" value="建筑装修/油漆/打磨"> <label>建筑装修/油漆/打磨</label></div>
+                        <div class="option-item"><input type="checkbox" value="汽车修理/焊接"> <label>汽车修理/焊接</label></div>
+                        <div class="option-item"><input type="checkbox" value="印刷/铸字"> <label>印刷/铸字</label></div>
+                        <div class="option-item"><input type="checkbox" value="陶瓷/玻璃/搪瓷生产"> <label>陶瓷/玻璃/搪瓷生产</label></div>
+                        <div class="option-item"><input type="checkbox" value="电缆/管道焊接"> <label>电缆/管道焊接</label></div>
+                        <div class="option-item"><input type="checkbox" value="其他接触铅行业"> <label>其他接触铅行业</label></div>
+                        <div class="option-item"><input type="checkbox" value="none" id="jobNone"> <label>无 / 不清楚</label></div>
+                    </div>
+                </div>
+                <div class="medical-note">⚠️ 蓄电池、金属冶炼、电子焊接是当前接触铅风险最高的行业，工作服可能将铅尘带回家。</div>
+            </div>
+
+            <!-- 三、餐具厨具与日用品 -->
+            <div class="card">
+                <div class="section-title">🍽️ 三、餐具、厨具与日用品</div>
+                <div class="question"><div class="question-text">3.1 是否使用来源不明的金属锅具（路边摊、杂牌铝锅/铜锅等）？</div><div class="options" data-q="metalPot"><div class="option-item" data-val="yes"><input type="radio" name="metalPot" value="yes"> <label>是</label></div><div class="option-item" data-val="no"><input type="radio" name="metalPot" value="no"> <label>否</label></div></div></div>
+                <div class="question"><div class="question-text">3.2 是否使用色彩鲜艳、图案有凹凸感的陶瓷碗盘（内壁有彩绘）？</div><div class="options" data-q="ceramic"><div class="option-item" data-val="yes"><input type="radio" name="ceramic" value="yes"> <label>是</label></div><div class="option-item" data-val="no"><input type="radio" name="ceramic" value="no"> <label>否</label></div></div></div>
+                <div class="question"><div class="question-text">3.3 是否使用来源不明的搪瓷餐具（或有破损、瓷釉脱落）？</div><div class="options" data-q="enamel"><div class="option-item" data-val="yes"><input type="radio" name="enamel" value="yes"> <label>是</label></div><div class="option-item" data-val="no"><input type="radio" name="enamel" value="no"> <label>否</label></div></div></div>
+                <div class="question"><div class="question-text">3.4 是否使用早期（90年代前）水晶玻璃杯长期盛放酸性饮品？</div><div class="options" data-q="crystal"><div class="option-item" data-val="yes"><input type="radio" name="crystal" value="yes"> <label>是</label></div><div class="option-item" data-val="no"><input type="radio" name="crystal" value="no"> <label>否</label></div></div></div>
+                <div class="medical-note">💡 釉上彩陶瓷餐具铅溶出风险高，建议更换为白瓷或釉下彩；破损搪瓷餐具内部金属暴露风险增加。</div>
+            </div>
+
+            <!-- 四、中药、传统用品与行为习惯 -->
+            <div class="card">
+                <div class="section-title">🌿 四、中药、传统用品与行为习惯</div>
+                <div class="question"><div class="question-text">4.1 孩子是否长期服用中药、草药、传统偏方（包括凉茶、补汤、消食粉等）？</div><div class="options" data-q="herb"><div class="option-item" data-val="yes"><input type="radio" name="herb" value="yes"> <label>是</label></div><div class="option-item" data-val="no"><input type="radio" name="herb" value="no"> <label>否</label></div></div></div>
+                <div class="question"><div class="question-text">4.2 孩子是否使用或接触过传统化妆品（kohl眼影、红汞、某些美白粉、染发剂）？</div><div class="options" data-q="cosmetic"><div class="option-item" data-val="yes"><input type="radio" name="cosmetic" value="yes"> <label>是</label></div><div class="option-item" data-val="no"><input type="radio" name="cosmetic" value="no"> <label>否</label></div></div></div>
+                <div class="question"><div class="question-text">4.3 家中是否有老旧、漆面剥落的玩具？</div><div class="options" data-q="oldToys"><div class="option-item" data-val="yes"><input type="radio" name="oldToys" value="yes"> <label>有</label></div><div class="option-item" data-val="no"><input type="radio" name="oldToys" value="no"> <label>无</label></div></div></div>
+                <div class="question"><div class="question-text">4.4 孩子是否有以下习惯？（可多选）</div><div class="options" id="habitOptions">
+                    <div class="option-item"><input type="checkbox" value="吃手指"> <label>吃手指</label></div>
+                    <div class="option-item"><input type="checkbox" value="啃咬玩具"> <label>啃咬玩具</label></div>
+                    <div class="option-item"><input type="checkbox" value="饭前不洗手"> <label>饭前不洗手</label></div>
+                    <div class="option-item"><input type="checkbox" value="户外玩耍后不洗手"> <label>户外玩耍后不洗手</label></div>
+                </div></div>
+                <div class="medical-note">📌 部分中药材可能从土壤中吸收铅；传统化妆品含铅极高；手口行为是儿童铅摄入主要途径。</div>
+            </div>
+
+            <!-- 五、饮用水与居住周边 -->
+            <div class="card">
+                <div class="section-title">🚰 五、饮用水与居住周边</div>
+                <div class="question"><div class="question-text">5.1 您家房屋是否早于2000年且未更换水管？</div><div class="options" data-q="oldPipe"><div class="option-item" data-val="yes"><input type="radio" name="oldPipe" value="yes"> <label>是</label></div><div class="option-item" data-val="no"><input type="radio" name="oldPipe" value="no"> <label>否</label></div></div></div>
+                <div class="question"><div class="question-text">5.2 房屋周边1公里内是否有以下场所？（可多选）</div><div class="options" id="nearbyOptions">
+                    <div class="option-item"><input type="checkbox" value="金属冶炼厂/铅蓄电池厂"> <label>金属冶炼厂/铅蓄电池厂</label></div>
+                    <div class="option-item"><input type="checkbox" value="汽车修理厂/拆解厂"> <label>汽车修理厂/拆解厂</label></div>
+                    <div class="option-item"><input type="checkbox" value="燃煤电厂/大型锅炉"> <label>燃煤电厂/大型锅炉</label></div>
+                    <div class="option-item"><input type="checkbox" value="废品回收站/电子垃圾拆解"> <label>废品回收站/电子垃圾拆解</label></div>
+                    <div class="option-item"><input type="checkbox" value="交通主干道/大型停车场"> <label>交通主干道/大型停车场</label></div>
+                </div></div>
+                <div class="question"><div class="question-text">5.3 孩子是否经常在裸露土壤（非草坪）上玩耍？</div><div class="options" data-q="soilPlay"><div class="option-item" data-val="yes"><input type="radio" name="soilPlay" value="yes"> <label>是</label></div><div class="option-item" data-val="no"><input type="radio" name="soilPlay" value="no"> <label>否</label></div></div></div>
+                <div class="question"><div class="question-text">5.4 早起用水习惯：早晨第一次用水是否会放掉一些水才用于饮用/做饭？</div><div class="options" data-q="waterFlush"><div class="option-item" data-val="yes"><input type="radio" name="waterFlush" value="yes"> <label>会放一会儿再用</label></div><div class="option-item" data-val="no"><input type="radio" name="waterFlush" value="no"> <label>直接使用过夜水</label></div></div></div>
+                <div class="medical-note">💧 早起先放水1-2分钟（冲掉管道中可能析出的铅）再取水饮用或做饭，是重要防护措施。</div>
+            </div>
+
+            <button type="button" class="btn-submit" id="submitBtn">📋 生成我的风险行动指南</button>
+        </form>
+        <div id="resultArea"></div>
+        <div class="footnote">
+            🌿 本表仅作家庭铅暴露风险初步筛查工具，不能替代专业环境检测或医疗诊断。<br>
+            若怀疑孩子存在铅暴露风险，请及时联系当地疾控中心进行血铅检测。
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // 辅助函数：获取单选的选中值
+        function getRadioValue(name) {
+            const radios = document.getElementsByName(name);
+            for (let radio of radios) {
+                if (radio.checked) return radio.value;
+            }
+            return null;
+        }
+
+        // 获取多选值数组 (复选框组)
+        function getCheckboxValues(selector) {
+            let values = [];
+            const checkboxes = document.querySelectorAll(selector);
+            for (let cb of checkboxes) {
+                if (cb.checked && cb.value !== 'none') {
+                    values.push(cb.value);
+                }
+            }
+            // 如果选择了“无”且没有其他选项，视为空数组；但若有其他选项，“无”可忽略
+            const noneCheck = document.querySelector('#jobNone');
+            if (noneCheck && noneCheck.checked && values.length === 0) values = [];
+            return values;
+        }
+
+        function getMultiCheckboxValues(containerId) {
+            let values = [];
+            const container = document.getElementById(containerId);
+            if(container){
+                const inputs = container.querySelectorAll('input[type="checkbox"]');
+                inputs.forEach(cb => {
+                    if(cb.checked && cb.value !== 'none') values.push(cb.value);
+                });
+            }
+            return values;
+        }
+
+        // 风险评估主函数
+        function calculateRisk() {
+            let riskPoints = 0;
+            let details = [];
+
+            // 1. 房屋年龄
+            const houseYear = parseInt(document.getElementById('houseYear').value);
+            if (!isNaN(houseYear) && houseYear < 2000) riskPoints += 2;  // 2000年前建成为高风险指标
+            if (!isNaN(houseYear) && houseYear < 1990) riskPoints += 1;  // 更老再加分
+
+            // 装修或油漆剥落
+            if (getRadioValue('renovation') === 'yes') { riskPoints += 2; details.push("近期装修/翻新或油漆剥落"); }
+            if (getRadioValue('paintPeel') === 'yes') { riskPoints += 2; details.push("老旧油漆墙皮剥落"); }
+
+            // 职业暴露 (每个行业增加1分，最多3分)
+            const jobs = getCheckboxValues('#jobOptions input[type="checkbox"]');
+            const jobCount = jobs.filter(j => j !== '无 / 不清楚').length;
+            if (jobCount > 0) {
+                let add = Math.min(jobCount, 3);
+                riskPoints += add;
+                details.push(`家庭成员从事 ${jobs.join(',')} 等高风险职业`);
+            }
+
+            // 餐具风险
+            if (getRadioValue('metalPot') === 'yes') { riskPoints += 1; details.push("使用来源不明金属锅具"); }
+            if (getRadioValue('ceramic') === 'yes') { riskPoints += 1; details.push("釉上彩陶瓷餐具"); }
+            if (getRadioValue('enamel') === 'yes') { riskPoints += 1; details.push("破损搪瓷餐具"); }
+            if (getRadioValue('crystal') === 'yes') { riskPoints += 1; details.push("早期水晶玻璃杯盛酸性饮品"); }
+
+            // 中药及传统用品
+            if (getRadioValue('herb') === 'yes') { riskPoints += 1; details.push("长期服用中药/偏方"); }
+            if (getRadioValue('cosmetic') === 'yes') { riskPoints += 2; details.push("使用传统化妆品"); }
+            if (getRadioValue('oldToys') === 'yes') { riskPoints += 1; details.push("老旧漆面剥落玩具"); }
+
+            // 儿童行为习惯（每项0.5分，上限2分）
+            const habits = getMultiCheckboxValues('habitOptions');
+            const habitScore = Math.min(habits.length * 0.5, 2);
+            riskPoints += habitScore;
+            if (habits.length) details.push(`存在手口行为：${habits.join(',')}`);
+
+            // 饮用水与周边
+            if (getRadioValue('oldPipe') === 'yes') { riskPoints += 1; details.push("老旧未更换水管"); }
+            const nearby = getMultiCheckboxValues('nearbyOptions');
+            const nearbyScore = Math.min(nearby.length, 2); // 最多加2分
+            riskPoints += nearbyScore;
+            if (nearby.length) details.push(`周边1km内有 ${nearby.join(',')}`);
+            if (getRadioValue('soilPlay') === 'yes') { riskPoints += 1; details.push("经常在裸露土壤玩耍"); }
+            if (getRadioValue('waterFlush') === 'no') { riskPoints += 1; details.push("晨起直接用过夜水"); }
+            else if(getRadioValue('waterFlush') === 'yes') { details.push("晨起放水后使用（良好习惯）"); }
+
+            // 计算综合等级
+            let level = 'low';
+            let levelText = '低风险';
+            if (riskPoints >= 7) { level = 'high'; levelText = '高风险'; }
+            else if (riskPoints >= 4) { level = 'mid'; levelText = '中风险'; }
+            else { level = 'low'; levelText = '低风险'; }
+
+            return { riskPoints, level, levelText, details };
+        }
+
+        // 生成个性化行动指南
+        function generateGuide(riskData, details) {
+            const { level, levelText, riskPoints } = riskData;
+            let guideHtml = `<div class="result-card">
+                <div class="risk-badge ${level === 'high' ? 'high-risk' : (level === 'mid' ? 'mid-risk' : 'low-risk')}">📊 风险等级：${levelText} (评分 ${riskPoints})</div>
+                <p><strong>🔍 主要风险因素：</strong><br> ${details.length ? details.join('；') : '未发现明确风险点，继续保持良好习惯。'}</p>
+                <hr>
+                <div><strong>📋 个性化行动指南（安心滋养 · 铅暴露干预）</strong></div>
+                <ul class="guide-list">`;
+
+            // 基础通用建议
+            if (level === 'high') {
+                guideHtml += `<li>⚠️ 尽快联系当地疾控中心或儿科医生进行血铅检测，尤其孩子年龄＜6岁。</li>`;
+                guideHtml += `<li>🏡 立即排查并隔离污染源：如油漆剥落区域应安全覆盖，老旧玩具丢弃，更换可疑餐具。</li>`;
+                guideHtml += `<li>🧹 每周至少湿拖地2次，用湿抹布擦拭窗台、桌面，减少含铅粉尘。</li>`;
+                guideHtml += `<li>🍎 保证孩子饮食富含钙、铁、维生素C（奶制品、豆制品、柑橘类），可减少铅吸收。</li>`;
+            } else if (level === 'mid') {
+                guideHtml += `<li>📌 按优先级执行：① 源头清除（更换可疑餐具、修复剥落油漆）② 行为干预（纠正吃手、饭前洗手）③ 3个月内复查血铅。</li>`;
+                guideHtml += `<li>🩺 建议带孩子至儿科或儿保健科评估血铅水平，尤其是出现食欲减退、易怒、注意力不集中时。</li>`;
+                guideHtml += `<li>🧽 每日用肥皂水洗手，特别是饭前、户外活动后；定期清洗儿童玩具。</li>`;
+                guideHtml += `<li>🥛 增加高钙食物（酸奶、豆腐），避免空腹摄入高油脂食物（促进铅吸收）。</li>`;
+            } else {
+                guideHtml += `<li>✅ 风险较低，继续保持良好卫生习惯：勤洗手、湿式清洁、健康饮食。</li>`;
+                guideHtml += `<li>🔄 每半年评估一次，若房屋老旧或周边环境变化，重新自查。</li>`;
+            }
+
+            // 根据具体细节生成额外建议
+            if (details.some(d => d.includes("金属锅具") || d.includes("陶瓷餐具"))) {
+                guideHtml += `<li>🍲 立即替换来源不明的金属锅具及釉上彩陶瓷碗盘，建议使用白瓷、不锈钢（食品级）或玻璃餐具。</li>`;
+            }
+            if (details.some(d => d.includes("职业"))) {
+                guideHtml += `<li>🧥 从事高风险职业的家庭成员，回家后应立即更换工作服并单独清洗，洗澡后再接触孩子。</li>`;
+            }
+            if (details.some(d => d.includes("手口行为"))) {
+                guideHtml += `<li>🧼 加强看护，纠正吃手指、啃玩具习惯，户外玩耍后必须洗手，使用儿童专用洗手液。</li>`;
+            }
+            if (details.some(d => d.includes("老旧水管") || d.includes("晨起直接过夜水"))) {
+                guideHtml += `<li>🚰 每日清晨第一次用水前，打开冷水龙头放水至少1-2分钟（接取的水可用于冲洗），之后再取水饮用或做饭。</li>`;
+            }
+            if (details.some(d => d.includes("裸露土壤"))) {
+                guideHtml += `<li>🌱 避免孩子在裸露土壤区域玩耍，可铺设草皮或设置沙坑；雨后及时清洗手脚。</li>`;
+            }
+            if (getRadioValue('herb') === 'yes') {
+                guideHtml += `<li>🌿 咨询医生评估中药必要性，避免长期服用来源不明的草药，尤其朱砂、雄黄等含重金属药材。</li>`;
+            }
+
+            guideHtml += `<li>📖 建议下载《安心滋养铅风险排除清单》，每日打卡执行：洗手、湿清洁、营养补充。</li>`;
+            guideHtml += `</ul><div class="medical-note">⚠️ 本指南基于家庭问卷生成，不能代替医疗诊断。如有疑虑，请尽快进行血铅筛查（静脉血检测更准确）。</div>`;
+            guideHtml += `<button id="resetBtn" style="background:#eef2e6; margin-top:16px; padding:8px 20px; border-radius:40px; border:none; font-weight:600;">重新填写</button>`;
+            guideHtml += `</div>`;
+            return guideHtml;
+        }
+
+        // 提交事件
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            // 房屋年龄简单校验
+            const yearInput = document.getElementById('houseYear');
+            const yearVal = yearInput.value;
+            if (yearVal && (isNaN(parseInt(yearVal)) || parseInt(yearVal) < 1900 || parseInt(yearVal) > 2026)) {
+                alert("请填写正确的房屋建造年份（如 1998）");
+                return;
+            }
+            const riskData = calculateRisk();
+            const guideHtml = generateGuide(riskData, riskData.details);
+            const resultDiv = document.getElementById('resultArea');
+            resultDiv.innerHTML = guideHtml;
+            // 重置按钮功能
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    // 重置表单所有内容
+                    document.getElementById('leadRiskForm').reset();
+                    resultDiv.innerHTML = '';
+                    // 清除所有自定义选中样式（如果有）
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+            // 滚动到结果
+            resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        // 为选项卡片增加选中样式（增强视觉反馈）
+        function bindOptionStyles() {
+            const allOptionItems = document.querySelectorAll('.option-item');
+            allOptionItems.forEach(item => {
+                const input = item.querySelector('input');
+                if (!input) return;
+                const updateStyle = () => {
+                    if (input.type === 'radio') {
+                        if (input.checked) item.classList.add('selected');
+                        else item.classList.remove('selected');
+                    } else if (input.type === 'checkbox') {
+                        if (input.checked) item.classList.add('selected');
+                        else item.classList.remove('selected');
+                    }
+                };
+                input.addEventListener('change', updateStyle);
+                updateStyle();
+                item.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'INPUT') {
+                        input.click();
+                    }
+                });
+            });
+        }
+        setTimeout(bindOptionStyles, 100);
+        // 为动态生成的选项也要绑定，但先执行一次
+        window.addEventListener('load', bindOptionStyles);
+    })();
+</script>
+</body>
+</html>

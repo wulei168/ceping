@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>儿童睡眠问题自测 · 安心滋养·饮食干预计划</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f7f9f4;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      color: #2e3b2c;
+      line-height: 1.6;
+      padding: 1.5rem;
+    }
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 2rem;
+      padding: 2rem 1.8rem;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.05), 0 8px 18px rgba(0,40,20,0.06);
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .brand {
+      font-size: 1.4rem;
+      font-weight: 500;
+      letter-spacing: 2px;
+      color: #4a6741;
+      background: #eef5e9;
+      display: inline-block;
+      padding: 0.4rem 2rem;
+      border-radius: 3rem;
+      margin-bottom: 0.8rem;
+    }
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: #2d3a24;
+      margin: 0.5rem 0 0.2rem;
+    }
+    .subtitle {
+      color: #5e6b52;
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+    }
+    .disclaimer {
+      background: #fdf8ed;
+      border-left: 4px solid #e6b422;
+      padding: 1rem 1.2rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      color: #5a4a2e;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+    .progress {
+      background: #e9f0e4;
+      border-radius: 20px;
+      height: 8px;
+      margin-bottom: 2rem;
+    }
+    .progress-bar {
+      background: #6d8c54;
+      height: 100%;
+      width: 0%;
+      transition: width 0.2s ease;
+      border-radius: 20px;
+    }
+    .quiz-section {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .question-card {
+      border: 1px solid #e1e8db;
+      border-radius: 1.2rem;
+      padding: 1.3rem 1.2rem;
+      background: #fefefe;
+    }
+    .question-title {
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+    .q-num {
+      background: #eaf1e4;
+      color: #3e5a2e;
+      border-radius: 2rem;
+      padding: 0.15rem 0.8rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .multi-badge {
+      background: #fff3e0;
+      color: #b85c1a;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.8rem;
+      border-radius: 1rem;
+      font-weight: 500;
+    }
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+    .option-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.8rem;
+      background: #fafbf9;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .option-item:hover {
+      background: #f1f5ed;
+    }
+    input[type="radio"], input[type="checkbox"] {
+      margin-top: 0.25rem;
+      accent-color: #6d8c54;
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+    }
+    label {
+      cursor: pointer;
+      flex: 1;
+      font-size: 0.95rem;
+    }
+    .btn-submit {
+      background: #5b7a47;
+      color: white;
+      border: none;
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding: 1rem 2rem;
+      border-radius: 3rem;
+      width: 100%;
+      margin: 1.5rem 0 0.5rem;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: background 0.3s;
+    }
+    .btn-submit:hover {
+      background: #3f5a30;
+    }
+    .result-container {
+      margin-top: 2rem;
+      background: #f4f9f0;
+      border-radius: 1.5rem;
+      padding: 1.8rem;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .result-type {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #2b4820;
+      margin-bottom: 0.5rem;
+    }
+    .result-sub {
+      color: #445a38;
+      font-weight: 500;
+      margin-bottom: 1.2rem;
+    }
+    .result-detail {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border: 1px solid #d6e2ce;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+    }
+    .result-advice {
+      background: #fff9ea;
+      border-left: 5px solid #e6b422;
+      padding: 1rem 1.2rem;
+      border-radius: 1rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+    }
+    .ai-prompt-box {
+      background: #f0f4ff;
+      border: 1px solid #b8c9e0;
+      border-radius: 1rem;
+      padding: 1.2rem;
+      margin: 1.5rem 0;
+    }
+    .ai-prompt-box h3 {
+      color: #2d3a5e;
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .ai-prompt-text {
+      background: white;
+      border-radius: 0.8rem;
+      padding: 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #d0daea;
+      color: #1e293b;
+    }
+    .copy-btn {
+      background: #3b5998;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.5rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.8rem;
+      transition: background 0.3s;
+    }
+    .copy-btn:hover {
+      background: #2d4373;
+    }
+    .reset-btn {
+      background: transparent;
+      border: 1px solid #6d8c54;
+      color: #4a5e3a;
+      padding: 0.7rem 1.8rem;
+      border-radius: 2rem;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    @media (max-width: 480px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      h1 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand">安心滋养·饮食干预计划</div>
+    <h1>儿童睡眠问题 · 类型评估</h1>
+    <div class="subtitle">识别高风险倾向，获取AI就绪的个性化提示词</div>
+  </header>
+  <div class="disclaimer">
+    <strong>⚕️ 免责声明</strong>
+    本测评仅为膳食营养辅助参考，不构成医疗诊断或治疗建议。如果您的孩子有明确的打鼾、呼吸暂停、严重日间嗜睡等情况，请务必优先就诊耳鼻喉科或睡眠中心。我们旨在帮助您更好地观察孩子状况，配合专业指导进行健康管理。
+  </div>
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+  <form id="quizForm">
+    <div class="quiz-section" id="questionsContainer"></div>
+    <button type="button" class="btn-submit" id="submitBtn">查看睡眠问题类型</button>
+  </form>
+  <div class="result-container" id="resultContainer">
+    <div id="resultContent"></div>
+    <button class="reset-btn" id="resetBtn">重新测评</button>
+  </div>
+</div>
+<script>
+  (function() {
+    const questions = [
+      { id:1, text:"您的孩子在睡眠中打鼾吗？", multi:false, options:[
+        {val:"A", label:"经常打鼾，声音响亮，隔着房门也能听到（每周≥3晚）。"},
+        {val:"B", label:"偶尔打鼾，声音轻微，通常在感冒或鼻塞时出现。"},
+        {val:"C", label:"从不打鼾。"},
+        {val:"D", label:"我不太确定/没注意过。"}
+      ]},
+      { id:2, text:"您是否观察到孩子在睡眠中出现呼吸暂停？", multi:false, options:[
+        {val:"A", label:"经常观察到，有时一晚上有好几次，看起来很吓人。"},
+        {val:"B", label:"偶尔观察到一两次。"},
+        {val:"C", label:"从未观察到。"},
+        {val:"D", label:"我没注意过。"}
+      ]},
+      { id:3, text:"您的孩子睡觉时嘴巴是张开的还是闭着的？", multi:false, options:[
+        {val:"A", label:"几乎总是张着嘴巴呼吸，白天也经常张着嘴巴。"},
+        {val:"B", label:"只在感冒鼻塞时才会张口呼吸。"},
+        {val:"C", label:"通常闭着嘴巴呼吸。"},
+        {val:"D", label:"我没注意过。"}
+      ]},
+      { id:4, text:"您的孩子睡觉时，通常喜欢采取什么姿势？", multi:false, options:[
+        {val:"A", label:"喜欢趴着睡，或者把头颈部过度后仰，好像这样呼吸更顺畅。"},
+        {val:"B", label:"侧着睡会好一些，平躺时打鼾明显加重。"},
+        {val:"C", label:"姿势自然，没有特别的偏好。"},
+        {val:"D", label:"我没太留意睡姿。"}
+      ]},
+      { id:5, text:"您的孩子睡觉时是否多汗（排除室温过高或被子过厚）？", multi:false, options:[
+        {val:"A", label:"是的，经常满头大汗，枕头都湿透了，尤其是后脑勺。"},
+        {val:"B", label:"偶尔会出汗，不算严重。"},
+        {val:"C", label:"基本不出汗。"},
+        {val:"D", label:"没注意过。"}
+      ]},
+      { id:6, text:"您的孩子早上刚醒来时，有没有以下表现？", multi:true, options:[
+        {val:"A", label:"抱怨头痛，尤其是额头或太阳穴附近。"},
+        {val:"B", label:"口干舌燥，急着要喝水。"},
+        {val:"C", label:"极度困倦，感觉睡了像没睡，有严重的“起床气”。"},
+        {val:"D", label:"醒来后精神还可以，没什么特别的不适。"}
+      ]},
+      { id:7, text:"您的孩子（或您自己）是否被说过有“腺样体面容”的特征？", multi:false, options:[
+        {val:"A", label:"是的，很明显，已经有这个趋势了。"},
+        {val:"B", label:"有一点点，不太确定算不算。"},
+        {val:"C", label:"完全没有，面容正常。"},
+        {val:"D", label:"我不太清楚什么是腺样体面容。"}
+      ]},
+      { id:8, text:"您的孩子在白天会不自觉地张着嘴巴吗？", multi:false, options:[
+        {val:"A", label:"是的，经常张着嘴巴，看电视、玩玩具、甚至发呆时都张着嘴。"},
+        {val:"B", label:"只有在运动后或特别累的时候才会张口。"},
+        {val:"C", label:"不会，白天嘴巴是自然闭合的。"},
+        {val:"D", label:"没注意过。"}
+      ]},
+      { id:9, text:"您的孩子在整个上午的精力状态如何？", multi:false, options:[
+        {val:"A", label:"非常困倦，注意力集中不了，老师反馈上午经常“梦游”。"},
+        {val:"B", label:"上午精神不错，和同龄孩子差不多。"},
+        {val:"C", label:"精神很紧张，虽然不困，但感觉焦虑、坐立不安。"},
+        {val:"D", label:"没听老师说过，不太清楚。"}
+      ]},
+      { id:10, text:"您的孩子在傍晚和晚上的精力状态如何？", multi:false, options:[
+        {val:"A", label:"越到晚上越精神，思维活跃，灵感很多。"},
+        {val:"B", label:"到了晚上就比较疲惫，和大多数孩子一样准备休息。"},
+        {val:"C", label:"晚上感觉很累，但一躺到床上就“精神百倍”，脑子里想法停不下来。"},
+        {val:"D", label:"我没太留意早晚的差异。"}
+      ]},
+      { id:11, text:"在周末或不用上学的日子里，您孩子的作息通常是？", multi:false, options:[
+        {val:"A", label:"很晚才睡，第二天会睡懒觉到上午甚至中午，像是在“补觉”。"},
+        {val:"B", label:"作息和上学日差不多，即使睡得晚一点，早上也还是那个时间醒来。"},
+        {val:"C", label:"作息完全混乱，没有规律，白天随时都在睡，晚上又睡不着。"},
+        {val:"D", label:"我们家的作息一直比较规律，周末也一样。"}
+      ]},
+      { id:12, text:"如果您让孩子在周末“补觉”睡到自然醒，他/她的状态会改善吗？", multi:false, options:[
+        {val:"A", label:"会，补觉后精神明显好很多，情绪也稳定了。"},
+        {val:"B", label:"没什么改善，即使睡够了还是觉得很累。"},
+        {val:"C", label:"反而更糟糕，补觉后晚上更睡不着了。"},
+        {val:"D", label:"我们从不刻意补觉，不确定。"}
+      ]},
+      { id:13, text:"您的孩子从关灯躺下到真正睡着，通常需要多长时间？", multi:false, options:[
+        {val:"A", label:"很快，大概10-20分钟就能睡着。"},
+        {val:"B", label:"比较久，经常需要30分钟到1小时。"},
+        {val:"C", label:"非常久，经常超过1小时，甚至更久。"},
+        {val:"D", label:"时间很不固定，有时候快有时候慢。"}
+      ]},
+      { id:14, text:"当您的孩子躺在床上准备入睡时，您观察到他/她通常是什么状态？", multi:false, options:[
+        {val:"A", label:"会说脑子里有很多想法，或者身体翻来覆去，感觉怎么躺都不舒服。"},
+        {val:"B", label:"会说腿里面有虫爬感、酸胀、痒，必须不停地动腿或者让大人按摩。"},
+        {val:"C", label:"没什么特别的不适，但会反复提要求、找借口下床。"},
+        {val:"D", label:"比较安静放松，很快就能入睡。"}
+      ]},
+      { id:15, text:"在准备入睡时，您的孩子对声音、光线等环境因素敏感吗？", multi:false, options:[
+        {val:"A", label:"极度敏感，有一点声音或光线就睡不着。"},
+        {val:"B", label:"有一点敏感，需要一个相对安静的环境。"},
+        {val:"C", label:"完全不敏感，在吵闹的环境里也能睡着。"},
+        {val:"D", label:"没注意。"}
+      ]},
+      { id:16, text:"您的孩子有没有一吃完热的食物或洗热水澡时，就有大量清鼻涕流出来？", multi:false, options:[
+        {val:"A", label:"有，经常这样。"},
+        {val:"B", label:"没有。"}
+      ]},
+      { id:17, text:"您孩子的鼻炎症状在精神状态或睡眠质量不佳时会如何变化？", multi:false, options:[
+        {val:"A", label:"明显加重，压力大或睡不好时，鼻子就跟着遭殃。"},
+        {val:"B", label:"没什么变化，鼻子问题和睡眠压力关系不大。"},
+        {val:"C", label:"我孩子没有鼻炎问题。"}
+      ]},
+      { id:18, text:"您的孩子在就寝时是否有以下拖延或抵抗行为？", multi:true, options:[
+        {val:"A", label:"反复要求再喝一次水、再去一次厕所、再讲一个故事。"},
+        {val:"B", label:"一到睡觉时间就开始讨价还价，或者说害怕黑暗、害怕怪物。"},
+        {val:"C", label:"必须由特定的大人陪伴才能入睡，换个人就不行。"},
+        {val:"D", label:"以上都没有，孩子很配合。"}
+      ]},
+      { id:19, text:"您的孩子夜间醒来后，通常是如何重新入睡的？", multi:false, options:[
+        {val:"A", label:"必须呼叫父母，需要被再次摇晃、喂奶、或者父母到床上陪伴才能再睡着。"},
+        {val:"B", label:"会自己醒着玩一会儿，或者哭几声，然后自己又睡着了。"},
+        {val:"C", label:"会醒来，但因为腿不舒服而哭闹，需要揉一揉才能再睡。"},
+        {val:"D", label:"我孩子基本不夜醒。"}
+      ]},
+      { id:20, text:"您的孩子在哪里最容易睡着？", multi:false, options:[
+        {val:"A", label:"在自己的床上，只要有大人在身边陪着。"},
+        {val:"B", label:"在沙发上、车上，或者父母的床上，而在自己房间里却很难入睡。"},
+        {val:"C", label:"在自己的床上，可以独立入睡。"},
+        {val:"D", label:"在哪里都很难入睡。"}
+      ]},
+      { id:21, text:"如果尝试让您的孩子学习独立入睡，通常会怎样？", multi:false, options:[
+        {val:"A", label:"会引起剧烈的、长时间的哭闹和抗议，最后大人只能妥协。"},
+        {val:"B", label:"会有一些抗议，但如果大人坚持，几天后就能慢慢适应。"},
+        {val:"C", label:"我们一直是这样做的，孩子已经习惯了独立入睡。"},
+        {val:"D", label:"我们从没尝试过。"}
+      ]},
+      { id:22, text:"您的孩子是否抱怨过腿部有难以描述的、不舒服的感觉？", multi:false, options:[
+        {val:"A", label:"经常抱怨，用“虫子在爬”、“像有东西在跳”、“里面痒挠不到”等词语描述。"},
+        {val:"B", label:"有时会说腿疼，像是运动后的酸痛或“生长痛”。"},
+        {val:"C", label:"从未抱怨过。"},
+        {val:"D", label:"我孩子还不会表达。"}
+      ]},
+      { id:23, text:"当孩子抱怨腿部不适时，哪种方式最能帮助他/她缓解？", multi:false, options:[
+        {val:"A", label:"起来走动一下、伸伸腿、踢踢腿、或者让我帮他/她按摩。"},
+        {val:"B", label:"转移注意力、讲个故事、给个拥抱，安静下来就好了。"},
+        {val:"C", label:"怎么都无法缓解，只能等不适感自己过去。"},
+        {val:"D", label:"我孩子没有这个问题。"}
+      ]},
+      { id:24, text:"您是否在孩子的睡眠中观察到节律性的腿部动作？", multi:false, options:[
+        {val:"A", label:"脚趾、脚踝或膝盖出现节律性的、短暂的伸展或弯曲，每隔几十秒就动一次。"},
+        {val:"B", label:"偶尔会有突然的、大幅度的抽动，然后就没了。"},
+        {val:"C", label:"睡觉很安稳，没什么多余的动作。"},
+        {val:"D", label:"我没观察过。"}
+      ]},
+      { id:25, text:"您的孩子白天静坐时，是否会频繁抖腿、踢腿、或变换姿势？", multi:false, options:[
+        {val:"A", label:"是的，非常频繁，感觉他/她坐着就很难受，必须一直动。"},
+        {val:"B", label:"会有点坐不住，但更像是注意力不集中引起的多动。"},
+        {val:"C", label:"可以安静地坐着，没什么问题。"},
+        {val:"D", label:"没注意。"}
+      ]},
+      { id:26, text:"您的孩子是否有贫血（被医生诊断过缺铁性贫血）？", multi:false, options:[
+        {val:"A", label:"是，被诊断过。"},
+        {val:"B", label:"没有，但孩子挑食严重，不吃红肉。"},
+        {val:"C", label:"没有，饮食均衡。"},
+        {val:"D", label:"没查过，不清楚。"}
+      ]},
+      { id:27, text:"您或您的配偶是否有“晚上安静时腿特别难受，必须起来走动”的经历？", multi:false, options:[
+        {val:"A", label:"有，我自己或配偶就有这个毛病，很典型。"},
+        {val:"B", label:"没有。"},
+        {val:"C", label:"我不太清楚。"}
+      ]},
+      { id:28, text:"您的孩子是否有长期张口呼吸的习惯？", multi:false, options:[
+        {val:"A", label:"是，白天和晚上都经常张着嘴巴。"},
+        {val:"B", label:"只在晚上睡觉时张口。"},
+        {val:"C", label:"没有这个习惯。"},
+        {val:"D", label:"没注意。"}
+      ]},
+      { id:29, text:"您的孩子白天会显得特别疲倦或嗜睡吗？", multi:false, options:[
+        {val:"A", label:"会，经常看起来没精神，在车上、看电视时很容易就睡着了。"},
+        {val:"B", label:"不会，虽然晚上睡得不好，但白天精力异常旺盛（多动）。"},
+        {val:"C", label:"会，但主要是因为晚上没睡好，白天才困。"},
+        {val:"D", label:"精神状态正常。"}
+      ]},
+      { id:30, text:"关于您孩子的睡眠，以下哪项描述最贴近您的困扰？", multi:false, options:[
+        {val:"A", label:"我最担心的是他/她睡觉时呼吸的问题，打鼾、憋气，让人看着很害怕。"},
+        {val:"B", label:"我最头疼的是他/她根本不按正常时间睡觉，晚上像夜猫子，早上叫不醒。"},
+        {val:"C", label:"我最无奈的是他/她明明很困，但就是睡不着，脑子里想太多，或者身体静不下来。"},
+        {val:"D", label:"我最崩溃的是每天晚上的“睡觉大战”，讲故事、喝水、上厕所，没完没了。"}
+      ]},
+      { id:31, text:"您的直系亲属中，是否有人有明确的过敏性鼻炎、哮喘或湿疹？", multi:false, options:[
+        {val:"A", label:"有，不止一个人有。"},
+        {val:"B", label:"有一个人有。"},
+        {val:"C", label:"完全没有。"},
+        {val:"D", label:"我不太清楚。"}
+      ]},
+      { id:32, text:"您的孩子是否曾经被诊断为ADHD？", multi:false, options:[
+        {val:"A", label:"是，已经明确诊断。"},
+        {val:"B", label:"老师或医生提过有这种可能，但还没确诊。"},
+        {val:"C", label:"没有，孩子没有这方面问题。"},
+        {val:"D", label:"我不太确定。"}
+      ]},
+      { id:33, text:"您的孩子正在使用以下哪种ADHD药物？", multi:false, options:[
+        {val:"A", label:"哌甲酯类（如利他林、专注达等）"},
+        {val:"B", label:"苯丙胺类（如阿德拉等）"},
+        {val:"C", label:"非兴奋剂类（如托莫西汀、胍法辛等）"},
+        {val:"D", label:"没有使用任何ADHD药物。"}
+      ]},
+      { id:34, text:"您在帮助孩子改善睡眠的过程中，遇到的最大困难是什么？", multi:false, options:[
+        {val:"A", label:"孩子身体上的不适（打鼾、腿难受等）很难通过教育或安抚来解决。"},
+        {val:"B", label:"孩子自己的生物钟好像就是乱的，强行调整会引发激烈反抗。"},
+        {val:"C", label:"孩子一躺到床上就开始焦虑、胡思乱想，我们的话他/她根本听不进去。"},
+        {val:"D", label:"我们做父母的无法保持一致，总是心软妥协，结果又回到原点。"}
+      ]}
+    ];
+
+    const container = document.getElementById('questionsContainer');
+    function renderQuestions() {
+      let html = '';
+      questions.forEach((q) => {
+        html += `<div class="question-card" id="q-${q.id}">
+          <div class="question-title">
+            <span class="q-num">${q.id}</span> ${q.text}
+            ${q.multi ? '<span class="multi-badge">可多选</span>' : ''}
+          </div>
+          <div class="options">`;
+        q.options.forEach(opt => {
+          const inputType = q.multi ? 'checkbox' : 'radio';
+          html += `<div class="option-item">
+            <input type="${inputType}" name="q${q.id}" value="${opt.val}" id="q${q.id}_${opt.val}">
+            <label for="q${q.id}_${opt.val}">${opt.label}</label>
+          </div>`;
+        });
+        html += `</div></div>`;
+      });
+      container.innerHTML = html;
+      document.querySelectorAll('#quizForm input').forEach(input => {
+        input.addEventListener('change', updateProgress);
+      });
+    }
+
+    function updateProgress() {
+      let answered = 0;
+      questions.forEach(q => {
+        if (document.querySelectorAll(`input[name="q${q.id}"]:checked`).length > 0) answered++;
+      });
+      const percent = Math.round((answered / questions.length) * 100);
+      document.getElementById('progressBar').style.width = percent + '%';
+    }
+
+    function collectCounts() {
+      const counts = { A:0, B:0, C:0, D:0 };
+      questions.forEach(q => {
+        const checked = document.querySelectorAll(`input[name="q${q.id}"]:checked`);
+        checked.forEach(cb => {
+          if (cb.value in counts) counts[cb.value]++;
+        });
+      });
+      return counts;
+    }
+
+    function getHighScoreTypes(counts, threshold = 0.6) {
+      const max = Math.max(counts.A, counts.B, counts.C, counts.D);
+      if (max === 0) return [];
+      const types = [];
+      if (counts.A >= max * threshold) types.push('A');
+      if (counts.B >= max * threshold) types.push('B');
+      if (counts.C >= max * threshold) types.push('C');
+      if (counts.D >= max * threshold) types.push('D');
+      return types;
+    }
+
+    function getSelectedAnswers() {
+      const selected = {};
+      questions.forEach(q => {
+        const checked = document.querySelectorAll(`input[name="q${q.id}"]:checked`);
+        if (checked.length > 0) {
+          const labels = [];
+          checked.forEach(cb => {
+            const label = document.querySelector(`label[for="q${q.id}_${cb.value}"]`);
+            if (label) labels.push(label.textContent.trim());
+          });
+          selected[q.id] = labels;
+        }
+      });
+      return selected;
+    }
+
+    const knowledgeMap = {
+      A: "《结构梗阻型睡眠问题》",
+      B: "《昼夜节律紊乱型睡眠问题》",
+      C: "《神经递质失衡/过度觉醒型睡眠问题》",
+      D: "《RLS/PLMD型》或《行为/心理生理性失眠型》"
+    };
+
+    const typeNames = {
+      A: "结构梗阻型高风险",
+      B: "昼夜节律紊乱型高风险",
+      C: "神经递质失衡/过度觉醒型高风险",
+      D: "RLS/PLMD型 或 行为/心理生理性失眠型高风险"
+    };
+
+    function generatePrompt(types, counts, selectedAnswers) {
+      let prompt = "请根据以下儿童睡眠问题自测结果，生成个性化的膳食营养辅助方案。\n\n";
+      prompt += "【高风险类型】\n";
+      if (types.length === 0) {
+        prompt += "未明确识别主导类型，需进一步观察。\n";
+      } else {
+        types.forEach(t => {
+          prompt += `- ${typeNames[t]}\n`;
+        });
+      }
+      prompt += "\n【关键线索摘要】\n";
+      for (let i = 1; i <= questions.length; i++) {
+        if (selectedAnswers[i]) {
+          const qText = questions[i-1].text;
+          prompt += `- ${qText}：${selectedAnswers[i].join('；')}\n`;
+        }
+      }
+      prompt += "\n【分类计数】\n";
+      prompt += `A类选项数量：${counts.A}（结构梗阻/呼吸相关）\n`;
+      prompt += `B类选项数量：${counts.B}（节律紊乱/生物钟相关）\n`;
+      prompt += `C类选项数量：${counts.C}（过度觉醒/焦虑相关）\n`;
+      prompt += `D类选项数量：${counts.D}（行为性失眠/RLS相关）\n`;
+      prompt += "\n请基于以上信息，结合安心滋养知识库中的睡眠专题，提供包括膳食原则、营养补剂建议及行为干预要点的综合方案。";
+      return prompt;
+    }
+
+    function generateResult(types, counts, selectedAnswers) {
+      let html = '';
+      if (types.length === 0) {
+        html += `<div class="result-type">未能识别高风险类型</div><p>您可能选择了较多“不确定”选项。建议带着问卷中的问题，有意识地观察孩子1-2周后重新测评。</p>`;
+        return html;
+      }
+
+      const dominant = types[0];
+      if (types.length === 1) {
+        const name = typeNames[dominant];
+        html += `<div class="result-type">📌 ${name}</div>`;
+        html += `<div class="result-sub">基于您的自测结果，提示孩子可能存在该类型的睡眠问题倾向。</div>`;
+        html += `<div class="result-detail">${getTypeDetail(dominant)}</div>`;
+        html += `<div class="result-advice"><strong>📖 下一步：</strong>请前往安心滋养知识库，查阅<strong>${knowledgeMap[dominant]}</strong>专题，获取完整的干预思路、膳食原则和营养补剂方案。</div>`;
+      } else {
+        const names = types.map(t => typeNames[t]).join(' 与 ');
+        html += `<div class="result-type">📌 混合类型高风险</div>`;
+        html += `<div class="result-sub">您的孩子可能同时存在 ${names} 的特征，这在临床上非常常见。</div>`;
+        html += `<div class="result-detail">🔗 混合类型干预原则：建议按照“先解决呼吸和运动问题（结构梗阻、RLS），再调整节律，最后处理行为和焦虑”的顺序进行干预。<br><br>`;
+        types.forEach(t => {
+          html += `▶ ${typeNames[t]}：<br>${getTypeDetail(t)}<br><br>`;
+        });
+        html += `⚡ 重要提醒：混合类型需要更系统的综合管理，建议结合知识库中对应专题，或在健康管理师指导下制定个体化方案。</div>`;
+        const categoryList = types.map(t => knowledgeMap[t]).join('、');
+        html += `<div class="result-advice"><strong>📖 下一步：</strong>请查阅安心滋养知识库中的<strong>${categoryList}</strong>专题。</div>`;
+      }
+
+      // AI提示词
+      const promptText = generatePrompt(types, counts, selectedAnswers);
+      html += `
+        <div class="ai-prompt-box">
+          <h3>🤖 AI个性化方案提示词</h3>
+          <p style="font-size:0.9rem; margin-bottom:0.6rem;">复制以下内容，粘贴到任意AI助手（如ChatGPT、DeepSeek等），即可获得针对您孩子情况的初步膳食营养建议。</p>
+          <div class="ai-prompt-text" id="aiPromptText">${escapeHtml(promptText)}</div>
+          <button class="copy-btn" id="copyPromptBtn">📋 一键复制提示词</button>
+        </div>
+      `;
+      return html;
+    }
+
+    function escapeHtml(text) {
+      return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    function getTypeDetail(type) {
+      if (type === 'A') {
+        return `🔍 高风险线索：习惯性打鼾、呼吸暂停、张口呼吸、腺样体面容、晨起头痛口干。\n📋 核心方向：评估气道阻塞，耳鼻喉科就诊，必要时进行睡眠监测。\n🥗 膳食营养方向：控糖抗炎、优化脂肪酸、提供颅面骨骼发育原料、积极管理体重。`;
+      } else if (type === 'B') {
+        return `🔍 高风险线索：入睡时间显著延迟，周末补觉，上午极度困倦，越晚越精神。\n📋 核心方向：光照管理、固定起床时间、逐步提前入睡、必要时褪黑素辅助。\n🥗 膳食营养方向：规律早餐启动节律、优化晚餐色氨酸-碳水搭配、严格禁咖啡因。`;
+      } else if (type === 'C') {
+        return `🔍 高风险线索：思维奔逸、身体无法放松、对声音光线敏感、越努力越清醒。\n📋 核心方向：睡前电子屏禁令、腹式呼吸/放松技术、靶向补充镁和L-茶氨酸。\n🥗 膳食营养方向：补充GABA合成原料（镁/B6/锌）、优化晚餐、稳定夜间血糖、禁咖啡因。`;
+      } else if (type === 'D') {
+        return `🔍 高风险线索：腿部虫爬感/不适感、睡前必须动腿、睡眠中节律性腿部运动、缺铁/贫血史。或：入睡依赖、就寝抵抗、条件性失眠、家长长期充当“入睡工具”。\n📋 核心方向：检测血清铁蛋白（RLS型），或执行行为干预/消退法（行为型）。\n🥗 膳食营养方向：优先补铁+维生素C（RLS型），或固定睡前程序+镁辅助放松（行为型）。`;
+      }
+      return '';
+    }
+
+    function showResults() {
+      const counts = collectCounts();
+      const types = getHighScoreTypes(counts);
+      const selectedAnswers = getSelectedAnswers();
+      const resultDiv = document.getElementById('resultContent');
+      resultDiv.innerHTML = generateResult(types, counts, selectedAnswers);
+      document.getElementById('resultContainer').style.display = 'block';
+      window.scrollTo({ top: document.getElementById('resultContainer').offsetTop - 50, behavior: 'smooth' });
+
+      // 绑定复制按钮事件
+      const copyBtn = document.getElementById('copyPromptBtn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', function() {
+          const promptText = document.getElementById('aiPromptText').textContent;
+          navigator.clipboard.writeText(promptText).then(() => {
+            copyBtn.textContent = '✅ 已复制';
+            setTimeout(() => { copyBtn.textContent = '📋 一键复制提示词'; }, 2000);
+          });
+        });
+      }
+    }
+
+    function resetQuiz() {
+      document.querySelectorAll('#quizForm input').forEach(input => input.checked = false);
+      document.getElementById('resultContainer').style.display = 'none';
+      document.getElementById('progressBar').style.width = '0%';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    renderQuestions();
+    document.getElementById('submitBtn').addEventListener('click', function() {
+      let answered = 0;
+      questions.forEach(q => {
+        if (document.querySelectorAll(`input[name="q${q.id}"]:checked`).length > 0) answered++;
+      });
+      if (answered < questions.length * 0.6) {
+        alert(`您还有 ${questions.length - answered} 题未作答。为了结果更准确，建议至少完成60%的题目。`);
+      }
+      showResults();
+    });
+    document.getElementById('resetBtn').addEventListener('click', resetQuiz);
+  })();
+</script>
+</body>
+</html>
