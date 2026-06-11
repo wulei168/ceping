@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>月经不调自测表 | 安心滋养·饮食干预计划</title>
+    <title>月经不调速查表 | 安心滋养·饮食干预计划</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: #f8f5f0;
             font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
@@ -18,7 +17,6 @@
             padding: 1.5rem;
             line-height: 1.5;
         }
-
         .container {
             max-width: 1100px;
             margin: 0 auto;
@@ -28,7 +26,6 @@
             overflow: hidden;
             padding: 2rem 2rem 3rem;
         }
-
         .header {
             text-align: center;
             margin-bottom: 2rem;
@@ -61,7 +58,6 @@
             border-radius: 16px;
             text-align: left;
         }
-
         .section-title {
             font-size: 1.2rem;
             font-weight: 600;
@@ -249,15 +245,15 @@
 <body>
 <div class="container">
     <div class="header">
-        <div class="main-title">🌸 月经不调自测表</div>
-        <div class="subtitle">安心滋养 · 饮食干预计划 测评工具</div>
+        <div class="main-title">📆 月经不调速查表</div>
+        <div class="subtitle">安心滋养 · 饮食干预计划 测评参考</div>
         <div class="disclaimer">
             ⚕️ 温馨提示：本测评仅作为饮食调理与健康评估的参考，不能替代专业医疗诊断。如月经问题持续或伴有严重疼痛、大量出血、闭经等，请及时就医。
         </div>
     </div>
 
     <div class="progress-section">
-        <span class="badge">🌿 基于安心滋养数据库干预方式分型</span>
+        <span class="badge">🌿 基于功能医学和膳食养生分型</span>
         <span class="q-counter" id="qCounter">加载中...</span>
     </div>
 
@@ -271,7 +267,7 @@
 
     <div id="resultArea" class="result-box" style="display: none;"></div>
     <div class="footer-note">
-        ✨ 根据您的回答，系统将匹配最可能的月经不调类型数据，并提供对应的饮食干预方向（参考胰岛素抵抗型、雌激素优势型、甲状腺功能低下型、高泌乳素型、炎症痛经型、肠道菌群型、压力/HPA轴型）。
+        ✨ 根据您的回答，系统将匹配最可能的月经不调对应饮食干预类型，并提供对应干预方向（胰岛素抵抗型、雌激素优势型、甲状腺功能低下型、高泌乳素型、炎症痛经型、肠道菌群型、压力/HPA轴型）。
     </div>
 </div>
 
@@ -287,85 +283,82 @@
         STRESS: "⑦ 压力/HPA轴紊乱型"
     };
 
-    // ---------- 题目定义（共66题，包含周期过短、过长、不规律、痛经等）----------
-    // 新增周期过短相关题目，并保持各类型数量均衡
-    const questions = [
-        // ==== 症状定位题（不计入分型评分，但用于结果展示）====
-        { text: "【症状定位】您的月经周期通常是？", typeKey: "SYMPTOM", isSymptom: true, optionsText: ["<21天(过短)","21-35天(正常)","35-45天(偏长)",">45天或闭经","完全不规律"] },
-        { text: "【症状定位】经期长度（出血天数）？", typeKey: "SYMPTOM", isSymptom: true, optionsText: ["<3天","3-7天",">7天"] },
-        { text: "【症状定位】月经量大约如何？", typeKey: "SYMPTOM", isSymptom: true, optionsText: ["很少（点滴即净）","中等","很多（每1-2小时需换卫生巾）","有大量血块"] },
-        { text: "【症状定位】痛经程度？", typeKey: "SYMPTOM", isSymptom: true, optionsText: ["无","轻度（不影响生活）","中度（需止痛药）","重度（卧床）"] },
-        { text: "【症状定位】非经期出血（经间期或接触性出血）？", typeKey: "SYMPTOM", isSymptom: true, optionsText: ["无","偶尔有","经常有"] },
-        
-        // 胰岛素抵抗型 (INSULIN) 9题
-        { text: "您的月经周期经常大于35天（或每年少于8次月经）？", typeKey: "INSULIN" },
-        { text: "您是否有中心性肥胖（腰围≥80cm）或体重较难减轻？", typeKey: "INSULIN" },
-        { text: "您是否脸上反复长痤疮（尤其下巴、下颌线）或体毛增多？", typeKey: "INSULIN" },
+    // ==================== 优化后的题目（共约58题，分类清晰，无重复） ====================
+    // 第一部分：基础月经症状（不计入分型，仅用于展示）
+    const symptomQuestions = [
+        { text: "【基础症状】您的月经周期平均是多少天？", typeKey: "SYMPTOM", isSymptom: true, options: ["<21天（过短）", "21-35天（正常）", "35-45天（偏长）", ">45天或闭经", "完全不规律"] },
+        { text: "【基础症状】经期出血一般持续几天？", typeKey: "SYMPTOM", isSymptom: true, options: ["<3天", "3-7天", ">7天"] },
+        { text: "【基础症状】月经量大概如何？", typeKey: "SYMPTOM", isSymptom: true, options: ["很少（点滴即净）", "中等", "很多（每1-2小时需换卫生巾）", "伴有大量血块"] },
+        { text: "【基础症状】痛经程度？", typeKey: "SYMPTOM", isSymptom: true, options: ["无", "轻度（不影响生活）", "中度（需吃止痛药）", "重度（卧床）"] },
+        { text: "【基础症状】非经期是否有不规则出血（如排卵期出血、同房后出血）？", typeKey: "SYMPTOM", isSymptom: true, options: ["无", "偶尔有", "经常有"] }
+    ];
+
+    // 分型题目（每个类型7-9题，避免重复）
+    const typeQuestions = [
+        // --- 胰岛素抵抗型 (INSULIN)  8题 ---
+        { text: "您的月经周期经常大于35天（或每年少于8次）？", typeKey: "INSULIN" },
+        { text: "您有中心性肥胖（腰围≥80cm）且体重较难减轻？", typeKey: "INSULIN" },
+        { text: "您是否脸上反复长痤疮（尤其下巴、下颌线）同时体毛增多（上唇、下腹等）？", typeKey: "INSULIN" }, // 原“或”改“且”
         { text: "颈后、腋下等皮肤褶皱处是否有黑褐色天鹅绒样斑块（黑棘皮症）？", typeKey: "INSULIN" },
-        { text: "是否曾被诊断为多囊卵巢综合征（PCOS）或卵巢多囊样改变？", typeKey: "INSULIN" },
+        { text: "是否曾被诊断为多囊卵巢综合征（PCOS）或B超提示卵巢多囊样改变？", typeKey: "INSULIN" },
         { text: "饭后常感到困倦、乏力，甚至需要小睡？", typeKey: "INSULIN" },
         { text: "您偏爱米饭、面条、甜食或含糖饮料吗？", typeKey: "INSULIN" },
         { text: "腹部脂肪堆积明显（苹果型身材）？", typeKey: "INSULIN" },
-        { text: "空腹血糖、胰岛素或甘油三酯曾偏高？", typeKey: "INSULIN" },
+        { text: "您是否有血糖、血脂或胰岛素检查结果异常（如偏高）？", typeKey: "INSULIN" }, // 原专业术语通俗化
         
-        // 雌激素优势型 (ESTROGEN) 10题（包含周期过短相关：月经频发）
+        // --- 雌激素优势型 (ESTROGEN) 9题 ---
         { text: "您的月经周期经常短于21天（月经频发）？", typeKey: "ESTROGEN" },
-        { text: "经前一周或经前出现乳房胀痛、触痛明显？", typeKey: "ESTROGEN" },
+        { text: "经前一周乳房胀痛、触痛明显？", typeKey: "ESTROGEN" },
         { text: "月经量多（每1-2小时需换卫生巾）或经期超过7天？", typeKey: "ESTROGEN" },
         { text: "经前两天有褐色点滴出血（正式月经来潮前见红）？", typeKey: "ESTROGEN" },
-        { text: "经期有血块且痛经程度较轻？", typeKey: "ESTROGEN" },
+        { text: "经期有血块，但痛经较轻？", typeKey: "ESTROGEN" },
         { text: "有子宫肌瘤、子宫内膜息肉或乳腺增生/纤维囊性变病史？", typeKey: "ESTROGEN" },
         { text: "情绪容易波动、易怒或经前焦虑明显？", typeKey: "ESTROGEN" },
-        { text: "曾使用含雌激素药物（如避孕药）后症状加重？", typeKey: "ESTROGEN" },
         { text: "经前出现水肿（体重上升、手脚肿胀）？", typeKey: "ESTROGEN" },
         { text: "长期便秘（每周排便少于3次）？", typeKey: "ESTROGEN" },
         
-        // 甲状腺功能低下型 (THYROID) 9题
+        // --- 甲状腺功能低下型 (THYROID) 8题 ---
         { text: "经常怕冷、手脚冰凉，比别人穿得多？", typeKey: "THYROID" },
         { text: "容易疲劳、嗜睡，即使睡足8小时白天仍困倦？", typeKey: "THYROID" },
-        { text: "体重增加且减肥困难（尤其伴随控制饮食仍胖）？", typeKey: "THYROID" },
+        { text: "体重增加且减肥困难（控制饮食仍无效）？", typeKey: "THYROID" },
         { text: "眉毛外侧变稀疏、脱发增多？", typeKey: "THYROID" },
         { text: "皮肤干燥、头发粗糙、指甲易断？", typeKey: "THYROID" },
-        { text: "便秘（每周排便<3次）且腹胀常见？", typeKey: "THYROID" },
-        { text: "月经周期不规律（可长可短，但以推迟为主）？", typeKey: "THYROID" },
-        { text: "检查曾提示甲状腺功能减退（TSH升高）？", typeKey: "THYROID" },
+        { text: "便秘（每周<3次）且腹胀常见？", typeKey: "THYROID" },
+        { text: "曾查出甲状腺功能减退（TSH升高）？", typeKey: "THYROID" },
         { text: "记忆力减退、反应变慢或情绪低落？", typeKey: "THYROID" },
         
-        // 高泌乳素血症型 (PROLACTIN) 9题
+        // --- 高泌乳素血症型 (PROLACTIN) 8题 ---
         { text: "非哺乳期乳房能挤出乳汁样液体（溢乳）？", typeKey: "PROLACTIN" },
         { text: "月经稀发或闭经（≥3个月没有月经）？", typeKey: "PROLACTIN" },
         { text: "伴有经常性头痛或视觉模糊？", typeKey: "PROLACTIN" },
         { text: "性欲减退、阴道干涩（非更年期）？", typeKey: "PROLACTIN" },
-        { text: "长期服用抗抑郁/抗精神病药物或胃药（甲氧氯普胺）？", typeKey: "PROLACTIN" },
-        { text: "乳房胀痛特别严重且非经前也常有？", typeKey: "PROLACTIN" },
+        { text: "长期服用抗抑郁/抗精神病药物或胃药（如甲氧氯普胺）？", typeKey: "PROLACTIN" },
+        { text: "乳房胀痛严重且非经期也常有？", typeKey: "PROLACTIN" },
         { text: "压力大时溢乳或月经推迟更明显？", typeKey: "PROLACTIN" },
         { text: "曾诊断垂体微腺瘤或泌乳素偏高？", typeKey: "PROLACTIN" },
-        { text: "咖啡因或高脂饮食后乳房不适感加重？", typeKey: "PROLACTIN" },
         
-        // 炎症/前列腺素型痛经 (INFLAMM) 9题
+        // --- 炎症/前列腺素型痛经 (INFLAMM) 8题 ---
         { text: "月经第一天或第二天出现严重下腹绞痛，需要吃止痛药？", typeKey: "INFLAMM" },
         { text: "痛经伴有恶心、呕吐或腹泻？", typeKey: "INFLAMM" },
         { text: "疼痛从月经来潮前几小时开始，持续12-72小时？", typeKey: "INFLAMM" },
-        { text: "月经期间头痛、腰酸明显？", typeKey: "INFLAMM" },
-        { text: "服用布洛芬或萘普生等止痛药后痛经显著缓解？", typeKey: "INFLAMM" },
-        { text: "喜欢吃红肉、油炸食品或高Omega-6植物油（大豆油、玉米油）？", typeKey: "INFLAMM" },
+        { text: "服用布洛芬等止痛药后痛经显著缓解？", typeKey: "INFLAMM" },
+        { text: "喜欢吃红肉、油炸食品或大豆油、玉米油做的食物？", typeKey: "INFLAMM" },
         { text: "很少吃深海鱼（三文鱼、沙丁鱼等）？", typeKey: "INFLAMM" },
         { text: "经期血块较多且颜色暗红？", typeKey: "INFLAMM" },
-        { text: "盆腔检查无异常（排除子宫肌瘤、内异症等）？", typeKey: "INFLAMM" },
+        { text: "盆腔检查无异常（排除子宫肌瘤、内异症）？", typeKey: "INFLAMM" },
         
-        // 肠道菌群失调/雌激素再吸收型 (GUT_ESTRO) 9题
+        // --- 肠道菌群失调/雌激素再吸收型 (GUT_ESTRO) 8题 ---
         { text: "长期便秘（每周<3次）且排便费力？", typeKey: "GUT_ESTRO" },
         { text: "经前/经期腹胀明显，排气增多？", typeKey: "GUT_ESTRO" },
-        { text: "进食高纤维食物后腹胀不缓解反而加重？", typeKey: "GUT_ESTRO" },
-        { text: "有抗生素使用史（尤其反复使用）？", typeKey: "GUT_ESTRO" },
+        { text: "有抗生素长期或反复使用史？", typeKey: "GUT_ESTRO" },
         { text: "月经量多，经期延长，且伴有经间期出血？", typeKey: "GUT_ESTRO" },
         { text: "平时饮食中蔬菜、全谷物吃得很少，偏爱肉食？", typeKey: "GUT_ESTRO" },
         { text: "曾诊断子宫肌瘤或子宫内膜增生？", typeKey: "GUT_ESTRO" },
         { text: "大便气味较重或黏马桶？", typeKey: "GUT_ESTRO" },
-        { text: "使用益生菌后腹胀/排便或经期不适有所改善？", typeKey: "GUT_ESTRO" },
+        { text: "服用益生菌后腹胀/排便或月经不适有所改善？", typeKey: "GUT_ESTRO" },
         
-        // 压力/HPA轴紊乱型 (STRESS) 10题（包含周期过短或不规律）
-        { text: "月经周期随压力波动（加班、考试时推迟或提前，放松时恢复）？", typeKey: "STRESS" },
+        // --- 压力/HPA轴紊乱型 (STRESS) 9题 ---
+        { text: "月经周期随压力波动（考试、加班时推迟或提前，放松时恢复）？", typeKey: "STRESS" },
         { text: "长期感到焦虑、紧张或容易失眠？", typeKey: "STRESS" },
         { text: "容易疲劳、午后精力差，需要咖啡提神？", typeKey: "STRESS" },
         { text: "经前情绪波动剧烈（易怒、低落、哭泣）？", typeKey: "STRESS" },
@@ -373,25 +366,17 @@
         { text: "喜欢喝咖啡、浓茶或能量饮料？", typeKey: "STRESS" },
         { text: "经常低血糖（饭前心慌手抖、头晕）或加餐不规律？", typeKey: "STRESS" },
         { text: "体型偏瘦但腹部赘肉堆积（压力肥）？", typeKey: "STRESS" },
-        { text: "早晨醒来仍感觉疲乏，晚上精神好？", typeKey: "STRESS" },
         { text: "休闲放松后月经周期变得规律些？", typeKey: "STRESS" }
     ];
-    // 共计 5条症状 + 9+10+9+9+9+9+10 = 5+65=70？ 数一下: 症状5, INSULIN9, ESTROGEN10, THYROID9, PROLACTIN9, INFLAMM9, GUT_ESTRO9, STRESS10 = 5+65=70题。确保在合理范围内。
-
+    
+    // 合并全部题目（症状题在前，分型题在后）
+    const allQuestions = [...symptomQuestions, ...typeQuestions];
+    const totalQuestions = allQuestions.length;
+    
     // 选项分值定义（非症状题：0=从不,1=很少,2=有时,3=经常,4=总是）
     const optionLabels = ["从不", "很少", "有时", "经常", "总是"];
     
-    let userAnswers = new Array(questions.length).fill(null); // 每题得分0-4，症状题存储选项索引（0~n）
-    let symptoms = []; // 存储症状文本用于展示
-    
-    function initSymptoms() {
-        // 初始化症状题答案存储为索引
-        for(let i=0; i<questions.length; i++) {
-            if(questions[i].isSymptom) {
-                userAnswers[i] = null;
-            }
-        }
-    }
+    let userAnswers = new Array(totalQuestions).fill(null);
     
     // DOM 元素
     const container = document.getElementById("questionsContainer");
@@ -402,8 +387,7 @@
 
     function renderQuestions() {
         container.innerHTML = "";
-        let normalCount = 0;
-        questions.forEach((q, idx) => {
+        allQuestions.forEach((q, idx) => {
             const card = document.createElement("div");
             card.className = "question-card";
             const qText = document.createElement("div");
@@ -413,7 +397,12 @@
             
             const optionsDiv = document.createElement("div");
             optionsDiv.className = "options";
-            let optList = q.isSymptom ? (q.optionsText || ["<21天","21-35天",">35天"]) : optionLabels;
+            let optList;
+            if (q.isSymptom) {
+                optList = q.options;
+            } else {
+                optList = optionLabels;
+            }
             for (let val = 0; val < optList.length; val++) {
                 const optDiv = document.createElement("div");
                 optDiv.className = "opt-item";
@@ -463,48 +452,39 @@
 
     function updateCounter() {
         const answered = userAnswers.filter(a => a !== null).length;
-        qCounterSpan.innerText = `${answered} / ${questions.length} 已答`;
+        qCounterSpan.innerText = `${answered} / ${totalQuestions} 已答`;
     }
 
     function resetAll() {
-        userAnswers = new Array(questions.length).fill(null);
+        userAnswers = new Array(totalQuestions).fill(null);
         renderQuestions();
         resultDiv.style.display = "none";
         resultDiv.innerHTML = "";
     }
 
-    // 提取症状描述（用于结果展示）
+    // 提取症状摘要
     function getSymptomSummary() {
         let summary = [];
-        // 周期
+        const cycles = [0,1,2,3,4];
         const cycleIdx = userAnswers[0];
-        if(cycleIdx !== undefined && cycleIdx !== null) {
-            const cycleText = ["周期过短 (<21天)", "周期正常 (21-35天)", "周期偏长 (35-45天)", "周期>45天或闭经", "完全不规律"][cycleIdx];
-            summary.push(`• 月经周期：${cycleText}`);
+        if(cycleIdx !== null && cycleIdx < symptomQuestions[0].options.length) {
+            summary.push(`• 月经周期：${symptomQuestions[0].options[cycleIdx]}`);
         }
-        // 经期
         const durIdx = userAnswers[1];
-        if(durIdx !== null) {
-            const durText = ["<3天", "3-7天", ">7天"][durIdx];
-            summary.push(`• 经期长度：${durText}`);
+        if(durIdx !== null && durIdx < symptomQuestions[1].options.length) {
+            summary.push(`• 经期长度：${symptomQuestions[1].options[durIdx]}`);
         }
-        // 经量
         const volIdx = userAnswers[2];
-        if(volIdx !== null) {
-            const volText = ["很少（点滴）", "中等", "很多（频繁更换）", "大量血块"][volIdx];
-            summary.push(`• 月经量：${volText}`);
+        if(volIdx !== null && volIdx < symptomQuestions[2].options.length) {
+            summary.push(`• 月经量：${symptomQuestions[2].options[volIdx]}`);
         }
-        // 痛经
         const painIdx = userAnswers[3];
-        if(painIdx !== null) {
-            const painText = ["无", "轻度", "中度（需止痛）", "重度（卧床）"][painIdx];
-            summary.push(`• 痛经程度：${painText}`);
+        if(painIdx !== null && painIdx < symptomQuestions[3].options.length) {
+            summary.push(`• 痛经程度：${symptomQuestions[3].options[painIdx]}`);
         }
-        // 非经期出血
         const spottingIdx = userAnswers[4];
-        if(spottingIdx !== null) {
-            const spottingText = ["无", "偶尔有", "经常有"][spottingIdx];
-            summary.push(`• 非经期出血：${spottingText}`);
+        if(spottingIdx !== null && spottingIdx < symptomQuestions[4].options.length) {
+            summary.push(`• 非经期出血：${symptomQuestions[4].options[spottingIdx]}`);
         }
         return summary;
     }
@@ -517,9 +497,9 @@
         let counts = {
             INSULIN: 0, ESTROGEN: 0, THYROID: 0, PROLACTIN: 0, INFLAMM: 0, GUT_ESTRO: 0, STRESS: 0
         };
-        for(let i=0; i<questions.length; i++) {
-            const q = questions[i];
-            if(q.isSymptom) continue;
+        // 从第5题之后开始（跳过症状题）
+        for(let i = symptomQuestions.length; i < allQuestions.length; i++) {
+            const q = allQuestions[i];
             const score = userAnswers[i];
             if(score === null) continue;
             const type = q.typeKey;
@@ -533,13 +513,13 @@
             if(counts[t] > 0) avgScores[t] = scores[t] / counts[t];
             else avgScores[t] = 0;
         }
-        return { avgScores, rawScores: scores, counts };
+        return { avgScores, counts };
     }
 
     function displayResults() {
         const answeredCount = userAnswers.filter(a => a !== null).length;
         if(answeredCount < 30) {
-            alert(`您只完成了${answeredCount}题（共${questions.length}题）。建议完成更多题目结果更准确（至少40题）。`);
+            alert(`您只完成了${answeredCount}题（共${totalQuestions}题）。建议完成更多题目（至少40题）结果更准确。`);
             return;
         }
         const { avgScores } = computeScores();
@@ -602,7 +582,6 @@
     }
 
     function init() {
-        initSymptoms();
         renderQuestions();
         submitBtn.addEventListener("click", onSubmit);
         resetBtn.addEventListener("click", resetAll);
