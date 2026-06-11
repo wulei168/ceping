@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>早泄膳食分类自测表 · 安心滋养</title>
+    <title>早泄膳食支持自评问卷 · 安心滋养</title>
     <style>
         * {
             margin: 0;
@@ -12,7 +12,7 @@
         }
         body {
             background: #f2f7ef;
-            font-family: system-ui, -apple-system, 'Segoe UI', 'Noto Sans', 'Roboto', sans-serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', 'Roboto', 'Noto Sans', sans-serif;
             color: #1d2e1a;
             padding: 24px 18px 60px;
         }
@@ -37,6 +37,21 @@
             display: inline-block;
             padding-top: 5px;
         }
+        .disclaimer {
+            background: #fff6e0;
+            border-left: 5px solid #e6a017;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: #6b4c1c;
+            text-align: center;
+        }
+        .disclaimer a {
+            color: #2a6b2f;
+            text-decoration: none;
+            font-weight: 500;
+        }
         .container {
             max-width: 1020px;
             margin: 0 auto;
@@ -48,17 +63,17 @@
         .section {
             background: #fefef7;
             border-radius: 24px;
-            margin-bottom: 32px;
-            padding: 18px 20px;
+            margin-bottom: 26px;
+            padding: 12px 16px;
             border: 1px solid #e3efd9;
         }
         .section h2 {
-            font-size: 1.45rem;
+            font-size: 1.25rem;
             font-weight: 600;
             color: #2a6820;
-            border-left: 5px solid #7bc762;
-            padding-left: 14px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #7bc762;
         }
         .question {
             margin-bottom: 22px;
@@ -72,6 +87,7 @@
             margin-bottom: 12px;
             color: #1a3016;
             font-size: 0.96rem;
+            line-height: 1.4;
         }
         .options {
             display: flex;
@@ -217,184 +233,166 @@
 </head>
 <body>
 <div class="brand">
-    <h1>⚡ 早泄膳食分类自测表</h1>
-    <div class="sub">安心滋养 · 饮食干预计划 | 快速分型 · 调理参考</div>
+    <h1>⚡ 早泄膳食支持自评问卷</h1>
+    <div class="sub">安心滋养 · 饮食干预计划 | 精准分型 · 根源调理</div>
+</div>
+<div class="disclaimer">
+    📢 本问卷不能代替医疗诊断，仅用于匹配日常膳食建议、快速分类参考。<br>
+    如需详细了解安心滋养计划，请联系微信：<strong>adhdxx</strong>
 </div>
 <div class="container" id="app">
     <div id="questions-container"></div>
     <div class="result-area" id="resultArea" style="display: none;">
-        <div class="result-title">📊 您的分型评估</div>
+        <div class="result-title">📊 您的膳食支持评估结果</div>
         <div id="scoreSummary"></div>
         <div id="typeAdvice" class="insight-text" style="background: #fff9ef; padding: 18px; border-radius: 20px; margin-top: 18px;"></div>
     </div>
-    <button id="calcBtn">🔍 生成报告 & 获取分型指导</button>
+    <button id="calcBtn">🔍 生成报告 & 获取膳食建议</button>
     <div class="footnote">
-        ⚕️ 本测评基于功能医学和养生理论设计，结果用于饮食与生活方式参考，不能替代专业医疗诊断。更多了解安心滋养+V：adhdxx<br>
+        ⚕️ 本测评基于功能医学六大分型理论，结果仅作为膳食与生活方式调整参考。<br>
         安心滋养 · 从肠道到神经，科学管理早泄。
     </div>
 </div>
 
 <script>
-    // ---------- 问卷数据（共60题，包含体型详细评估）----------
-    // 注意：前两个问题改为身高、体重+体型特征，动态计算BMI分类，后续保留原计分体系。
-    // 为了保持题量，将原Q2替换为身高体重录入+体型选择，计分逻辑整合腹部肥胖/代谢风险。
+    // 问卷数据（共60题，通俗表达）
     const questionsData = [
-        // 0: 身高体重录入 (特殊处理, 生成两个输入框)
-        { text: "Q1. 您的身高(cm) 和 体重(kg)", type: "hw", special: "hw" },
-        // 1: 体型特征 (苹果型、梨型、均匀型等) 辅助代谢评分
-        { text: "Q2. 您的体型特征？（影响代谢及内脏脂肪评估）", options: ["苹果型(腹部脂肪突出)","梨型(臀部/大腿脂肪多)","均匀型","四肢纤细但腹部膨隆(中心性肥胖)","标准体型"], scores: [[0,0,4,0,0,0],[0,0,1,0,0,0],[0,0,0,0,0,0],[0,0,4,0,0,0],[0,0,0,0,0,0]] },
-        // 原Q3~Q60保持原计分逻辑，仅调整编号，确保总分正确
-        { text: "Q3. 早泄类型？", options: ["原发性(一直存在)","继发性(曾正常后出现)","自然变异型"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q4. 通常射精潜伏期（插入后）？", options: ["<30秒","30秒-1分钟","1-2分钟","2-3分钟",">3分钟"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q5. 延迟射精能力？", options: ["完全不能控制","很少能控制","有时能控制","多数时候能控制","完全能控制"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q6. 因射精快感到痛苦/沮丧？", options: ["总是","经常","有时","很少","从不"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q7. 担心伴侣不满意？", options: ["总是","经常","有时","很少","从不"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q8. 极轻微刺激（爱抚/摩擦）就产生射精紧迫感？", options: ["总是","经常","有时","很少","从不"], scores: [[0,0,0,0,2,0],[0,0,0,0,1,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q9. 使用利多卡因/局麻乳膏后射精时间显著延长（>2分钟）？", options: ["是，非常明显","有些延长但仍不足","几乎没有效果","从未使用"], scores: [[0,0,0,0,3,0],[0,0,0,0,1,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q10. 曾被诊断焦虑/抑郁并服药？", options: ["确诊且服药","确诊未服药/停药","无"], scores: [[4,0,0,0,0,0],[2,0,0,0,0,0],[0,0,0,0,0,0]] },
+        // 0 身高体重
+        { text: "Q1. 您的身高（厘米）和体重（公斤）", type: "hw", special: "hw" },
+        // 1 体型特征
+        { text: "Q2. 您的体型更接近哪一种？", options: ["苹果型(肚子大，四肢细)","梨型(屁股/大腿胖，腰相对细)","匀称型","四肢细但肚子突出(中心性肥胖)","标准体型"], scores: [[0,0,4,0,0,0],[0,0,1,0,0,0],[0,0,0,0,0,0],[0,0,4,0,0,0],[0,0,0,0,0,0]] },
+        // 核心情况
+        { text: "Q3. 早泄是从什么时候开始的？", options: ["从第一次性生活就存在","过去正常，后来才出现","时好时坏，不稳定"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q4. 进入阴道后，通常多久射精？", options: ["不到半分钟","半分钟到1分钟","1到2分钟","2到3分钟","超过3分钟"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q5. 你可以主动延迟射精吗？", options: ["完全控制不了","很少能控制","有时能控制","多数能控制","完全能控制"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q6. 因为射精快而感到痛苦、沮丧？", options: ["总是","经常","有时","很少","从不"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q7. 担心伴侣对性生活不满意？", options: ["总是","经常","有时","很少","从不"], scores: [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q8. 轻微的抚摸或摩擦就会让你觉得快要射精？", options: ["总是","经常","有时","很少","从不"], scores: [[0,0,0,0,2,0],[0,0,0,0,1,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q9. 使用“延时喷剂”或麻醉乳膏（利多卡因）后，射精时间明显变长（比如从<1分钟延长到>2分钟）？", options: ["是，非常明显","有些延长但还不够","几乎没效果","从未使用"], scores: [[0,0,0,0,3,0],[0,0,0,0,1,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q10. 被医生诊断过焦虑症或抑郁症，并且正在服药？", options: ["确诊并服药","确诊但未服药或已停药","没有"], scores: [[4,0,0,0,0,0],[2,0,0,0,0,0],[0,0,0,0,0,0]] },
 
-        // 神经递质模块 (Q11~Q22)
-        { text: "Q11. 经常感到焦虑、紧张或莫名担忧？", options: ["总是","经常","有时","很少","从不"], scores: [[3,0,0,0,0,0],[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q12. 情绪低落、兴趣减退？", options: ["总是","经常","有时","很少","从不"], scores: [[3,0,0,0,0,0],[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q13. SSRI类药物（帕罗西汀、舍曲林）服用情况？", options: ["目前每日服用","按需服用(达泊西汀)","曾用已停药","从未使用"], scores: [[4,0,0,0,0,0],[3,0,0,0,0,0],[2,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q14. 服用SSRI期间是否出现过射精延迟？", options: ["明显延长","略微延长","无变化","不适用"], scores: [[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q15. 睡眠质量？", options: ["很差(常失眠<6h)","一般(多梦,6-7h)","较好(7-8h深睡)","很好(>8h)"], scores: [[3,0,0,0,0,0],[2,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q16. 即使休息足够也常感疲劳、精力不足？", options: ["总是","经常","有时","很少","从不"], scores: [[3,0,0,0,0,0],[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q17. 日常蛋白质来源？", options: ["大量动物蛋白(肉/蛋/奶)","植物蛋白为主","均衡","很少吃蛋白质"], scores: [[2,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q18. 主食类型？", options: ["几乎全是精白米面","一半精制一半全谷物","以全谷物/豆类/薯类为主"], scores: [[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q19. 单独大量摄入高LNAA蛋白（乳清蛋白粉/纯鸡胸/牛肉）且不搭配碳水？", options: ["是","有时","否"], scores: [[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q20. 平时日晒（不涂防晒）情况？", options: ["很少（室内或严格防晒）","偶尔（每周<3次）","充足（几乎每天>15分钟）"], scores: [[2,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q21. 是否常规补充维生素D（>2000IU/天）？", options: ["否","偶尔","是"], scores: [[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q22. 是否规律补充B族维生素（复合B）？", options: ["否","是"], scores: [[2,0,0,0,0,0],[0,0,0,0,0,0]] },
+        // 情绪与压力相关
+        { text: "Q11. 经常感到紧张、担心、坐立不安？", options: ["总是","经常","有时","很少","从不"], scores: [[3,0,0,0,0,0],[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q12. 情绪低落，对什么事都提不起兴趣？", options: ["总是","经常","有时","很少","从不"], scores: [[3,0,0,0,0,0],[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q13. 你服用过帕罗西汀、舍曲林等抗抑郁药或按需服用的必利劲吗？", options: ["每天吃","按需吃（如必利劲）","以前吃过，现已停","从未用过"], scores: [[4,0,0,0,0,0],[3,0,0,0,0,0],[2,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q14. 吃这类药物后，射精时间是否变长了？", options: ["明显变长","稍微变长","没变化","不适用"], scores: [[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q15. 睡眠质量怎么样？", options: ["很差（失眠<6小时）","一般（多梦，6-7小时）","较好（7-8小时，睡得好）","很好（>8小时）"], scores: [[3,0,0,0,0,0],[2,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q16. 即使睡眠充足，白天也常觉得累、没精神？", options: ["总是","经常","有时","很少","从不"], scores: [[3,0,0,0,0,0],[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q17. 你平时吃肉、蛋、奶多，还是豆制品、主食多？", options: ["大量吃肉蛋奶（动物蛋白）","豆制品为主（植物蛋白）","荤素搭配","很少吃蛋白质"], scores: [[2,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q18. 主食（米饭、面条）你通常吃什么？", options: ["几乎都是白米饭、白面条","一半粗粮一半细粮","以糙米、燕麦、豆类、薯类为主"], scores: [[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q19. 是否经常单独吃大量蛋白粉、纯鸡胸肉或牛肉（不搭配主食）？", options: ["是","有时","否"], scores: [[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q20. 平时晒太阳多吗？（不涂防晒霜）", options: ["很少（室内工作或严格防晒）","偶尔（每周少于3次）","充足（几乎每天>15分钟）"], scores: [[2,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q21. 你是否定期补充维生素D（每天2000单位以上）？", options: ["否","偶尔","是"], scores: [[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q22. 是否经常吃复合B族维生素？", options: ["否","是"], scores: [[2,0,0,0,0,0],[0,0,0,0,0,0]] },
 
-        // 甲状腺/内分泌 (Q23~Q33)
-        { text: "Q23. 甲状腺疾病史？", options: ["甲亢(Graves)","桥本甲状腺炎","甲减","甲状腺结节","无"], scores: [[0,5,0,0,0,0],[0,4,0,0,0,0],[0,4,0,0,0,0],[0,2,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q24. 近期甲亢相关症状（心慌、怕热手抖、体重降等）？", options: ["有≥2项","有1项","无"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q25. 近期甲减相关症状（怕冷、乏力便秘、体重增等）？", options: ["有≥2项","有1项","无"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q26. 曾抽血查甲状腺功能结果？", options: ["异常（TSH升高/降低）","正常","未查"], scores: [[0,4,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q27. 甲状腺自身抗体（TPOAb/TgAb）升高？", options: ["是","否","未测"], scores: [[0,4,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q28. 日常碘摄入？", options: ["加碘盐+常吃海带紫菜(>2次/周)","加碘盐/偶尔海藻","无碘盐/几乎不吃海藻"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,2,0,0,0,0]] },
-        { text: "Q29. 是否服用左甲状腺素（优甲乐）？", options: ["是，规律","不规律","否"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q30. 是否服用抗甲状腺药物（甲巯咪唑等）？", options: ["是","否"], scores: [[0,3,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q31. 补硒或每日吃巴西坚果(≥2颗)？", options: ["是","否"], scores: [[0,0,0,0,0,0],[0,2,0,0,0,0]] },
-        { text: "Q32. 大量生吃十字花科蔬菜(西兰花/卷心菜等＞200g/天)？", options: ["是","有时","否"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q33. 大量大豆制品(>300ml豆浆或>200g豆腐)？", options: ["是","有时","否"], scores: [[0,2,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
+        // 甲状腺相关
+        { text: "Q23. 是否有甲状腺疾病（甲亢、甲减、桥本病等）？", options: ["甲亢","桥本甲状腺炎","甲减","甲状腺结节","无"], scores: [[0,5,0,0,0,0],[0,4,0,0,0,0],[0,4,0,0,0,0],[0,2,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q24. 近半年有没有心慌、怕热、手抖、体重莫名下降（甲亢迹象）？", options: ["有2项及以上","有1项","无"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q25. 近半年有没有怕冷、乏力、便秘、体重增加（甲减迹象）？", options: ["有2项及以上","有1项","无"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q26. 抽血查过甲状腺功能吗？结果？", options: ["不正常（TSH偏高或偏低）","正常","没查过"], scores: [[0,4,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q27. 检查过甲状腺抗体（TPOAb、TgAb）吗？", options: ["升高","正常","没测"], scores: [[0,4,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q28. 日常吃碘（加碘盐、海带、紫菜）的情况？", options: ["加碘盐并且常吃海带紫菜（每周>2次）","加碘盐、偶尔海藻","无碘盐/几乎不吃海藻"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,2,0,0,0,0]] },
+        { text: "Q29. 是否正在服用左甲状腺素（优甲乐）？", options: ["是，规律服用","不规律","否"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q30. 是否正在服用抗甲状腺药（甲巯咪唑等）？", options: ["是","否"], scores: [[0,3,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q31. 是否补充硒（如每日吃巴西坚果≥2颗或吃硒补充剂）？", options: ["是","否"], scores: [[0,0,0,0,0,0],[0,2,0,0,0,0]] },
+        { text: "Q32. 每天大量生吃西兰花、卷心菜等十字花科蔬菜（超过200克）？", options: ["是","有时","否"], scores: [[0,3,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q33. 每天喝超过300毫升豆浆或吃超过200克豆腐？", options: ["是","有时","否"], scores: [[0,2,0,0,0,0],[0,1,0,0,0,0],[0,0,0,0,0,0]] },
 
-        // 代谢/胰岛素抵抗 (Q34~Q44)
-        { text: "Q34. 确诊下列疾病（可多选）", options: ["2型糖尿病","糖尿病前期","高血压","高甘油三酯/低HDL","脂肪肝","无"], multiple: true, scores: [[2,2,0,0,0,0],[2,1,0,0,0,0],[1,1,0,0,0,0],[1,1,0,0,0,0],[1,1,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q35. 典型“三多一少”(多饮多尿多食体重降)？", options: ["是","否"], scores: [[3,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q36. 糖化血红蛋白(HbA1c)水平？", options: ["≥6.5%","6.0-6.4%","<6.0%","未测"], scores: [[5,0,0,0,0,0],[3,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q37. 腰围情况？", options: ["正常(男<90/女<85)","轻度超标(男90-100/女85-95)","严重超标(男>100/女>95)","未测"], scores: [[0,0,0,0,0,0],[0,0,2,0,0,0],[0,0,4,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q38. 餐后容易困倦、乏力（尤其午餐后）？", options: ["总是","经常","有时","很少","从不"], scores: [[3,0,0,0,0,0],[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q39. 添加糖（含糖饮料、甜点、果汁）频率？", options: ["每天≥1次","每周3-6次","每周1-2次","很少/从不"], scores: [[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q40. 主食中精制碳水（白米白面）占比？", options: [">70%","50-70%","30-50%","<30%"], scores: [[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q41. 每餐蔬菜摄入量？", options: ["<1拳头","1-2拳头",">2拳头"], scores: [[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q42. 每周中等强度运动（快走、慢跑等）时间？", options: ["<30分钟","30-90分钟","90-150分钟",">150分钟"], scores: [[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q43. 近亲属（父母/兄弟姐妹）是否有2型糖尿病或肥胖？", options: ["有糖尿病","有肥胖","两者都有","无"], scores: [[1,0,0,0,0,0],[1,0,0,0,0,0],[2,0,0,0,0,0],[0,0,0,0,0,0]] },
+        // 代谢、血糖、肥胖相关
+        { text: "Q34. 确诊过以下哪些病？（可多选）", options: ["2型糖尿病","糖尿病前期（血糖偏高）","高血压","高甘油三酯或低高密度脂蛋白","脂肪肝","无"], multiple: true, scores: [[2,2,0,0,0,0],[2,1,0,0,0,0],[1,1,0,0,0,0],[1,1,0,0,0,0],[1,1,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q35. 是否出现过“多饮、多尿、多食、体重下降”典型糖尿病症状？", options: ["是","否"], scores: [[3,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q36. 最近糖化血红蛋白（HbA1c）结果？", options: ["≥6.5%","6.0-6.4%","<6.0%","没测"], scores: [[5,0,0,0,0,0],[3,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q37. 腰围情况（肚脐水平）？", options: ["正常（男<90cm，女<85cm）","轻度超标","严重超标","没量"], scores: [[0,0,0,0,0,0],[0,0,2,0,0,0],[0,0,4,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q38. 饭后（尤其午饭后）容易犯困、没精神？", options: ["总是","经常","有时","很少","从不"], scores: [[3,0,0,0,0,0],[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q39. 吃甜食、喝含糖饮料的频率？", options: ["每天≥1次","每周3-6次","每周1-2次","很少或从不"], scores: [[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q40. 主食中白米饭、白面条等精细主食占多少？", options: ["70%以上","50%-70%","30%-50%","不足30%"], scores: [[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q41. 每顿饭吃蔬菜的量？", options: ["少于一个拳头","1-2个拳头","多于2个拳头"], scores: [[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q42. 每周中等强度运动（快走、慢跑、游泳等）时长？", options: ["不足30分钟","30-90分钟","90-150分钟","超过150分钟"], scores: [[3,0,0,0,0,0],[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q43. 父母或亲兄弟姐妹有2型糖尿病或肥胖吗？", options: ["有糖尿病","有肥胖","两者都有","无"], scores: [[1,0,0,0,0,0],[1,0,0,0,0,0],[2,0,0,0,0,0],[0,0,0,0,0,0]] },
         { text: "Q44. 长期服用二甲双胍等降糖药？", options: ["是","否"], scores: [[3,0,0,0,0,0],[0,0,0,0,0,0]] },
 
-        // 慢性前列腺/炎症 (Q45~Q52)
-        { text: "Q45. 盆腔不适症状（可多选）", options: ["会阴坠胀","下腹痛","睾丸痛","龟头痛","射精痛","尿痛/尿频/尿不尽","腰骶酸痛","无"], multiple: true, special: "pelvic" },
-        { text: "Q46. 曾被诊断为慢性前列腺炎/CPPS？", options: ["是，有检查确诊","是，疑似未检查","否"], scores: [[6,0,0,0,0,0],[4,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q47. 久坐(≥8小时/天)或长时骑车(每周>3次，每次>1小时)？", options: ["是","否"], scores: [[4,0,0,0,0,0],[0,0,0,0,0,0]] },
+        // 前列腺/盆腔区域
+        { text: "Q45. 最近3个月，有没有以下不舒服？（可多选）", options: ["会阴部（睾丸和肛门之间）坠胀或痛","下腹部或腹股沟不适","睾丸胀痛","龟头疼","射精时或射精后疼","尿痛、尿频、尿不尽","腰骶酸痛","没有上述症状"], multiple: true, special: "pelvic" },
+        { text: "Q46. 医生诊断过慢性前列腺炎或慢性盆腔疼痛综合征吗？", options: ["是，做过检查确诊","是，怀疑但没确诊","否"], scores: [[6,0,0,0,0,0],[4,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q47. 每天久坐≥8小时，或每周长距离骑车（>1小时）超过3次？", options: ["是","否"], scores: [[4,0,0,0,0,0],[0,0,0,0,0,0]] },
         { text: "Q48. 经常憋尿？", options: ["是","有时","否"], scores: [[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q49. 辛辣食物或饮酒后盆腔不适/早泄加重？", options: ["明显加重","有时","无影响"], scores: [[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q50. 之前使用抗生素治疗前列腺的效果？", options: ["有效","无效/复发","未用过"], scores: [[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q51. α受体阻滞剂（坦索罗辛）效果？", options: ["有效","无效","未用过"], scores: [[2,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q52. 常吃南瓜子或补充锌（>15mg/天）？", options: ["是","否"], scores: [[0,0,0,-2,0,0],[0,0,0,0,0,0]] },
+        { text: "Q49. 吃辛辣食物或喝酒后，盆腔不适或早泄会加重？", options: ["明显加重","有时会","没影响"], scores: [[3,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q50. 因为前列腺问题吃过抗生素，效果怎么样？", options: ["有效","无效或复发","没吃过"], scores: [[2,0,0,0,0,0],[1,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q51. 用过坦索罗辛等α受体阻滞剂效果？", options: ["有效","无效","没用过"], scores: [[2,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q52. 经常吃南瓜子或补充锌（每天超过15毫克）？", options: ["是","否"], scores: [[0,0,0,-2,0,0],[0,0,0,0,0,0]] },
 
-        // 神经反射/高敏感型 (Q53~Q59)
-        { text: "Q53. 龟头（阴茎头）感觉极度敏感，轻微触碰即产生强烈射精冲动？", options: ["极度敏感","一般","不敏感"], scores: [[0,0,0,0,5,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q54. 利多卡因乳膏单用后早泄显著改善（时间延长2倍以上）？", options: ["显著改善","有些改善","未试或无效"], scores: [[0,0,0,0,6,0],[0,0,0,0,1,0],[0,0,0,0,0,0]] },
-        { text: "Q55. 自慰习惯：一直追求快速射精（<2分钟）？", options: ["是，一直快速","会刻意延长","不自慰"], scores: [[0,0,0,0,3,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q56. 包皮情况？", options: ["正常","包皮过长（勃起后不能完全露出）","包茎"], scores: [[0,0,0,0,2,0],[0,0,0,0,4,0],[0,0,0,0,0,0]] },
-        { text: "Q57. 若做过包皮环切，术后龟头敏感度变化？", options: ["增高","无变化/降低","未手术"], scores: [[0,0,0,0,2,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
-        { text: "Q58. 常吃油炸、烧烤、烘焙焦香食物（每周>3次）？", options: ["是","有时","否"], scores: [[0,0,0,0,3,0],[0,0,0,0,1,0],[0,0,0,0,0,0]] },
-        { text: "Q59. 常吃辛辣（辣椒、咖喱等）？", options: ["是","有时","否"], scores: [[0,0,0,0,2,0],[0,0,0,0,1,0],[0,0,0,0,0,0]] },
+        // 神经反射、敏感相关
+        { text: "Q53. 龟头（阴茎头）特别敏感，轻轻一碰就有强烈的射精冲动？", options: ["极度敏感","一般","不敏感"], scores: [[0,0,0,0,5,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q54. 单用延时麻醉乳膏，早泄明显改善（时间延长2倍以上）？", options: ["明显改善","有些改善","没用过或无效"], scores: [[0,0,0,0,6,0],[0,0,0,0,1,0],[0,0,0,0,0,0]] },
+        { text: "Q55. 自慰时习惯快速射精（不到2分钟）？", options: ["是，一直快速","会刻意延长","不自慰"], scores: [[0,0,0,0,3,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q56. 包皮情况？", options: ["正常","包皮过长（勃起后不能完全露出龟头）","包茎（包皮口狭窄无法翻开）"], scores: [[0,0,0,0,2,0],[0,0,0,0,4,0],[0,0,0,0,0,0]] },
+        { text: "Q57. 如果做过包皮环切，术后龟头敏感度变化？", options: ["变得更敏感","没变化/降低","没手术"], scores: [[0,0,0,0,2,0],[0,0,0,0,0,0],[0,0,0,0,0,0]] },
+        { text: "Q58. 常吃油炸、烧烤、烤焦的食物（每周超过3次）？", options: ["是","有时","否"], scores: [[0,0,0,0,3,0],[0,0,0,0,1,0],[0,0,0,0,0,0]] },
+        { text: "Q59. 常吃辣椒、咖喱等辛辣食物？", options: ["是","有时","否"], scores: [[0,0,0,0,2,0],[0,0,0,0,1,0],[0,0,0,0,0,0]] },
 
-        // 肠道健康 (Q60)
-        { text: "Q60. 近3个月消化系统症状（可多选）", options: ["腹胀","排气增多","腹泻","便秘","疲劳/脑雾","无"], multiple: true, special: "gut" }
+        // 肠道健康
+        { text: "Q60. 最近3个月有这些消化问题吗？（可多选）", options: ["肚子胀","放屁多","拉肚子","便秘","总觉得累、脑子像蒙了层雾","没有以上症状"], multiple: true, special: "gut" }
     ];
 
-    // 渲染主函数
-    function renderQuestions() {
-        let html = '';
-        let currentSection = '';
-        let sectionMap = [
-            { start:0, title:"📌 第一部分 基本信息与核心症状" },
-            { start:10, title:"🧠 模块A：神经递质/5-HT能通路失衡型" },
-            { start:23, title:"🦋 模块B：内分泌/甲状腺轴紊乱型" },
-            { start:34, title:"🩸 模块C：代谢/胰岛素抵抗型" },
-            { start:45, title:"🔥 模块D：慢性炎症/前列腺型" },
-            { start:53, title:"⚡ 模块E：神经反射/高敏感性型" },
-            { start:60, title:"🌿 模块F：肠道健康与通透性提示" }
-        ];
-        for (let i=0; i<sectionMap.length; i++) {
-            let sec = sectionMap[i];
-            let nextStart = (i+1 < sectionMap.length) ? sectionMap[i+1].start : questionsData.length;
-            html += `<div class="section"><h2>${sec.title}</h2>`;
-            for (let qidx=sec.start; qidx<nextStart; qidx++) {
-                const q = questionsData[qidx];
-                if (q.special === 'hw') {
-                    html += `<div class="question" data-qidx="hw"><div class="question-text">${q.text}</div>
-                    <div class="row-input">
-                        <div class="input-group"><label>身高 (cm)</label><input type="number" id="heightCm" placeholder="cm" step="1"></div>
-                        <div class="input-group"><label>体重 (kg)</label><input type="number" id="weightKg" placeholder="kg" step="0.5"></div>
-                    </div></div>`;
+    // 渲染问卷
+    function renderQuestionnaire() {
+        let html = `<div class="section"><h2>📋 请逐题填写，所有信息将用于匹配膳食建议</h2>`;
+        for (let idx = 0; idx < questionsData.length; idx++) {
+            const q = questionsData[idx];
+            if (q.special === 'hw') {
+                html += `<div class="question" data-qidx="hw"><div class="question-text">${q.text}</div>
+                <div class="row-input">
+                    <div class="input-group"><label>身高 (cm)</label><input type="number" id="heightCm" placeholder="例如 175" step="1"></div>
+                    <div class="input-group"><label>体重 (kg)</label><input type="number" id="weightKg" placeholder="例如 70" step="0.5"></div>
+                </div></div>`;
+            } else {
+                html += `<div class="question" data-qidx="${idx}"><div class="question-text">${q.text}</div><div class="options" id="qopt-${idx}">`;
+                if (q.multiple) {
+                    q.options.forEach(opt => {
+                        html += `<label><input type="checkbox" value="${opt}"> ${opt}</label>`;
+                    });
                 } else {
-                    html += `<div class="question" data-qidx="${qidx}"><div class="question-text">${q.text}</div><div class="options" id="qopt-${qidx}">`;
-                    if (q.multiple) {
-                        q.options.forEach(opt => {
-                            html += `<label><input type="checkbox" value="${opt}"> ${opt}</label>`;
-                        });
-                    } else {
-                        q.options.forEach((opt, idx) => {
-                            html += `<label><input type="radio" name="q${qidx}" value="${idx}"> ${opt}</label>`;
-                        });
-                    }
-                    html += `</div></div>`;
+                    q.options.forEach((opt, optIdx) => {
+                        html += `<label><input type="radio" name="q${idx}" value="${optIdx}"> ${opt}</label>`;
+                    });
                 }
+                html += `</div></div>`;
             }
-            html += `</div>`;
         }
+        html += `</div>`;
         document.getElementById('questions-container').innerHTML = html;
     }
-    renderQuestions();
+    renderQuestionnaire();
 
-    // 计分函数（包含BMI计算和体型特征得分）
+    // 计分函数（BMI、体型）
     function computeScores() {
         let scores = [0,0,0,0,0,0];
-        // 处理身高体重，计算BMI并给予代谢分
-        let heightVal = parseFloat(document.getElementById('heightCm')?.value);
-        let weightVal = parseFloat(document.getElementById('weightKg')?.value);
+        const heightVal = parseFloat(document.getElementById('heightCm')?.value);
+        const weightVal = parseFloat(document.getElementById('weightKg')?.value);
         let bmi = (heightVal && weightVal && heightVal>0) ? weightVal / ((heightVal/100)**2) : null;
         if (bmi !== null) {
-            if (bmi >= 28) scores[2] += 4;       // 肥胖
-            else if (bmi >= 24) scores[2] += 2;   // 超重
-            else if (bmi < 18.5) scores[2] += 1;  // 偏瘦不计代谢正分，给轻度
+            if (bmi >= 28) scores[2] += 4;
+            else if (bmi >= 24) scores[2] += 2;
         }
-        // 处理Q2体型特征（腹部肥胖额外加分）
         const q2div = document.querySelector(`.question[data-qidx="1"] .options input:checked`);
         if (q2div) {
             let optVal = parseInt(q2div.value);
             let addScore = questionsData[1].scores[optVal];
-            for (let i=0;i<6;i++) scores[i] += addScore[i];
+            if (addScore) for (let i=0;i<6;i++) scores[i] += addScore[i];
         }
-        // 遍历所有标准题目
-        for (let idx=0; idx<questionsData.length; idx++) {
+        for (let idx=2; idx<questionsData.length; idx++) {
             const q = questionsData[idx];
-            if (q.special === 'hw' || idx===1) continue; // 已处理
             const qDiv = document.querySelector(`.question[data-qidx="${idx}"] .options`);
             if (!qDiv) continue;
             if (q.multiple) {
                 const checked = Array.from(qDiv.querySelectorAll('input:checked')).map(cb => cb.value);
                 if (checked.length === 0) continue;
                 if (q.special === 'pelvic') {
-                    const cnt = checked.filter(v => v !== '无').length;
+                    const cnt = checked.filter(v => v !== '没有上述症状' && v !== '无').length;
                     scores[3] += cnt * 2;
                     if (cnt >= 3) scores[3] += 5;
                 } else if (q.special === 'gut') {
-                    const cnt = checked.filter(v => v !== '无').length;
+                    const cnt = checked.filter(v => v !== '没有以上症状').length;
                     scores[5] += cnt * 1;
                 } else if (q.scores) {
                     for (let val of checked) {
@@ -421,22 +419,22 @@
         const scores = computeScores();
         const maxScores = [45,35,40,40,25,20];
         const percent = scores.map((s,i)=> Math.min(100, Math.round((s/maxScores[i])*100)));
-        const typeNames = ["① 神经递质/5-HT型","② 内分泌/甲状腺型","③ 代谢/胰岛素抵抗型","④ 慢性炎症/前列腺型","⑤ 神经反射/高敏感性型","🌱 肠漏风险提示"];
+        const typeNames = ["① 神经递质平衡型","② 内分泌/甲状腺型","③ 代谢/血糖型","④ 慢性炎症/前列腺型","⑤ 神经反射敏感型","🌱 肠道通透性风险"];
         let gridHtml = `<div class="score-grid">`;
         for (let i=0;i<6;i++) {
-            gridHtml += `<div class="score-card"><h4>${typeNames[i]} <span>${scores[i]}/${maxScores[i]}</span></h4><div class="progress-bar"><div class="progress-fill" style="width: ${percent[i]}%;"></div></div><div class="insight-text">${percent[i]>=60?'高度倾向 / 核心干预方向':percent[i]>=40?'中度倾向，建议关注':'倾向较低或混合因素'}</div></div>`;
+            gridHtml += `<div class="score-card"><h4>${typeNames[i]} <span>${scores[i]}/${maxScores[i]}</span></h4><div class="progress-bar"><div class="progress-fill" style="width: ${percent[i]}%;"></div></div><div class="insight-text">${percent[i]>=60?'高度倾向，优先膳食干预':percent[i]>=40?'中度倾向，建议结合调整':'倾向较低或混合因素'}</div></div>`;
         }
         gridHtml += `</div>`;
         document.getElementById('scoreSummary').innerHTML = gridHtml;
 
-        let advice = `<strong>🔍 分型解读与安心滋养干预方向</strong><br>`;
-        if (percent[0]>=60) advice += `• 神经递质型：增加色氨酸食物（豆制品、南瓜子），搭配复合碳水，补充镁/B族/ω-3。<br>`;
-        if (percent[1]>=60) advice += `• 内分泌/甲状腺型：检测甲功和抗体；甲亢严格限碘，桥本尝试无麸质饮食+硒。<br>`;
-        if (percent[2]>=60) advice += `• 代谢型：低GI高纤维饮食、减重、规律有氧运动，补充α-硫辛酸。<br>`;
-        if (percent[3]>=60) advice += `• 前列腺型：抗炎饮食（番茄红素、锌、南瓜子），避免久坐，盆底放松训练。<br>`;
-        if (percent[4]>=60) advice += `• 反射敏感型：龟头脱敏训练，利多卡因乳膏，降低高AGEs烹饪，补充B12/镁。<br>`;
-        if (percent[5]>=50) advice += `• 肠漏高风险：优先修复肠道（谷氨酰胺、可溶性纤维、益生菌）。<br>`;
-        advice += `<br>✨ 混合型常见，请结合最高分1-2项进行个性化饮食调整，并咨询专业医师。安心滋养 · 从根源改善，重获掌控感。`;
+        let advice = `<strong>🔍 膳食支持方向（安心滋养建议）</strong><br>`;
+        if (percent[0]>=60) advice += `• 神经递质平衡型：多吃豆制品、南瓜子、全谷物，补充镁、B族维生素、Omega-3。<br>`;
+        if (percent[1]>=60) advice += `• 内分泌/甲状腺型：甲亢严格限碘；桥本可尝试无麸质饮食，补充硒。<br>`;
+        if (percent[2]>=60) advice += `• 代谢/血糖型：低升糖指数高纤维饮食、减重、规律运动，辅以α-硫辛酸。<br>`;
+        if (percent[3]>=60) advice += `• 慢性炎症/前列腺型：抗炎饮食（番茄红素、锌、南瓜子），避免久坐。<br>`;
+        if (percent[4]>=60) advice += `• 神经反射敏感型：龟头脱敏训练，减少油炸烧烤，补充维生素B12和镁。<br>`;
+        if (percent[5]>=50) advice += `• 肠道通透性偏高：增加可溶性纤维、谷氨酰胺、益生菌修复肠道。<br>`;
+        advice += `<br>✨ 多数人属于混合型，请结合得分最高的1-2项调整日常饮食。详细咨询请联系安心滋养微信：<strong>adhdxx</strong>。`;
         document.getElementById('typeAdvice').innerHTML = advice;
         document.getElementById('resultArea').style.display = 'block';
         window.scrollTo({ top: document.getElementById('resultArea').offsetTop - 40, behavior: 'smooth' });
