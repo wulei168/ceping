@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>高血压膳食分类测评 - 得舒饮食个性化微调</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #f0f7f0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, sans-serif;
+            padding: 24px 16px 48px;
+            color: #1e2a1e;
+        }
+
+        .container {
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 8px 24px rgba(0, 20, 0, 0.08);
+            padding: 24px 20px 32px;
+            margin-bottom: 24px;
+            transition: all 0.2s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #2b5e2b;
+            letter-spacing: -0.3px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #4a6741;
+            font-size: 0.95rem;
+            border-top: 1px solid #e2f0e2;
+            padding-top: 12px;
+            margin-top: 8px;
+        }
+
+        .dash-badge {
+            background: #e9f5e9;
+            border-radius: 60px;
+            padding: 12px 18px;
+            margin-bottom: 24px;
+            border-left: 4px solid #3b8c3b;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .dash-badge strong {
+            color: #1f4f1f;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .question-group {
+            margin-bottom: 28px;
+            border-bottom: 1px solid #e2f0e2;
+            padding-bottom: 20px;
+        }
+
+        .question-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #2c5e2c;
+        }
+
+        .question-title span {
+            background: #d9ecd0;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 12px 0 8px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #fafef7;
+            padding: 8px 16px;
+            border-radius: 48px;
+            border: 1px solid #cfdfcf;
+            transition: 0.1s;
+            cursor: pointer;
+        }
+
+        .option.selected {
+            background: #e0f0e0;
+            border-color: #3b8c3b;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        input[type="radio"] {
+            accent-color: #2e7d32;
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        label {
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: #5f7b5a;
+            margin-top: 8px;
+            background: #f9fbf7;
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        button {
+            background: #2e7d32;
+            color: white;
+            border: none;
+            font-size: 1.05rem;
+            font-weight: 600;
+            padding: 14px 24px;
+            border-radius: 60px;
+            width: 100%;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        button:hover {
+            background: #1f5a23;
+        }
+
+        .result-card {
+            background: #fefce8;
+            border: 1px solid #e6e2bf;
+            border-radius: 28px;
+            padding: 20px;
+            margin-top: 24px;
+        }
+
+        .result-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #2c4b2c;
+            border-left: 5px solid #6fbf4c;
+            padding-left: 14px;
+            margin-bottom: 20px;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            background: white;
+            border-radius: 20px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #3b5e3b;
+        }
+
+        .section ul, .section p {
+            font-size: 0.94rem;
+            line-height: 1.45;
+            color: #2d3a2a;
+            margin-left: 18px;
+        }
+
+        .section li {
+            margin: 8px 0;
+        }
+
+        .badge-micro {
+            background: #eff5e8;
+            border-radius: 30px;
+            padding: 2px 10px;
+            font-size: 0.75rem;
+            font-weight: normal;
+            display: inline-block;
+            margin-left: 8px;
+            color: #3f6b3a;
+        }
+
+        .footnote {
+            font-size: 0.75rem;
+            color: #6e7c66;
+            text-align: center;
+            margin-top: 28px;
+            border-top: 1px solid #dae8d2;
+            padding-top: 20px;
+        }
+
+        hr {
+            margin: 16px 0;
+            border: 0;
+            height: 1px;
+            background: #dfecdb;
+        }
+
+        @media (max-width: 550px) {
+            .card {
+                padding: 20px 16px;
+            }
+            .option {
+                padding: 6px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="header">
+            <h1>🥬 高血压膳食分类测评</h1>
+            <p>基于得舒饮食 (DASH) · 精准微调 · 吃得更科学</p>
+        </div>
+        
+        <!-- DASH 基础说明 -->
+        <div class="dash-badge">
+            <strong>🍽️ 基础饮食核心 —— 得舒饮食 (DASH)</strong>
+            • 每日钠摄入 ＜2400mg (约6g盐)，理想≤1500mg<br>
+            • 高钾、高镁、高钙：多吃蔬菜、水果、低脂奶制品、全谷物、豆类、鱼、禽<br>
+            • 限制红肉、甜食、饱和脂肪和含糖饮料<br>
+            <span style="font-size:0.8rem;">✅ 所有高血压人群都应优先遵循以上原则，然后根据下方分类做“微调”。</span>
+        </div>
+
+        <!-- 问卷区 四个核心分类 -->
+        <form id="quizForm">
+            <!-- 1. 肾功能不全 -->
+            <div class="question-group">
+                <div class="question-title"><span>①</span> 肾脏功能情况</div>
+                <div class="options" id="q1_options">
+                    <div class="option" data-val="yes">
+                        <input type="radio" name="kidney" id="kidney_yes" value="yes">
+                        <label for="kidney_yes">✔️ 确诊或怀疑肾功能不全 (血肌酐升高 / eGFR↓ / 慢性肾病)</label>
+                    </div>
+                    <div class="option" data-val="no">
+                        <input type="radio" name="kidney" id="kidney_no" value="no">
+                        <label for="kidney_no">❌ 肾功能正常 (或未知但无肾病病史)</label>
+                    </div>
+                </div>
+                <div class="help-text">📌 若有肾病，需警惕高钾风险；DASH中高钾食物应谨慎。</div>
+            </div>
+
+            <!-- 2. 糖尿病 -->
+            <div class="question-group">
+                <div class="question-title"><span>②</span> 是否合并糖尿病？</div>
+                <div class="options" id="q2_options">
+                    <div class="option" data-val="yes">
+                        <input type="radio" name="diabetes" id="diabetes_yes" value="yes">
+                        <label for="diabetes_yes">🩸 是，确诊糖尿病或血糖控制不佳</label>
+                    </div>
+                    <div class="option" data-val="no">
+                        <input type="radio" name="diabetes" id="diabetes_no" value="no">
+                        <label for="diabetes_no">🍏 否，无糖尿病</label>
+                    </div>
+                </div>
+                <div class="help-text">📌 糖尿病者需要控制碳水化合物总量及水果种类，避免血糖波动。</div>
+            </div>
+
+            <!-- 3. 肥胖 / 腹型肥胖 -->
+            <div class="question-group">
+                <div class="question-title"><span>③</span> 体重情况 (肥胖指标)</div>
+                <div class="options" id="q3_options">
+                    <div class="option" data-val="yes">
+                        <input type="radio" name="obesity" id="obesity_yes" value="yes">
+                        <label for="obesity_yes">⚖️ 肥胖 (BMI ≥ 28) 或 腹型肥胖 (男腰围≥90cm / 女≥85cm)</label>
+                    </div>
+                    <div class="option" data-val="no">
+                        <input type="radio" name="obesity" id="obesity_no" value="no">
+                        <label for="obesity_no">💪 正常体重或仅超重 (BMI＜28 且腰围未超标)</label>
+                    </div>
+                </div>
+                <div class="help-text">📌 肥胖者需在DASH基础上控制总热量，加强体重管理。</div>
+            </div>
+
+            <!-- 4. 老年 / 血压波动大 -->
+            <div class="question-group">
+                <div class="question-title"><span>④</span> 年龄或血压稳定性</div>
+                <div class="options" id="q4_options">
+                    <div class="option" data-val="yes">
+                        <input type="radio" name="elderly" id="elderly_yes" value="yes">
+                        <label for="elderly_yes">👴 年龄 ≥65岁 或 血压波动大/易头晕(体位性低血压)</label>
+                    </div>
+                    <div class="option" data-val="no">
+                        <input type="radio" name="elderly" id="elderly_no" value="no">
+                        <label for="elderly_no">🧑 年龄＜65岁 且 无体位性低血压或血压剧烈波动</label>
+                    </div>
+                </div>
+                <div class="help-text">📌 老年人降压不宜过激，注意优质蛋白和防跌倒，避免过于严格限盐。</div>
+            </div>
+            
+            <button type="button" id="generateBtn">✨ 生成我的个性化膳食微调方案</button>
+        </form>
+    </div>
+
+    <!-- 结果展示区，初始隐藏 -->
+    <div id="resultArea" style="display: none;">
+        <div class="card result-card">
+            <div class="result-title">📋 基于DASH的膳食微调结果</div>
+            <div id="resultContent">
+                <!-- 动态内容渲染 -->
+            </div>
+            <div class="footnote">
+                💡 提示：以上建议可与专业营养师或医生沟通，确保最适合您的个体方案。<br>
+                仍以得舒饮食为基础，根据个人情况微调即可匹配膳食数据库。
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 辅助函数：获取选中的 radio 值
+    function getSelectedValue(name) {
+        const radios = document.querySelectorAll(`input[name="${name}"]`);
+        for (let radio of radios) {
+            if (radio.checked) return radio.value;
+        }
+        return null;
+    }
+
+    // 高亮当前选中的选项样式 (美化点击区域)
+    function bindOptionStyling() {
+        const optionDivs = document.querySelectorAll('.option');
+        optionDivs.forEach(div => {
+            const radio = div.querySelector('input[type="radio"]');
+            if (!radio) return;
+            const updateStyle = () => {
+                if (radio.checked) {
+                    div.classList.add('selected');
+                } else {
+                    div.classList.remove('selected');
+                }
+            };
+            radio.addEventListener('change', updateStyle);
+            updateStyle();
+            div.addEventListener('click', (e) => {
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'LABEL') {
+                    radio.checked = true;
+                    const changeEvent = new Event('change', { bubbles: true });
+                    radio.dispatchEvent(changeEvent);
+                }
+            });
+        });
+    }
+
+    // 核心生成逻辑: 基于选择返回 微调文本 + 可匹配膳食数据库的结构化条目
+    function generateAdvice() {
+        const kidney = getSelectedValue('kidney');
+        const diabetes = getSelectedValue('diabetes');
+        const obesity = getSelectedValue('obesity');
+        const elderly = getSelectedValue('elderly');
+
+        // 校验是否全部作答
+        if (kidney === null || diabetes === null || obesity === null || elderly === null) {
+            alert('请完整填写以上4个问题，以便生成个性化的膳食微调建议。');
+            return null;
+        }
+
+        // 构造微调结构
+        let baseDASH = {
+            title: "🥗 基础：得舒饮食 (DASH) 通用原则",
+            items: [
+                "每日钠摄入＜2400mg (约6g盐) ，逐步降至1500mg/日效果更佳",
+                "多吃蔬菜 (每天4-5份) 、水果 (4-5份) 、低脂/脱脂乳制品 (2-3份) ",
+                "主食一半以上为全谷物 (糙米、燕麦、藜麦) ",
+                "每周吃2次以上的鱼, 选择瘦肉、去皮禽肉, 限制红肉 (每周＜2份) ",
+                "限制含糖饮料、甜点、饱和脂肪 (肥肉、黄油、椰子油) "
+            ]
+        };
+
+        // 微调分类及对应指导（用于膳食数据库匹配的标签）
+        let microAdjustments = [];
+
+        // 肾功能不全：高钾警告
+        if (kidney === 'yes') {
+            microAdjustments.push({
+                condition: "肾功能不全",
+                summary: "⚠️ 谨慎高钾食物，避免低钠盐",
+                details: [
+                    "❌ 不要盲目追求高钾：如大量香蕉、橙子、土豆、菠菜汁、牛油果、低钠盐（含氯化钾）",
+                    "✔️ 蔬菜可先焯水再烹饪，减少钾含量",
+                    "✔️ 选择苹果、蓝莓、蔓越莓、白菜、萝卜等相对低钾的蔬果",
+                    "✔️ 严格遵医嘱控制蛋白质量，防止肾脏负担加重"
+                ],
+                tags: ["低钾饮食", "限制高钾蔬果", "禁用低钠盐"]
+            });
+        } else {
+            microAdjustments.push({
+                condition: "肾功能正常",
+                summary: "✅ 充分受益于高钾降压",
+                details: [
+                    "👍 放心增加高钾食物：绿叶蔬菜 (菠菜、空心菜) 、豆类、香蕉、橙子、土豆、南瓜",
+                    "👍 可使用低钠盐（氯化钾）替代部分普通盐，进一步降低血压",
+                    "每日钾摄入目标约3500-4700mg, 有助于排钠降压"
+                ],
+                tags: ["高钾膳食", "鼓励低钠盐", "果蔬丰富"]
+            });
+        }
+
+        // 糖尿病：控糖微调
+        if (diabetes === 'yes') {
+            microAdjustments.push({
+                condition: "合并糖尿病",
+                summary: "🍚 控制碳水化合物总量及升糖指数",
+                details: [
+                    "水果每日控制在1-2份（一份约一个拳头大小），优先选择低GI水果：樱桃、草莓、柚子、苹果",
+                    "主食要定量，每餐约1拳头，多选杂粮饭、全麦面包，避免稀饭、白粥、糖水",
+                    "增加膳食纤维（每天30g以上），利于平稳血糖",
+                    "不建议大量饮用果汁，水果直接吃更佳",
+                    "合并高血压时，仍需低钠高钾，但要监测血糖反应"
+                ],
+                tags: ["控碳水", "低GI水果", "定量主食", "高纤维"]
+            });
+        } else {
+            microAdjustments.push({
+                condition: "无糖尿病",
+                summary: "🍎 自由享受多样蔬果，无需严格限量碳水",
+                details: [
+                    "可按照DASH推荐量摄入水果每日4-5份，不必担心血糖",
+                    "全谷物替换精米白面即可，不需精细化计算碳水化合物",
+                    "普通成人也可以适当摄入薯类、水果，有益代谢"
+                ],
+                tags: ["标准DASH碳水比例", "丰富水果"]
+            });
+        }
+
+        // 肥胖 / 腹型肥胖 -> 热量控制
+        if (obesity === 'yes') {
+            microAdjustments.push({
+                condition: "肥胖/腹型肥胖",
+                summary: "⚖️ 强烈建议限制总热量，逐步减重",
+                details: [
+                    "每餐减少10-20%主食量，增加非淀粉类蔬菜（西兰花、叶菜、黄瓜）体积",
+                    "控制坚果每日一小把（不超过20g），烹饪油20g/日以内",
+                    "戒除含糖饮料、甜点、油炸食品，零食选无糖酸奶、水果",
+                    "目标每周减重0.5~1kg，可有效降压",
+                    "DASH结合限能量饮食效果更显著"
+                ],
+                tags: ["限能量DASH", "减重膳食", "控制油脂和糖"]
+            });
+        } else {
+            microAdjustments.push({
+                condition: "体重正常",
+                summary: "💪 维持健康体重，不刻意限总热量",
+                details: [
+                    "按照标准DASH份量进食即可，避免过量高热量零食",
+                    "保持规律运动有助血压平稳",
+                    "无需严格计算热量，但仍需注意均衡搭配"
+                ],
+                tags: ["标准DASH", "维持代谢"]
+            });
+        }
+
+        // 老年人 / 血压波动大
+        if (elderly === 'yes') {
+            microAdjustments.push({
+                condition: "高龄或血压波动大",
+                summary: "👴 温和降压，防止低血压及营养不良",
+                details: [
+                    "盐分限制不宜过于激进：每天钠可控制在2000mg左右，避免头晕乏力",
+                    "优先保证优质蛋白质：鱼、禽、豆制品、蛋、奶，预防肌肉流失",
+                    "注意补充钙和维生素D：每天一杯低脂奶/酸奶+适当晒太阳",
+                    "若使用低钠盐，监测血钾水平（尤其合并用药情况下）",
+                    "改变体位时缓慢起身，防止体位性低血压"
+                ],
+                tags: ["温和控钠", "优质蛋白", "防跌倒/低血压"]
+            });
+        } else {
+            microAdjustments.push({
+                condition: "非老年/血压稳定",
+                summary: "✅ 可积极控盐和高钾，耐受性好",
+                details: [
+                    "可严格限钠＜1500mg/日，使用低钠盐进一步降压",
+                    "增加钾摄入 (蔬果+豆类)，降压效果更优",
+                    "常规DASH即可，无需特殊避险"
+                ],
+                tags: ["严格DASH", "强化降压饮食"]
+            });
+        }
+
+        return { baseDASH, microAdjustments };
+    }
+
+    // 渲染结果
+    function renderResult() {
+        const result = generateAdvice();
+        if (!result) return;
+
+        const { baseDASH, microAdjustments } = result;
+        const resultContentDiv = document.getElementById('resultContent');
+        if (!resultContentDiv) return;
+
+        let html = `
+            <div class="section">
+                <h3>🌿 ${baseDASH.title}</h3>
+                <ul>
+                    ${baseDASH.items.map(item => `<li>${item}</li>`).join('')}
+                </ul>
+            </div>
+            <div class="section">
+                <h3>🔄 根据你的个人状况 · 精准微调 <span class="badge-micro">可匹配膳食数据库</span></h3>
+        `;
+
+        for (let adj of microAdjustments) {
+            html += `
+                <div style="background:#fff5e8; border-radius:20px; padding:12px 16px; margin-bottom:16px;">
+                    <div style="font-weight:700; margin-bottom:8px; color:#b45f1b;">📌 ${adj.condition}</div>
+                    <div style="font-weight:600; margin-bottom:8px;">🎯 ${adj.summary}</div>
+                    <ul style="margin:6px 0 6px 20px;">
+                        ${adj.details.map(d => `<li>${d}</li>`).join('')}
+                    </ul>
+                    <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:6px;">
+                        ${adj.tags.map(tag => `<span style="background:#eaf3e5; padding:2px 12px; border-radius:30px; font-size:0.7rem; color:#2c5e2c;">#${tag}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // 增加一条“膳食数据库匹配指引”
+        html += `
+            <div style="background:#eef4ea; border-radius:16px; padding:12px; margin-top:8px;">
+                <p style="font-weight:600; margin-bottom:6px;">📌 膳食数据库使用指引</p>
+                <p style="font-size:0.85rem;">根据以上【个人微调标签】快速匹配推荐食材：<br>
+                - 高钾人群 → 优先推荐钾丰富食物（香蕉、菠菜、土豆）<br>
+                - 低钾人群（肾病）→ 推荐低钾蔬果（苹果、蓝莓、白菜、冬瓜）<br>
+                - 控糖/糖尿病 → 选择低GI水果、杂粮主食并限制总量<br>
+                - 肥胖 → 低热量密度菜单、控制油盐份量<br>
+                - 老年人 → 保证软烂易消化高蛋白、不过分限盐<br>
+                可直接将标签组合（如“高钾膳食+标准DASH”）用于食谱筛选。
+                </p>
+            </div>
+        `;
+
+        html += `</div>`;
+        resultContentDiv.innerHTML = html;
+
+        // 显示结果区域
+        const resultArea = document.getElementById('resultArea');
+        if (resultArea) resultArea.style.display = 'block';
+        // 滚动到结果区
+        resultArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // 初始化页面: 绑定选项样式 + 生成按钮事件
+    document.addEventListener('DOMContentLoaded', () => {
+        bindOptionStyling();
+        const btn = document.getElementById('generateBtn');
+        if (btn) {
+            btn.addEventListener('click', renderResult);
+        }
+        // 可选: 默认预置第一组未选中，但没有任何选中不展示；也可以默认帮助提示
+        // 无预设, 保留完整填写提醒
+    });
+</script>
+</body>
+</html>
